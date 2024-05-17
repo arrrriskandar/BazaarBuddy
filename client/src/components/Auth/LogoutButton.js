@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { logout } from "../../firebase/auth";
 
 const LogoutButton = () => {
@@ -7,7 +7,7 @@ const LogoutButton = () => {
     try {
       await logout();
     } catch (error) {
-      console.error("Failed to log out", error);
+      message.error("Failed to log out", error);
     }
   };
 

@@ -51,7 +51,7 @@ const RegisterForm = ({ toggleRegister }) => {
               message: "Please enter a password!",
             },
             {
-              validator: validatePassword, // Custom password validation function
+              validator: validatePassword,
             },
           ]}
         >

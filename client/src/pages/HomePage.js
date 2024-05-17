@@ -1,4 +1,3 @@
-// src/components/Home.js
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
 import LogoutButton from "../components/Auth/LogoutButton";

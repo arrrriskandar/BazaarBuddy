@@ -5,7 +5,6 @@ import { resetPassword } from "../../firebase/auth";
 const ResetPasswordModal = ({ visible, onClose }) => {
   const onFinish = async (values) => {
     try {
-      console.log("email: ", values.email);
       await resetPassword(values.email);
       message.success("Password reset email sent. Please check your inbox.");
       onClose();
@@ -17,7 +16,7 @@ const ResetPasswordModal = ({ visible, onClose }) => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    message.error("Failed:", errorInfo);
   };
 
   return (
