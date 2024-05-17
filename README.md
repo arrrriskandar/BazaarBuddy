@@ -14,5 +14,5 @@ BazaarBuddy is an upcoming online marketplace application designed to connect bu
 
 ## Contributors
 
-- Kerin Wong ([@kerinwong](https://github.com/johndoe))
+- Kerin Wong ([@kerinwlt](https://github.com/kerinwlt))
 - Muhamad Ar Iskandar ([@arrrrriskandar](https://github.com/arrrriskandar))
