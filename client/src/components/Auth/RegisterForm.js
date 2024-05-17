@@ -1,9 +1,10 @@
 import React from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Typography } from "antd";
 import { register } from "../../firebase/auth";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
+  const { Text } = Typography;
 
   const onFinish = async ({ email, password }) => {
     try {
@@ -62,9 +63,15 @@ const RegisterForm = ({ toggleRegister }) => {
           </Button>
         </Form.Item>
       </Form>
-      <span style={{ cursor: "pointer" }} onClick={toggleRegister}>
+      <Text
+        style={{
+          cursor: "pointer",
+          color: "#1890ff",
+        }}
+        onClick={toggleRegister}
+      >
         Already have an account? Login here.
-      </span>
+      </Text>
     </div>
   );
 };

@@ -1,8 +1,19 @@
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Typography } from "antd";
 import { login } from "../../firebase/auth";
+import { useState } from "react";
+import ResetPasswordModal from "./ResetPasswordModal";
 
 const LoginForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
+  const [resetPasswordModal, setResetPasswordModal] = useState(false);
+  const { Text } = Typography;
+  const handleForgotPasswordClick = () => {
+    setResetPasswordModal(true);
+  };
+
+  const handleForgotPasswordClose = () => {
+    setResetPasswordModal(false);
+  };
 
   const onFinish = async ({ email, password }) => {
     try {
@@ -46,9 +57,29 @@ const LoginForm = ({ toggleRegister }) => {
           </Button>
         </Form.Item>
       </Form>
-      <span style={{ cursor: "pointer" }} onClick={toggleRegister}>
+      <Text
+        style={{
+          cursor: "pointer",
+          color: "#1890ff",
+        }}
+        onClick={toggleRegister}
+      >
         Don't have an account? Register here.
-      </span>
+      </Text>
+      <br />
+      <Text
+        style={{
+          cursor: "pointer",
+          color: "#1890ff",
+        }}
+        onClick={handleForgotPasswordClick}
+      >
+        Forgot password?
+      </Text>
+      <ResetPasswordModal
+        visible={resetPasswordModal}
+        onClose={handleForgotPasswordClose}
+      />
     </div>
   );
 };

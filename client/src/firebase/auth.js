@@ -2,6 +2,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "./config";
 
@@ -34,6 +35,14 @@ export const login = async (email, password) => {
 export const logout = async () => {
   try {
     await signOut(auth);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
   } catch (error) {
     throw error;
   }
