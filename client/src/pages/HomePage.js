@@ -1,9 +1,9 @@
 import React from "react";
-import { useAuth } from "../contexts/AuthContext";
 import LogoutButton from "../components/Auth/LogoutButton";
+import { useUser } from "../contexts/UserContext";
 
 const Home = () => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useUser();
 
   return (
     <div>

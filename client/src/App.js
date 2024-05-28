@@ -2,6 +2,7 @@ import React from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Home from "./pages/HomePage";
 import LoginRegisterPage from "./pages/LoginRegisterPage";
+import { UserProvider } from "./contexts/UserContext";
 
 const AuthenticatedApp = () => {
   return (
@@ -16,18 +17,20 @@ const UnauthenticatedApp = () => {
 };
 
 const App = () => {
-  const { currentUser } = useAuth();
+  const { currentAuthUser } = useAuth();
 
   return (
     <div className="App">
-      {currentUser ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      {currentAuthUser ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </div>
   );
 };
 
 const Root = () => (
   <AuthProvider>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </AuthProvider>
 );
 

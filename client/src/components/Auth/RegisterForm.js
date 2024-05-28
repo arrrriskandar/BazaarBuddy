@@ -1,17 +1,28 @@
 import React from "react";
 import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
 import { register } from "../../firebase/auth";
+import axios from "axios";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
   const { Text } = Typography;
 
-  const onFinish = async ({ email, password }) => {
+  const onFinish = async ({ email, password, username }) => {
     try {
-      await register(email, password);
+      const userCredentials = await register(email, password);
+      const uid = userCredentials.uid;
+      console.log(userCredentials);
+      console.log(uid);
+      console.log(username);
+      console.log(email);
+      await axios.post("http://localhost:5001/api/user", {
+        _id: uid,
+        username,
+        email,
+      });
       message.success("Registration successful!");
     } catch (error) {
-      message.error("Register failed");
+      message.error("Registration failed");
     }
   };
 
@@ -47,6 +58,18 @@ const RegisterForm = ({ toggleRegister }) => {
           />
           <Typography.Title level={2}>Register</Typography.Title>
           <Form form={form} onFinish={onFinish}>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  type: "username",
+                  message: "Please enter a username!",
+                },
+              ]}
+            >
+              <Input placeholder="Username" />
+            </Form.Item>
             <Form.Item
               name="email"
               rules={[

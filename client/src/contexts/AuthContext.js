@@ -1,3 +1,4 @@
+// AuthContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/config";
@@ -9,18 +10,18 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentAuthUser, setCurrentAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      setCurrentAuthUser(user);
       setLoading(false);
     });
     return unsubscribe;
   }, []);
 
-  const value = { currentUser, loading };
+  const value = { currentAuthUser, loading };
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

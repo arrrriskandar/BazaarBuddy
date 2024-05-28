@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  authId: {
+  _id: {
     type: String,
     required: true,
   },
@@ -11,6 +11,31 @@ const UserSchema = new mongoose.Schema({
   },
   username: {
     type: String,
+    required: true,
+  },
+  photoUrl: {
+    type: String,
+    default: "",
+    require: true,
+  },
+  address: {
+    type: String,
+    default: "",
+    require: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
+  ratingSum: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  ratingCount: {
+    type: Number,
+    default: 0,
     required: true,
   },
 });
