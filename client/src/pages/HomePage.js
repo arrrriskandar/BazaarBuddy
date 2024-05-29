@@ -1,14 +1,18 @@
 import React from "react";
-import LogoutButton from "../components/Auth/LogoutButton";
+import { Button } from "antd";
 import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { currentUser } = useUser();
+  const navigate = useNavigate();
 
   return (
     <div>
       <h1>{JSON.stringify(currentUser)}</h1>
-      <LogoutButton />
+      <Button type="primary" onClick={() => navigate("/profile")}>
+        Profile
+      </Button>
     </div>
   );
 };

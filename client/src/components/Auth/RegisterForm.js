@@ -2,27 +2,30 @@ import React from "react";
 import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
 import { register } from "../../firebase/auth";
 import axios from "axios";
+import { useUser } from "../../contexts/UserContext";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
   const { Text } = Typography;
+  const { setRegistering } = useUser();
 
   const onFinish = async ({ email, password, username }) => {
     try {
+      setRegistering(true);
       const userCredentials = await register(email, password);
       const uid = userCredentials.uid;
-      console.log(userCredentials);
-      console.log(uid);
-      console.log(username);
-      console.log(email);
+
       await axios.post("http://localhost:5001/api/user", {
         _id: uid,
         username,
         email,
       });
+
       message.success("Registration successful!");
     } catch (error) {
       message.error("Registration failed");
+    } finally {
+      setRegistering(false);
     }
   };
 

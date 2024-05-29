@@ -1,4 +1,3 @@
-// UserContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
@@ -10,7 +9,7 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
-  const { currentAuthUser } = useAuth();
+  const { currentAuthUser, setRegistering } = useAuth();
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -32,6 +31,6 @@ export const UserProvider = ({ children }) => {
     fetchUserDetails();
   }, [currentAuthUser]);
 
-  const value = { currentUser };
+  const value = { currentUser, setRegistering };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
