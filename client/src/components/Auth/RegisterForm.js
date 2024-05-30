@@ -3,6 +3,7 @@ import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
 import { register } from "../../firebase/auth";
 import axios from "axios";
 import { useUser } from "../../contexts/UserContext";
+import { apiEndpoint } from "../../constants";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
@@ -15,7 +16,7 @@ const RegisterForm = ({ toggleRegister }) => {
       const userCredentials = await register(email, password);
       const uid = userCredentials.uid;
 
-      await axios.post("http://localhost:5001/api/user", {
+      await axios.post(apiEndpoint + "/user", {
         _id: uid,
         username,
         email,

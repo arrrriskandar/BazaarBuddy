@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { apiEndpoint } from "../constants";
 
 const UserContext = createContext();
 
@@ -18,9 +19,10 @@ export const UserProvider = ({ children }) => {
       if (currentAuthUser) {
         try {
           const response = await axios.get(
-            `http://localhost:5001/api/user/${currentAuthUser.uid}`
+            apiEndpoint + `/user/${currentAuthUser.uid}`
           );
           setCurrentUser(response.data);
+          console.log(response.data + "heheheh");
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
