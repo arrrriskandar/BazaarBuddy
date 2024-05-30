@@ -11,6 +11,7 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
   const { currentAuthUser, setRegistering } = useAuth();
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -26,11 +27,16 @@ export const UserProvider = ({ children }) => {
       } else {
         setCurrentUser(null);
       }
+      setLoading(false);
     };
 
     fetchUserDetails();
   }, [currentAuthUser]);
 
-  const value = { currentUser, setRegistering };
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  const value = { currentUser, setRegistering, loading };
+  return (
+    <UserContext.Provider value={value}>
+      {!loading && children}
+    </UserContext.Provider>
+  );
 };

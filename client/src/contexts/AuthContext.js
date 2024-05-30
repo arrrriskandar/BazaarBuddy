@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     });
-    return unsubscribe;
+    return () => unsubscribe();
   }, [registering]);
 
   const value = { currentAuthUser, loading, setRegistering };
