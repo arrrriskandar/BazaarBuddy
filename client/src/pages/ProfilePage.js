@@ -32,7 +32,7 @@ const Profile = () => {
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
-            {currentUser.ratingSum / (currentUser.ratingCount || 1)}
+            {currentUser.ratingSum / (currentUser.ratingCount || 1)}{" "}
             <StarFilled />
             <span> ({currentUser.ratingCount} reviews)</span>
           </Descriptions.Item>

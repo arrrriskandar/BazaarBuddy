@@ -28,9 +28,6 @@ export const getUserController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
   try {
-    console.log(JSON.stringify(req.params));
-    console.log("id: ", JSON.stringify(req.params.id));
-    console.log("body", JSON.stringify(req.body));
     const updatedUser = await updateUser(req.params.id, req.body);
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
