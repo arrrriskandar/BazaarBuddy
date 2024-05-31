@@ -10,7 +10,7 @@ const Home = () => {
       <Button type="primary" onClick={() => navigate("/profile")}>
         Profile
       </Button>
-      <Button type="primary" onClick={() => navigate("/buy")}>
+      <Button type="primary" onClick={() => navigate("/buy/product")}>
         Buy
       </Button>
     </div>

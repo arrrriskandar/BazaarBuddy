@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { apiEndpoint } from "../constants";
+import { apiEndpoint } from "../../constants";
 import axios from "axios";
 import { message, Card, Row, Col, Rate } from "antd";
+import { Link } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -30,16 +31,21 @@ function BrowseProducts() {
             : 0;
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <Card
-                hoverable
-                cover={<img alt={product.name} src={product.images} />}
-              >
-                <Meta title={product.name} description={`$${product.price}`} />
-                <div style={{ marginTop: "10px", textAlign: "center" }}>
-                  <Rate disabled defaultValue={averageRating} />
-                  <div>{averageRating.toFixed(1)} / 5</div>
-                </div>
-              </Card>
+              <Link to={`/buy/product/${product._id}`}>
+                <Card
+                  hoverable
+                  cover={<img alt={product.name} src={product.images} />}
+                >
+                  <Meta
+                    title={product.name}
+                    description={`$${product.price}`}
+                  />
+                  <div style={{ marginTop: "10px", textAlign: "center" }}>
+                    <Rate disabled defaultValue={averageRating} />
+                    <div>{averageRating.toFixed(1)} / 5</div>
+                  </div>
+                </Card>
+              </Link>
             </Col>
           );
         })}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import RegisterForm from "../components/Auth/RegisterForm";
 import LoginForm from "../components/Auth/LoginForm";
 
-function LoginRegisterPage() {
+function LoginRegister() {
   const [isRegister, setIsRegister] = useState(false);
 
   const toggleRegister = () => {
@@ -20,4 +20,4 @@ function LoginRegisterPage() {
   );
 }
 
-export default LoginRegisterPage;
+export default LoginRegister;

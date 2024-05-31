@@ -2,22 +2,24 @@ import React from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Home from "./pages/HomePage";
 import Profile from "./pages/ProfilePage";
-import LoginRegisterPage from "./pages/LoginRegisterPage";
+import LoginRegister from "./pages/LoginRegisterPage";
 import { UserProvider } from "./contexts/UserContext";
+import ProductDetails from "./pages/buy/ProductDetailsPage";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import BrowseProducts from "./pages/BrowseProductsPage";
+import BrowseProducts from "./pages/buy/BrowseProductsPage";
 
 const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/buy" element={<BrowseProducts />} />
+      <Route path="/buy/product" element={<BrowseProducts />} />
+      <Route path="/buy/product/:productId" element={<ProductDetails />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
@@ -26,7 +28,7 @@ const AuthenticatedApp = () => {
 const UnauthenticatedApp = () => {
   return (
     <Routes>
-      <Route path="/" element={<LoginRegisterPage />} />
+      <Route path="/" element={<LoginRegister />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
