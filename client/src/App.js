@@ -12,16 +12,24 @@ import {
   Navigate,
 } from "react-router-dom";
 import BrowseProducts from "./pages/buy/BrowseProductsPage";
+import { Layout } from "antd";
+import TopNavigation from "./components/Common/TopNavigation";
+import { Content } from "antd/es/layout/layout";
 
 const AuthenticatedApp = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/buy/product" element={<BrowseProducts />} />
-      <Route path="/buy/product/:productId" element={<ProductDetails />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <Layout>
+      <TopNavigation />
+      <Content style={{ padding: "20px 50px" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/buy/product" element={<BrowseProducts />} />
+          <Route path="/buy/product/:productId" element={<ProductDetails />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Content>
+    </Layout>
   );
 };
 
