@@ -10,12 +10,14 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import BrowseProducts from "./pages/BrowseProductsPage";
 
 const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/buy" element={<BrowseProducts />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
