@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import { apiEndpoint } from "../constants";
+import { apiEndpoint } from "../constants/constants";
 
 const UserContext = createContext();
 

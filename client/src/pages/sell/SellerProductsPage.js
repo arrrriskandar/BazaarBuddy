@@ -3,16 +3,20 @@ import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Card, Row, Col, Rate } from "antd";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 
 const { Meta } = Card;
 
-function BrowseProducts() {
+function SellerProducts() {
   const [products, setProducts] = useState([]);
+  const { currentUser } = useUser();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(apiEndpoint + "/product");
+        const response = await axios.get(apiEndpoint + "/product", {
+          params: { seller: currentUser._id },
+        });
         setProducts(response.data);
       } catch (error) {
         message.error("Failed to retrieve products");
@@ -31,7 +35,7 @@ function BrowseProducts() {
             : 0;
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <Link to={`/buy/product/${product._id}`}>
+              <Link to={`/sell/product/${product._id}`}>
                 <Card
                   hoverable
                   cover={<img alt={product.name} src={product.images} />}
@@ -54,4 +58,4 @@ function BrowseProducts() {
   );
 }
 
-export default BrowseProducts;
+export default SellerProducts;

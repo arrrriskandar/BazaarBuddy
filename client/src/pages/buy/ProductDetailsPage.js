@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { apiEndpoint } from "../../constants";
+import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Button, Row, Col } from "antd";
+import { Category, Stock } from "../../constants/eNums";
 
 function ProductDetails() {
   const { productId } = useParams();
@@ -56,8 +57,8 @@ function ProductDetails() {
             <h1>{product.name}</h1>
             <p>{product.description}</p>
             <h2>${product.price}</h2>
-            <p>Category: {product.category}</p>
-            <p>Stock: {product.stock}</p>
+            <p>Category: {Category[product.category]}</p>
+            <p>Stock: {Stock[product.stock]}</p>
             <div
               style={{
                 marginBottom: "20px",

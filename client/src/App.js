@@ -14,6 +14,8 @@ import BrowseProducts from "./pages/buy/BrowseProductsPage";
 import { Layout } from "antd";
 import TopNavigation from "./components/Common/TopNavigation";
 import { Content } from "antd/es/layout/layout";
+import SellerProducts from "./pages/sell/SellerProductsPage";
+import SellerProductDetails from "./pages/sell/SellerProductDetailsPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -24,6 +26,11 @@ const AuthenticatedApp = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route path="/buy/product/:productId" element={<ProductDetails />} />
+          <Route
+            path="/sell/product/:productId"
+            element={<SellerProductDetails />}
+          />
+          <Route path="/sell/product" element={<SellerProducts />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>

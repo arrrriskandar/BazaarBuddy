@@ -60,7 +60,7 @@ const TopNavigation = () => {
           <Link to="/buy/product">Buy</Link>
         </Menu.Item>
         <Menu.Item key="2" icon={<DollarOutlined />}>
-          <Link to="/">Sell</Link>
+          <Link to="/sell/product">My Products</Link>
         </Menu.Item>
         <Menu.Item key="3" icon={<WechatOutlined />}>
           <Link to="/">Chats</Link>

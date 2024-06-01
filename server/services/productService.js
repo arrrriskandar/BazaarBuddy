@@ -34,6 +34,7 @@ export const getProducts = async (params) => {
 };
 
 export const updateProduct = async (id, productData) => {
+  productData.updatedAt = Date.now();
   return await ProductModel.findByIdAndUpdate(id, productData, { new: true });
 };
 

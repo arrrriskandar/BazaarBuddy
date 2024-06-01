@@ -3,7 +3,7 @@ import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
 import { register } from "../../firebase/auth";
 import axios from "axios";
 import { useUser } from "../../contexts/UserContext";
-import { apiEndpoint } from "../../constants";
+import { apiEndpoint } from "../../constants/constants";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
