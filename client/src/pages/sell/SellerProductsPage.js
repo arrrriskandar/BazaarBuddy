@@ -17,7 +17,7 @@ function SellerProducts() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(apiEndpoint + "/product", {
-          params: { seller: currentUser._id },
+          params: { seller: currentUser._id, retrieveMyProducts: true },
         });
         setProducts(response.data);
       } catch (error) {
@@ -26,7 +26,7 @@ function SellerProducts() {
     };
 
     fetchProducts();
-  }, []);
+  }, [currentUser._id]);
 
   const showModal = (productId) => {
     setSelectedProductId(productId);
