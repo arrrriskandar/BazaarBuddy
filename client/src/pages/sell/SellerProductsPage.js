@@ -3,7 +3,7 @@ import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Card, Row, Col, Rate, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
-import SellerProductDetails from "./SellerProductDetailsPage";
+import SellerProductDetails from "../../components/Sell/SellerProductDetails";
 
 const { Meta } = Card;
 
