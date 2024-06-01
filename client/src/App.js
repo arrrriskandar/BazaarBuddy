@@ -1,6 +1,5 @@
 import React from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import Home from "./pages/HomePage";
 import Profile from "./pages/ProfilePage";
 import LoginRegister from "./pages/LoginRegisterPage";
 import { UserProvider } from "./contexts/UserContext";
@@ -22,11 +21,10 @@ const AuthenticatedApp = () => {
       <TopNavigation />
       <Content style={{ padding: "20px 50px" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route path="/buy/product/:productId" element={<ProductDetails />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>
     </Layout>

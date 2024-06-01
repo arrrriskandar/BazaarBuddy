@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import {
   DollarOutlined,
@@ -12,6 +12,16 @@ import {
 const { Header } = Layout;
 
 const TopNavigation = () => {
+  const location = useLocation();
+  const getSelectedKey = () => {
+    if (location.pathname.startsWith("/buy")) return "1";
+    if (location.pathname.startsWith("/sell")) return "2";
+    if (location.pathname.startsWith("/chat")) return "3";
+    if (location.pathname.startsWith("/cart")) return "4";
+    if (location.pathname.startsWith("/profile")) return "5";
+    return "1";
+  };
+  const selectedKey = getSelectedKey();
   return (
     <Header
       style={{
@@ -38,7 +48,7 @@ const TopNavigation = () => {
       <Menu
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={["1"]}
+        selectedKeys={[selectedKey]}
         style={{
           flex: 1,
           display: "flex",
@@ -56,11 +66,11 @@ const TopNavigation = () => {
           <Link to="/">Chats</Link>
         </Menu.Item>
       </Menu>
-
+      {getSelectedKey() + "    getSelectedKey"}
       <Menu
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={[]}
+        selectedKeys={[selectedKey]}
         style={{ display: "flex", alignItems: "center" }}
       >
         <Menu.Item key="4" icon={<ShoppingCartOutlined />}>
