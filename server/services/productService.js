@@ -26,7 +26,7 @@ export const getProducts = async (params) => {
   if (seller) query.seller = seller;
 
   let sortOptions = {};
-  if (sortby) {
+  if (sortBy) {
     sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
   }
 
