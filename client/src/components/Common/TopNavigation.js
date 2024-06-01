@@ -66,7 +66,6 @@ const TopNavigation = () => {
           <Link to="/">Chats</Link>
         </Menu.Item>
       </Menu>
-      {getSelectedKey() + "    getSelectedKey"}
       <Menu
         theme="light"
         mode="horizontal"

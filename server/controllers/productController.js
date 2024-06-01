@@ -27,9 +27,9 @@ export const getProductController = async (req, res) => {
   }
 };
 
-export const getProductsController = async (_, res) => {
+export const getProductsController = async (req, res) => {
   try {
-    const products = await getProducts();
+    const products = await getProducts(req.query);
     if (!products) {
       return res.status(404).json({ message: "No Products found" });
     }
