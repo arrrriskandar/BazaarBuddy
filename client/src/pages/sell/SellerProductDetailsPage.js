@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Row, Col } from "antd";
 import { Category, Stock } from "../../constants/eNums";
 
-function SellerProductDetails() {
-  const { productId } = useParams();
+function SellerProductDetails(props) {
+  const { productId } = props;
   const [product, setProduct] = useState();
 
   useEffect(() => {

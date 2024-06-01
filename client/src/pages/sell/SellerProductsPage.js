@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Card, Row, Col, Rate } from "antd";
-import { Link } from "react-router-dom";
+import { message, Card, Row, Col, Rate, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
+import SellerProductDetails from "./SellerProductDetailsPage";
 
 const { Meta } = Card;
 
 function SellerProducts() {
   const [products, setProducts] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { currentUser } = useUser();
 
   useEffect(() => {
@@ -26,6 +28,19 @@ function SellerProducts() {
     fetchProducts();
   }, []);
 
+  const showModal = (productId) => {
+    setSelectedProductId(productId);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <Row gutter={[16, 16]}>
@@ -35,25 +50,34 @@ function SellerProducts() {
             : 0;
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <Link to={`/sell/product/${product._id}`}>
-                <Card
-                  hoverable
-                  cover={<img alt={product.name} src={product.images} />}
-                >
-                  <Meta
-                    title={product.name}
-                    description={`$${product.price}`}
-                  />
-                  <div style={{ marginTop: "10px", textAlign: "center" }}>
-                    <Rate disabled defaultValue={averageRating} />
-                    <div>{averageRating.toFixed(1)} / 5</div>
-                  </div>
-                </Card>
-              </Link>
+              <Card
+                hoverable
+                cover={<img alt={product.name} src={product.images} />}
+                onClick={() => showModal(product._id)}
+              >
+                <Meta title={product.name} description={`$${product.price}`} />
+                <div style={{ marginTop: "10px", textAlign: "center" }}>
+                  <Rate disabled defaultValue={averageRating} />
+                  <div>{averageRating.toFixed(1)} / 5</div>
+                </div>
+              </Card>
             </Col>
           );
         })}
       </Row>
+
+      {selectedProductId && (
+        <Modal
+          title="Product Details"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+          width={800}
+        >
+          <SellerProductDetails productId={selectedProductId} />
+        </Modal>
+      )}
     </div>
   );
 }
