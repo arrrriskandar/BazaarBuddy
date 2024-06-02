@@ -32,9 +32,14 @@ const Profile = () => {
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
-            {currentUser.ratingSum / (currentUser.ratingCount || 1)}{" "}
-            <StarFilled />
-            <span> ({currentUser.ratingCount} reviews)</span>
+            {currentUser.ratingCount > 0 ? (
+              <>
+                {currentUser.ratingAverage} <StarFilled />
+                <span> ({currentUser.ratingCount} reviews)</span>
+              </>
+            ) : (
+              <span>No reviews</span>
+            )}
           </Descriptions.Item>
           <Descriptions.Item label="Member Since">
             {new Date(currentUser.createdAt).toLocaleDateString()}

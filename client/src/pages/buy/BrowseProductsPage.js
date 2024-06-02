@@ -15,8 +15,8 @@ function BrowseProducts() {
     sortBy: "",
     sortOrder: "",
     stock: "1",
-    retrieveMyProducts: false,
-    seller: currentUser._id,
+    retrieveMyProducts: "no",
+    userId: currentUser._id,
   });
 
   useEffect(() => {
@@ -38,13 +38,10 @@ function BrowseProducts() {
     <div style={{ padding: "20px" }}>
       <Row gutter={[16, 16]}>
         {products.map((product) => {
-          const averageRating = product.ratingCount
-            ? product.ratingSum / product.ratingCount
-            : 0;
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
               <Link to={`/buy/product/${product._id}`}>
-                <ProductCard product={product} averageRating={averageRating} />
+                <ProductCard product={product} />
               </Link>
             </Col>
           );

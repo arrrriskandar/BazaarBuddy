@@ -23,13 +23,15 @@ const ProductSchema = new mongoose.Schema({
   seller: {
     type: String,
     ref: userModel,
+    required: true,
   },
   stock: {
     type: Number,
+    required: true,
   },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
-  ratingSum: {
+  ratingAverage: {
     type: Number,
     default: 0,
     required: true,

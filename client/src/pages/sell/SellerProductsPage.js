@@ -4,6 +4,7 @@ import axios from "axios";
 import { message, Card, Row, Col, Rate, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
 import SellerProductDetails from "../../components/Sell/SellerProductDetails";
+import ProductCard from "../../components/Product/ProductCard";
 
 const { Meta } = Card;
 
@@ -17,7 +18,7 @@ function SellerProducts() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(apiEndpoint + "/product", {
-          params: { seller: currentUser._id, retrieveMyProducts: true },
+          params: { userId: currentUser._id, retrieveMyProducts: "yes" },
         });
         setProducts(response.data);
       } catch (error) {
@@ -45,22 +46,9 @@ function SellerProducts() {
     <div style={{ padding: "20px" }}>
       <Row gutter={[16, 16]}>
         {products.map((product) => {
-          const averageRating = product.ratingCount
-            ? product.ratingSum / product.ratingCount
-            : 0;
           return (
             <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <Card
-                hoverable
-                cover={<img alt={product.name} src={product.images} />}
-                onClick={() => showModal(product._id)}
-              >
-                <Meta title={product.name} description={`$${product.price}`} />
-                <div style={{ marginTop: "10px", textAlign: "center" }}>
-                  <Rate disabled defaultValue={averageRating} />
-                  <div>{averageRating.toFixed(1)} / 5</div>
-                </div>
-              </Card>
+              <ProductCard product={product} showModal={showModal} />
             </Col>
           );
         })}
@@ -69,7 +57,7 @@ function SellerProducts() {
       {selectedProductId && (
         <Modal
           title="Product Details"
-          visible={isModalVisible}
+          open={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}
           footer={null}

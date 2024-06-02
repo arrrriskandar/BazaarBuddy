@@ -25,9 +25,9 @@ export const getProducts = async (queryParams) => {
   if (category) query.category = category;
   if (name) query.name = new RegExp(name, "i");
   if (stock) query.stock = stock;
-  if (retrieveMyProducts === "true") {
+  if (userId && retrieveMyProducts === "yes") {
     query.seller = userId;
-  } else {
+  } else if (userId && retrieveMyProducts === "no") {
     query.seller = { $ne: userId };
   }
 

@@ -22,7 +22,6 @@ export const UserProvider = ({ children }) => {
             apiEndpoint + `/user/${currentAuthUser.uid}`
           );
           setCurrentUser(response.data);
-          console.log(response.data + "heheheh");
         } catch (error) {
           console.error("Error fetching user details:", error);
         }

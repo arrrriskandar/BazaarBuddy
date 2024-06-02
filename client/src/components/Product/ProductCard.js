@@ -3,7 +3,7 @@ import React from "react";
 
 const { Meta } = Card;
 
-function ProductCard({ product, averageRating, showModal }) {
+function ProductCard({ product, showModal }) {
   return (
     <Card
       hoverable
@@ -29,8 +29,14 @@ function ProductCard({ product, averageRating, showModal }) {
     >
       <Meta title={product.name} description={`$${product.price}`} />
       <div style={{ marginTop: "10px", textAlign: "center" }}>
-        <Rate disabled defaultValue={averageRating} />
-        <div>{averageRating.toFixed(1)} / 5</div>
+        {product.ratingCount > 0 ? (
+          <>
+            <Rate disabled defaultValue={product.ratingAverage} />
+            <div>{product.ratingAverage.toFixed(1)} / 5</div>
+          </>
+        ) : (
+          <div>No reviews</div>
+        )}
       </div>
     </Card>
   );
