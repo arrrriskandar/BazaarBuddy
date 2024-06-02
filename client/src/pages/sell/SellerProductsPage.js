@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Card, Row, Col, Rate, Modal } from "antd";
+import { message, Row, Col, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
 import SellerProductDetails from "../../components/Sell/SellerProductDetails";
 import ProductCard from "../../components/Product/ProductCard";
-
-const { Meta } = Card;
 
 function SellerProducts() {
   const [products, setProducts] = useState([]);
@@ -56,7 +54,6 @@ function SellerProducts() {
 
       {selectedProductId && (
         <Modal
-          title="Product Details"
           open={isModalVisible}
           onOk={handleOk}
           onCancel={handleCancel}

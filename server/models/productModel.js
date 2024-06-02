@@ -14,7 +14,8 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   category: {
-    type: Number,
+    type: String,
+    default: "N/A",
   },
   images: {
     type: String,
@@ -26,8 +27,9 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   stock: {
-    type: Number,
+    type: String,
     required: true,
+    default: "Available",
   },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },

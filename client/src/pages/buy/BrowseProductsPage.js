@@ -14,7 +14,7 @@ function BrowseProducts() {
     category: "",
     sortBy: "",
     sortOrder: "",
-    stock: "1",
+    stock: "Available",
     retrieveMyProducts: "no",
     userId: currentUser._id,
   });

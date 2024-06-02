@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Row, Col, Input, Form, Button, Select } from "antd";
-import { Category, Stock } from "../../constants/eNums";
+import {
+  message,
+  Row,
+  Col,
+  Input,
+  Form,
+  Button,
+  Select,
+  Typography,
+  Descriptions,
+} from "antd";
+import { categories, stockOptions } from "../../constants/constants";
 
 const { TextArea } = Input;
 const { Option } = Select;
+const { Title, Paragraph } = Typography;
 
 function SellerProductDetails(props) {
   const { productId } = props;
@@ -68,40 +79,50 @@ function SellerProductDetails(props) {
           <Col span={12}>
             {!isEditing ? (
               <>
-                <h1>{product.name}</h1>
-                <p>{product.description}</p>
-                <h2>${product.price}</h2>
-                <p>Category: {Category[product.category]}</p>
-                <p>Stock: {Stock[product.stock]}</p>
-                <Button type="primary" onClick={handleEditClick}>
+                <Title level={2}>{product.name}</Title>
+                <Paragraph>{product.description}</Paragraph>
+                <Title level={3}>${product.price}</Title>
+                <Descriptions bordered column={1}>
+                  <Descriptions.Item label="Category">
+                    {product.category}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Stock">
+                    {product.stock}
+                  </Descriptions.Item>
+                </Descriptions>
+                <Button
+                  type="primary"
+                  onClick={handleEditClick}
+                  style={{ marginTop: "20px" }}
+                >
                   Edit
                 </Button>
               </>
             ) : (
               <Form form={form} onFinish={handleFormSubmit} layout="vertical">
-                <Form.Item name="name" label="Name">
+                <Form.Item name="name" label="Name" required>
                   <Input />
                 </Form.Item>
                 <Form.Item name="description" label="Description">
                   <TextArea rows={4} />
                 </Form.Item>
-                <Form.Item name="price" label="Price">
+                <Form.Item name="price" label="Price" required>
                   <Input type="number" />
                 </Form.Item>
                 <Form.Item name="category" label="Category">
                   <Select>
-                    {Object.keys(Category).map((key) => (
-                      <Option key={key} value={key}>
-                        {Category[key]}
+                    {categories.map((category) => (
+                      <Option key={category.value} value={category.stringValue}>
+                        {category.label}
                       </Option>
                     ))}
                   </Select>
                 </Form.Item>
                 <Form.Item name="stock" label="Stock">
                   <Select>
-                    {Object.keys(Stock).map((key) => (
-                      <Option key={key} value={key}>
-                        {Stock[key]}
+                    {stockOptions.map((option) => (
+                      <Option key={option.value} value={option.stringValue}>
+                        {option.label}
                       </Option>
                     ))}
                   </Select>
