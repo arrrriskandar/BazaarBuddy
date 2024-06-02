@@ -22,7 +22,7 @@ function BrowseProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(apiEndpoint + "/product", {
+        const response = await axios.get(apiEndpoint + "/product/buy", {
           params: searchParams,
         });
         setProducts(response.data);

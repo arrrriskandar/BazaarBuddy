@@ -2,7 +2,8 @@ import {
   createProduct,
   deleteProduct,
   getProduct,
-  getProducts,
+  getBrowseProducts,
+  getMyProducts,
   updateProduct,
 } from "../services/productService.js";
 
@@ -27,9 +28,21 @@ export const getProductController = async (req, res) => {
   }
 };
 
-export const getProductsController = async (req, res) => {
+export const getBrowseProductsController = async (req, res) => {
   try {
-    const products = await getProducts(req.query);
+    const products = await getBrowseProducts(req.query);
+    if (!products) {
+      return res.status(404).json({ message: "No Products found" });
+    }
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getMyProductsController = async (req, res) => {
+  try {
+    const products = await getMyProducts(req.query);
     if (!products) {
       return res.status(404).json({ message: "No Products found" });
     }
@@ -41,6 +54,9 @@ export const getProductsController = async (req, res) => {
 
 export const updateProductController = async (req, res) => {
   try {
+    const { name } = req.body;
+    if (!name)
+      return res.status(400).json({ message: "Name field must not be empty" });
     const updatedProduct = await updateProduct(req.params.id, req.body);
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
