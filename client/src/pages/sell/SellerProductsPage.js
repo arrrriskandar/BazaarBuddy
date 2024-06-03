@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Row, Col, Modal } from "antd";
+import { message, Row, Col, Modal, Typography, Divider } from "antd";
 import { useUser } from "../../contexts/UserContext";
 import SellerProductDetails from "../../components/sell/SellerProductDetails";
 import ProductCard from "../../components/product/ProductCard";
 import ProductNameSearch from "../../components/product/ProductNameSearch";
+
+const { Title } = Typography;
 
 function SellerProducts() {
   const [products, setProducts] = useState({
@@ -51,39 +53,32 @@ function SellerProducts() {
     setIsModalVisible(false);
   };
 
+  const renderProductsSection = (title, products) => (
+    <>
+      <Title level={3}>{title}</Title>
+      <Row gutter={[16, 16]}>
+        {products.map((product) => (
+          <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
+            <ProductCard product={product} showModal={showModal} />
+          </Col>
+        ))}
+      </Row>
+      <Divider />
+    </>
+  );
+
   return (
     <div style={{ padding: "20px" }}>
       <ProductNameSearch
         searchParams={searchParams}
         setSearchParams={setSearchParams}
       />
-      <Row gutter={[16, 16]}>
-        {products.available.map((product) => {
-          return (
-            <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <ProductCard product={product} showModal={showModal} />
-            </Col>
-          );
-        })}
-      </Row>
-      <Row gutter={[16, 16]}>
-        {products.outOfStock.map((product) => {
-          return (
-            <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <ProductCard product={product} showModal={showModal} />
-            </Col>
-          );
-        })}
-      </Row>
-      <Row gutter={[16, 16]}>
-        {products.discontinued.map((product) => {
-          return (
-            <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-              <ProductCard product={product} showModal={showModal} />
-            </Col>
-          );
-        })}
-      </Row>
+      {products.available.length > 0 &&
+        renderProductsSection("Available", products.available)}
+      {products.outOfStock.length > 0 &&
+        renderProductsSection("Out of Stock", products.outOfStock)}
+      {products.discontinued.length > 0 &&
+        renderProductsSection("Discontinued", products.discontinued)}
 
       {selectedProductId && (
         <Modal
