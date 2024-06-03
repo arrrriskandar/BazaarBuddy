@@ -10,22 +10,30 @@ export const getProduct = async (id) => {
 };
 
 export const getBrowseProducts = async (userId, queryParams) => {
-  const {
-    category,
-    name,
-    sortBy = "ratingAverage",
-    sortOrder = "desc",
-  } = queryParams;
+  const { category, name, sortCriteria } = queryParams;
 
   let query = {};
+
+  let sortBy;
+  let sortOrder;
 
   query.stock = "Available";
   query.seller = { $ne: userId };
 
-  if (category && category.length > 0) {
-    query.category = { $in: category };
+  if (category) {
+    query.category = category;
   }
   if (name) query.name = new RegExp(name, "i");
+
+  if (sortCriteria) {
+    if (sortCriteria.includes("asc")) {
+      sortBy = sortCriteria.slice(0, -3);
+      sortOrder = "asc";
+    } else {
+      sortBy = sortCriteria.slice(0, -4);
+      sortOrder = "desc";
+    }
+  }
 
   let sortOptions = {};
   if (sortBy) {

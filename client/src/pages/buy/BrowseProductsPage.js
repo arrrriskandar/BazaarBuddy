@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
 import { useUser } from "../../contexts/UserContext";
+import BrowseProductSearch from "../../components/buy/BrowseProductSearch";
 
 function BrowseProducts() {
   const { currentUser } = useUser();
@@ -12,8 +13,7 @@ function BrowseProducts() {
   const [searchParams, setSearchParams] = useState({
     name: "",
     category: "",
-    sortBy: "",
-    sortOrder: "",
+    sortCriteria: "ratingAveragedesc",
   });
 
   useEffect(() => {
@@ -32,10 +32,15 @@ function BrowseProducts() {
     };
 
     fetchProducts();
-  }, [searchParams]);
+  }, [currentUser._id, searchParams]);
 
   return (
     <div style={{ padding: "20px" }}>
+      <BrowseProductSearch
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
+      <Row gutter={[16, 16]}></Row>
       <Row gutter={[16, 16]}>
         {products.map((product) => {
           return (

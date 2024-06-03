@@ -5,6 +5,7 @@ import { message, Row, Col, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
 import SellerProductDetails from "../../components/sell/SellerProductDetails";
 import ProductCard from "../../components/product/ProductCard";
+import ProductNameSearch from "../../components/product/ProductNameSearch";
 
 function SellerProducts() {
   const [products, setProducts] = useState({
@@ -15,7 +16,9 @@ function SellerProducts() {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { currentUser } = useUser();
-  const [searchName, setSearchName] = useState();
+  const [searchParams, setSearchParams] = useState({
+    name: "",
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,10 +26,9 @@ function SellerProducts() {
         const response = await axios.get(
           apiEndpoint + `/product/sell/${currentUser._id}`,
           {
-            params: { name: searchName },
+            params: searchParams,
           }
         );
-        console.log(response.data);
         setProducts(response.data);
       } catch (error) {
         message.error("Failed to retrieve products");
@@ -34,7 +36,7 @@ function SellerProducts() {
     };
 
     fetchProducts();
-  }, [currentUser._id]);
+  }, [currentUser._id, searchParams]);
 
   const showModal = (productId) => {
     setSelectedProductId(productId);
@@ -51,6 +53,10 @@ function SellerProducts() {
 
   return (
     <div style={{ padding: "20px" }}>
+      <ProductNameSearch
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
       <Row gutter={[16, 16]}>
         {products.available.map((product) => {
           return (
