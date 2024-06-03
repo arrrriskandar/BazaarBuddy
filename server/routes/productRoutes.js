@@ -11,8 +11,8 @@ import {
 const router = express.Router();
 
 router.route("/").post(createProductController);
-router.route("/buy").get(getBrowseProductsController);
-router.route("/sell").get(getMyProductsController);
+router.route("/buy/:userId").get(getBrowseProductsController);
+router.route("/sell/:userId").get(getMyProductsController);
 router.route("/:id").get(getProductController);
 router.route("/:id").put(updateProductController);
 router.route("/:id").delete(deleteProductController);

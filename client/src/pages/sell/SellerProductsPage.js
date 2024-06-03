@@ -15,13 +15,17 @@ function SellerProducts() {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { currentUser } = useUser();
+  const [searchName, setSearchName] = useState();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(apiEndpoint + "/product/sell", {
-          params: { userId: currentUser._id },
-        });
+        const response = await axios.get(
+          apiEndpoint + `/product/sell/${currentUser._id}`,
+          {
+            params: { name: searchName },
+          }
+        );
         console.log(response.data);
         setProducts(response.data);
       } catch (error) {

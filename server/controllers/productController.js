@@ -30,7 +30,7 @@ export const getProductController = async (req, res) => {
 
 export const getBrowseProductsController = async (req, res) => {
   try {
-    const products = await getBrowseProducts(req.query);
+    const products = await getBrowseProducts(req.params.userId, req.query);
     if (!products) {
       return res.status(404).json({ message: "No Products found" });
     }
@@ -42,7 +42,7 @@ export const getBrowseProductsController = async (req, res) => {
 
 export const getMyProductsController = async (req, res) => {
   try {
-    const products = await getMyProducts(req.query);
+    const products = await getMyProducts(req.params.userId, req.query);
     if (!products) {
       return res.status(404).json({ message: "No Products found" });
     }

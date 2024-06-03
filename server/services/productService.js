@@ -9,31 +9,23 @@ export const getProduct = async (id) => {
   return await ProductModel.findById(id);
 };
 
-export const getBrowseProducts = async (queryParams) => {
+export const getBrowseProducts = async (userId, queryParams) => {
   const {
     category,
     name,
-    stock,
-    sortBy = "updatedAt",
+    sortBy = "ratingAverage",
     sortOrder = "desc",
-    userId,
-    retrieveMyProducts,
   } = queryParams;
 
   let query = {};
+
+  query.stock = "Available";
+  query.seller = { $ne: userId };
 
   if (category && category.length > 0) {
     query.category = { $in: category };
   }
   if (name) query.name = new RegExp(name, "i");
-  if (stock && stock.length > 0) {
-    query.stock = { $in: stock };
-  }
-  if (userId && retrieveMyProducts === "yes") {
-    query.seller = userId;
-  } else if (userId && retrieveMyProducts === "no") {
-    query.seller = { $ne: userId };
-  }
 
   let sortOptions = {};
   if (sortBy) {
@@ -42,12 +34,14 @@ export const getBrowseProducts = async (queryParams) => {
   return await ProductModel.find(query).sort(sortOptions);
 };
 
-export const getMyProducts = async (queryParams) => {
-  const { userId } = queryParams;
-  console.log(userId);
+export const getMyProducts = async (userId, queryParams) => {
+  const { name } = queryParams;
 
   let query = {};
-  if (userId) query.seller = userId;
+
+  query.seller = userId;
+
+  if (name) query.name = new RegExp(name, "i");
 
   const sortOptions = { updatedAt: -1 };
 

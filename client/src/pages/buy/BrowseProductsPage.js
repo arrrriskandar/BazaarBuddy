@@ -14,17 +14,17 @@ function BrowseProducts() {
     category: "",
     sortBy: "",
     sortOrder: "",
-    stock: "Available",
-    retrieveMyProducts: "no",
-    userId: currentUser._id,
   });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(apiEndpoint + "/product/buy", {
-          params: searchParams,
-        });
+        const response = await axios.get(
+          apiEndpoint + `/product/buy/${currentUser._id}`,
+          {
+            params: searchParams,
+          }
+        );
         setProducts(response.data);
       } catch (error) {
         message.error("Failed to retrieve products");
