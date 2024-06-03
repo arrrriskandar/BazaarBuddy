@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Avatar, Descriptions, Divider } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { useUser } from "../contexts/UserContext";
-import LogoutButton from "../components/Auth/LogoutButton";
+import LogoutButton from "../components/auth/LogoutButton";
 
 const Profile = () => {
   const { currentUser } = useUser();

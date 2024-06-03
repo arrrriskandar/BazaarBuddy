@@ -3,7 +3,7 @@ import axios from "axios";
 import { Col, Row, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProductCard from "../../components/Product/ProductCard";
+import ProductCard from "../../components/product/ProductCard";
 import { useUser } from "../../contexts/UserContext";
 
 function BrowseProducts() {

@@ -3,8 +3,8 @@ import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Row, Col, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
-import SellerProductDetails from "../../components/Sell/SellerProductDetails";
-import ProductCard from "../../components/Product/ProductCard";
+import SellerProductDetails from "../../components/sell/SellerProductDetails";
+import ProductCard from "../../components/product/ProductCard";
 
 function SellerProducts() {
   const [products, setProducts] = useState({

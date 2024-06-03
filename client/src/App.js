@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import BrowseProducts from "./pages/buy/BrowseProductsPage";
 import { Layout } from "antd";
-import TopNavigation from "./components/Common/TopNavigation";
+import TopNavigation from "./components/common/TopNavigation";
 import { Content } from "antd/es/layout/layout";
 import SellerProducts from "./pages/sell/SellerProductsPage";
 
