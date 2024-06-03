@@ -4,8 +4,13 @@ import ProductNameSearch from "../product/ProductNameSearch";
 
 const { Option } = Select;
 
-const BrowseProductSearch = ({ searchParams, setSearchParams }) => {
+const BrowseProductSearch = ({
+  searchParams,
+  setSearchParams,
+  setCurrentPage,
+}) => {
   const handleSelectChange = (value, name) => {
+    setCurrentPage(1);
     setSearchParams((prevParams) => ({
       ...prevParams,
       [name]: value,
@@ -17,6 +22,7 @@ const BrowseProductSearch = ({ searchParams, setSearchParams }) => {
       <ProductNameSearch
         searchParams={searchParams}
         setSearchParams={setSearchParams}
+        setCurrentPage={setCurrentPage}
       />
       <Row gutter={[16, 16]}>
         <Col span={8}>

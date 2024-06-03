@@ -1,8 +1,13 @@
 import React from "react";
 import { Row, Col, Input } from "antd";
 
-const ProductNameSearch = ({ searchParams, setSearchParams }) => {
+const ProductNameSearch = ({
+  searchParams,
+  setSearchParams,
+  setCurrentPage,
+}) => {
   const handleInputChange = (e) => {
+    setCurrentPage(1);
     setSearchParams((prevParams) => ({
       ...prevParams,
       [e.target.name]: e.target.value,

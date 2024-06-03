@@ -10,10 +10,11 @@ export const getProduct = async (id) => {
 };
 
 export const getBrowseProducts = async (userId, queryParams) => {
-  const { category, name, sortCriteria } = queryParams;
+  const { category, name, sortCriteria, page, limit } = queryParams;
+  const pageNumber = parseInt(page) || 1;
+  const pageSize = parseInt(limit) || 1;
 
   let query = {};
-
   let sortBy;
   let sortOrder;
 
@@ -28,18 +29,33 @@ export const getBrowseProducts = async (userId, queryParams) => {
   if (sortCriteria) {
     if (sortCriteria.includes("asc")) {
       sortBy = sortCriteria.slice(0, -3);
-      sortOrder = "asc";
+      sortOrder = 1;
     } else {
       sortBy = sortCriteria.slice(0, -4);
-      sortOrder = "desc";
+      sortOrder = -1;
     }
   }
 
   let sortOptions = {};
   if (sortBy) {
-    sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
+    sortOptions[sortBy] = sortOrder;
   }
-  return await ProductModel.find(query).sort(sortOptions);
+
+  const totalProducts = await ProductModel.countDocuments(query);
+  const totalPages = Math.ceil(totalProducts / pageSize);
+
+  const products = await ProductModel.find(query)
+    .sort(sortOptions)
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
+
+  return {
+    products,
+    total: totalProducts,
+    totalPages,
+    page: pageNumber,
+    pageSize,
+  };
 };
 
 export const getMyProducts = async (userId, queryParams) => {
