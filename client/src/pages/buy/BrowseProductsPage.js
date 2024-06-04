@@ -1,6 +1,6 @@
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { Col, Row, message, Pagination } from "antd";
+import { Col, Row, message, Pagination, Divider } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
@@ -53,6 +53,7 @@ function BrowseProducts() {
         setSearchParams={setSearchParams}
         setCurrentPage={setCurrentPage}
       />
+      <Divider />
       <Row gutter={[16, 16]}>
         {products.map((product) => (
           <Col xs={24} sm={12} md={8} lg={6} key={product._id}>

@@ -73,6 +73,7 @@ function SellerProducts() {
         searchParams={searchParams}
         setSearchParams={setSearchParams}
       />
+      <Divider />
       {products.available.length > 0 &&
         renderProductsSection("Available", products.available)}
       {products.outOfStock.length > 0 &&
