@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col, Select } from "antd";
-import ProductNameSearch from "../product/ProductNameSearch";
+import ProductNameSearch from "./ProductNameSearch";
 
 const { Option } = Select;
 

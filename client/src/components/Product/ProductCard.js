@@ -3,12 +3,11 @@ import React from "react";
 
 const { Meta } = Card;
 
-function ProductCard({ product, showModal }) {
+function ProductCard({ product }) {
   return (
     <Card
       hoverable
       style={{ height: "100%" }}
-      onClick={() => (showModal ? showModal(product._id) : null)}
       cover={
         <div
           style={{

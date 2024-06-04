@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
 import { useUser } from "../../contexts/UserContext";
-import BrowseProductSearch from "../../components/buy/BrowseProductSearch";
+import BrowseProductSearch from "../../components/product/BrowseProductSearch";
 
 function BrowseProducts() {
   const { currentUser } = useUser();
@@ -17,7 +17,7 @@ function BrowseProducts() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const pageSize = 1;
+  const pageSize = 20;
 
   useEffect(() => {
     const fetchProducts = async () => {

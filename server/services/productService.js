@@ -12,7 +12,7 @@ export const getProduct = async (id) => {
 export const getBrowseProducts = async (userId, queryParams) => {
   const { category, name, sortCriteria, page, limit } = queryParams;
   const pageNumber = parseInt(page) || 1;
-  const pageSize = parseInt(limit) || 1;
+  const pageSize = parseInt(limit) || 20;
 
   let query = {};
   let sortBy;

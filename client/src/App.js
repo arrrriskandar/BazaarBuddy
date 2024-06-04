@@ -3,18 +3,19 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Profile from "./pages/ProfilePage";
 import LoginRegister from "./pages/LoginRegisterPage";
 import { UserProvider } from "./contexts/UserContext";
-import ProductDetails from "./pages/buy/ProductDetailsPage";
+import BrowseProductDetails from "./pages/buy/ProductDetailsPage";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import BrowseProducts from "./pages/buy/BrowseProductsPage";
+import BrowseProducts from "./pages/buy/ProductsPage";
 import { Layout } from "antd";
 import TopNavigation from "./components/common/TopNavigation";
 import { Content } from "antd/es/layout/layout";
-import SellerProducts from "./pages/sell/SellerProductsPage";
+import SellerProducts from "./pages/sell/ProductsPage";
+import SellerProductDetails from "./pages/sell/ProductDetailsPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -24,8 +25,15 @@ const AuthenticatedApp = () => {
         <Routes>
           <Route path="/profile" element={<Profile />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
-          <Route path="/buy/product/:productId" element={<ProductDetails />} />
+          <Route
+            path="/buy/product/:productId"
+            element={<BrowseProductDetails />}
+          />
           <Route path="/sell/product" element={<SellerProducts />} />
+          <Route
+            path="/sell/product/:productId"
+            element={<SellerProductDetails />}
+          />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>

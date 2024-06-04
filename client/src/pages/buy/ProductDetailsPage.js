@@ -3,8 +3,9 @@ import { useParams } from "react-router-dom";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Button, Row, Col } from "antd";
+import ProductInfo from "../../components/product/ProductInfo";
 
-function ProductDetails() {
+function BrowseProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(1);
@@ -53,11 +54,7 @@ function ProductDetails() {
             />
           </Col>
           <Col span={12}>
-            <h1>{product.name}</h1>
-            <p>{product.description}</p>
-            <h2>${product.price}</h2>
-            <p>Category: {product.category}</p>
-            <p>Stock: {product.stock}</p>
+            <ProductInfo product={product} />
             <div
               style={{
                 marginBottom: "20px",
@@ -74,11 +71,7 @@ function ProductDetails() {
                 -
               </Button>
               <span>{quantity}</span>
-              <Button
-                onClick={incrementQuantity}
-                // disabled={quantity >= product.stock}
-                style={{ margin: "0 10px" }}
-              >
+              <Button onClick={incrementQuantity} style={{ margin: "0 10px" }}>
                 +
               </Button>
             </div>
@@ -101,4 +94,4 @@ function ProductDetails() {
   );
 }
 
-export default ProductDetails;
+export default BrowseProductDetails;
