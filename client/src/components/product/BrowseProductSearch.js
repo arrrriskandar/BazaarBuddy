@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Select } from "antd";
 import ProductNameSearch from "./ProductNameSearch";
+import { categories } from "../../constants/constants";
 
 const { Option } = Select;
 
@@ -34,13 +35,9 @@ const BrowseProductSearch = ({
             style={{ width: "100%" }}
           >
             <Option value="">All Categories</Option>
-            <Option value="Food and Beverages">Food and Beverages</Option>
-            <Option value="Fashion">Fashion</Option>
-            <Option value="Beauty">Beauty</Option>
-            <Option value="Home and Living">Home and Living</Option>
-            <Option value="Sports and Wellness">Sports and Wellness</Option>
-            <Option value="Electronics">Electronics</Option>
-            <Option value="Others">Others</Option>
+            {categories.map((category) => (
+              <Option value={category.value}>{category.label}</Option>
+            ))}
           </Select>
         </Col>
         <Col span={8}>

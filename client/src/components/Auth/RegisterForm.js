@@ -67,7 +67,6 @@ const RegisterForm = ({ toggleRegister }) => {
               rules={[
                 {
                   required: true,
-                  type: "username",
                   message: "Please enter a username!",
                 },
               ]}

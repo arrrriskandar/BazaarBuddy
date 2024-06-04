@@ -1,4 +1,4 @@
-import { Button, Form, Input, Row, Select, message } from "antd";
+import { Button, Form, Input, InputNumber, Row, Select, message } from "antd";
 import axios from "axios";
 import React from "react";
 import { apiEndpoint } from "../../constants/constants";
@@ -26,30 +26,45 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
   };
   return (
     <Form form={form} onFinish={handleFormSubmit} layout="vertical">
-      <Form.Item name="name" label="Name" required>
-        <Input />
+      <Form.Item
+        name="name"
+        label="Name:"
+        rules={[
+          {
+            required: true,
+            message: "Please enter product name!",
+          },
+        ]}
+      >
+        <Input placeholder="Name" />
       </Form.Item>
-      <Form.Item name="description" label="Description">
+      <Form.Item name="description" label="Description:">
         <TextArea rows={4} />
       </Form.Item>
-      <Form.Item name="price" label="Price" required>
-        <Input type="number" />
+      <Form.Item
+        name="price"
+        label="Price ($):"
+        rules={[
+          {
+            required: true,
+            type: "number",
+            message: "Please enter product price!",
+          },
+        ]}
+      >
+        <InputNumber style={{ width: "100%" }} />
       </Form.Item>
-      <Form.Item name="category" label="Category">
+      <Form.Item name="category" label="Category:" required>
         <Select>
           {categories.map((category) => (
-            <Option key={category.value} value={category.stringValue}>
-              {category.label}
-            </Option>
+            <Option value={category.value}>{category.label}</Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name="stock" label="Stock">
+      <Form.Item name="stock" label="Stock:" required>
         <Select>
           {stockOptions.map((option) => (
-            <Option key={option.value} value={option.stringValue}>
-              {option.label}
-            </Option>
+            <Option value={option.value}>{option.label}</Option>
           ))}
         </Select>
       </Form.Item>

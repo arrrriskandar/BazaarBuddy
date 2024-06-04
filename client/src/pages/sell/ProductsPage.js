@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Row, Col, Typography, Divider } from "antd";
+import { message, Row, Divider, Button, Modal } from "antd";
 import { useUser } from "../../contexts/UserContext";
-import ProductCard from "../../components/product/ProductCard";
 import ProductNameSearch from "../../components/product/ProductNameSearch";
-import { Link } from "react-router-dom";
-
-const { Title } = Typography;
+import { PlusOutlined } from "@ant-design/icons";
+import ProductAddForm from "../../components/product/ProductAddForm";
+import ProductsSection from "../../components/product/ProductsSection";
 
 function SellerProducts() {
   const [products, setProducts] = useState({
@@ -19,6 +18,7 @@ function SellerProducts() {
   const [searchParams, setSearchParams] = useState({
     name: "",
   });
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,36 +38,43 @@ function SellerProducts() {
     fetchProducts();
   }, [currentUser._id, searchParams]);
 
-  const renderProductsSection = (title, products) => (
-    <>
-      <Title level={3}>{title}</Title>
-      <Row gutter={[16, 16]}>
-        {products.map((product) => (
-          <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
-            <Link to={`/sell/product/${product._id}`}>
-              <ProductCard product={product} />
-            </Link>
-          </Col>
-        ))}
-      </Row>
-      <Divider />
-    </>
-  );
+  const handleAdd = () => {
+    setOpenModal(true);
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <ProductNameSearch
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
-      />
-      <Divider />
-      {products.available.length > 0 &&
-        renderProductsSection("Available", products.available)}
-      {products.outOfStock.length > 0 &&
-        renderProductsSection("Out of Stock", products.outOfStock)}
-      {products.discontinued.length > 0 &&
-        renderProductsSection("Discontinued", products.discontinued)}
-    </div>
+    <>
+      <Row style={{ justifyContent: "end" }}>
+        <Button icon={<PlusOutlined />} onClick={handleAdd} type="primary">
+          Add Product
+        </Button>
+      </Row>
+      <div style={{ padding: "20px" }}>
+        <ProductNameSearch
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
+        <Divider />
+        {products.available.length > 0 && (
+          <ProductsSection title={"Available"} products={products.available} />
+        )}
+        {products.outOfStock.length > 0 && (
+          <ProductsSection
+            title={"Out of Stock"}
+            products={products.outOfStock}
+          />
+        )}
+        {products.discontinued.length > 0 && (
+          <ProductsSection
+            title={"Discontinued"}
+            products={products.discontinued}
+          />
+        )}
+      </div>
+      <Modal open={openModal} footer={null}>
+        <ProductAddForm setOpenModal={setOpenModal} />
+      </Modal>
+    </>
   );
 }
 
