@@ -2,14 +2,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiEndpoint } from "../../constants/constants";
-import { message, Row, Col, Modal, Button, Form } from "antd";
+import { message, Row, Col, Modal, Button, Form, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
 import ProductEditForm from "../../components/product/ProductEditForm";
+import RemoveProductDialog from "../../components/product/RemoveProductDialog";
 
 function SellerProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState();
-  const [openModel, setOpenModel] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -25,7 +27,7 @@ function SellerProductDetails() {
   }, [productId]);
 
   const handleEdit = () => {
-    setOpenModel(true);
+    setOpenEditModal(true);
     form.setFieldsValue({
       name: product.name,
       description: product.description,
@@ -35,13 +37,10 @@ function SellerProductDetails() {
     });
   };
 
-  const handleOk = () => {
-    setOpenModel(false);
+  const handleRemove = () => {
+    setOpenRemoveModal(true);
   };
 
-  const handleCancel = () => {
-    setOpenModel(false);
-  };
   return (
     <div>
       {product ? (
@@ -56,23 +55,58 @@ function SellerProductDetails() {
             </Col>
             <Col span={12}>
               <ProductInfo product={product} />
-              <Button onClick={handleEdit} style={{ margin: "0 10px" }}>
-                Edit
-              </Button>
+              <Divider />
+              {product.stock !== "Discontinued" && (
+                <Row
+                  style={{
+                    marginBottom: "20px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    onClick={handleEdit}
+                    style={{ margin: "0 10px" }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    danger
+                    onClick={handleRemove}
+                    style={{ margin: "0 10px" }}
+                  >
+                    Remove
+                  </Button>
+                </Row>
+              )}
             </Col>
           </Row>
           <Modal
-            open={openModel}
-            onOk={handleOk}
-            onCancel={handleCancel}
+            open={openEditModal}
             footer={null}
             width={800}
+            closable={false}
+            centered={true}
           >
             <ProductEditForm
-              setOpenModal={setOpenModel}
+              setOpenEditModal={setOpenEditModal}
               product={product}
               setProduct={setProduct}
               form={form}
+            />
+          </Modal>
+          <Modal
+            open={openRemoveModal}
+            footer={null}
+            width={400}
+            closable={false}
+            centered={true}
+          >
+            <RemoveProductDialog
+              setOpenRemoveModal={setOpenRemoveModal}
+              setProduct={setProduct}
+              product={product}
             />
           </Modal>
         </>

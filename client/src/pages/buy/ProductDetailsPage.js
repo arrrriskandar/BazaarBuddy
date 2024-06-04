@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { message, Button, Row, Col } from "antd";
+import { message, Button, Row, Col, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
 
 function BrowseProductDetails() {
@@ -55,11 +55,12 @@ function BrowseProductDetails() {
           </Col>
           <Col span={12}>
             <ProductInfo product={product} />
-            <div
+            <Divider />
+            <Row
               style={{
                 marginBottom: "20px",
-                display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
               <span>Quantity: </span>
@@ -74,17 +75,25 @@ function BrowseProductDetails() {
               <Button onClick={incrementQuantity} style={{ margin: "0 10px" }}>
                 +
               </Button>
-            </div>
-            <Button
-              type="primary"
-              onClick={handleAddToCart}
-              style={{ marginRight: "10px" }}
+            </Row>
+            <Row
+              style={{
+                marginBottom: "20px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              Add to Cart
-            </Button>
-            <Button type="danger" onClick={handleBuyNow}>
-              Buy Now
-            </Button>
+              <Button
+                type="primary"
+                onClick={handleAddToCart}
+                style={{ marginRight: "10px" }}
+              >
+                Add to Cart
+              </Button>
+              <Button type="default" onClick={handleBuyNow}>
+                Buy Now
+              </Button>
+            </Row>
           </Col>
         </Row>
       ) : (

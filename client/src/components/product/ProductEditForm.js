@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, message } from "antd";
+import { Button, Form, Input, Row, Select, message } from "antd";
 import axios from "axios";
 import React from "react";
 import { apiEndpoint } from "../../constants/constants";
@@ -7,9 +7,9 @@ import { categories, stockOptions } from "../../constants/constants";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function ProductEditForm({ setOpenModal, product, setProduct, form }) {
+function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
   const handleCancelClick = () => {
-    setOpenModal(false);
+    setOpenEditModal(false);
   };
   const handleFormSubmit = async (values) => {
     try {
@@ -19,7 +19,7 @@ function ProductEditForm({ setOpenModal, product, setProduct, form }) {
       );
       setProduct(response.data);
       message.success("Product details updated successfully");
-      setOpenModal(false);
+      setOpenEditModal(false);
     } catch (error) {
       message.error("Failed to update product details");
     }
@@ -54,12 +54,19 @@ function ProductEditForm({ setOpenModal, product, setProduct, form }) {
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-        <Button style={{ marginLeft: "10px" }} onClick={handleCancelClick}>
-          Cancel
-        </Button>
+        <Row
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Save
+          </Button>
+          <Button style={{ marginLeft: "10px" }} onClick={handleCancelClick}>
+            Cancel
+          </Button>
+        </Row>
       </Form.Item>
     </Form>
   );
