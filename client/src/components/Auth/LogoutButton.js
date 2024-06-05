@@ -13,7 +13,7 @@ const LogoutButton = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={handleLogout}>
+      <Button danger onClick={handleLogout} style={{ minWidth: "100px" }}>
         Logout
       </Button>
     </div>

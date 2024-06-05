@@ -3,14 +3,12 @@ import { body, validationResult } from "express-validator";
 export const createUserValidationRules = () => {
   return [
     body("_id").notEmpty().withMessage("id is required"),
-    body("email").isEmail().withMessage("Email is invalid"),
     body("username").notEmpty().withMessage("Username is required"),
   ];
 };
 
 export const updateUserValidationRules = () => {
   return [
-    body("email").optional().isEmail().withMessage("Email is invalid"),
     body("username").optional().notEmpty().withMessage("Username is required"),
   ];
 };
@@ -20,6 +18,7 @@ export const restrictedFieldsValidationRules = () => {
     body("createdAt").not().exists(),
     body("ratingAverage").not().exists(),
     body("ratingCount").not().exists(),
+    body("email").not().exists(),
   ].map((rule) => rule.withMessage("Restricted request"));
 };
 

@@ -1,11 +1,22 @@
-import React from "react";
-import { Card, Avatar, Descriptions, Divider } from "antd";
+import React, { useState } from "react";
+import { Card, Avatar, Descriptions, Divider, Modal, Button, Form } from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { useUser } from "../contexts/UserContext";
 import LogoutButton from "../components/auth/LogoutButton";
+import ProfileEditForm from "../components/profile/ProfileEditForm";
 
 const Profile = () => {
   const { currentUser } = useUser();
+  const [openModal, setOpenModal] = useState(false);
+  const [form] = Form.useForm();
+  const [profile, setProfile] = useState(currentUser);
+
+  const handleEdit = () => {
+    setOpenModal(true);
+    form.setFieldsValue({
+      username: profile.username,
+    });
+  };
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
@@ -13,39 +24,70 @@ const Profile = () => {
         style={{ width: 400, boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
         cover={
           <Avatar
-            src={currentUser.photoUrl || "/default-avatar.png"}
+            src={profile.photoUrl || "/default-avatar.png"}
             size={200}
             style={{ margin: "20px auto" }}
           />
         }
-        actions={[<LogoutButton key="logout" />]}
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <h2>{currentUser.username}</h2>
-          <span style={{ color: "#888" }}>{currentUser.email}</span>
+          <h2>{profile.username}</h2>
+          <span style={{ color: "#888" }}>{profile.email}</span>
         </div>
         <Divider />
         <Descriptions layout="vertical" bordered column={1}>
           <Descriptions.Item label="Address">
-            {currentUser.address || (
+            {profile.address || (
               <span style={{ color: "#ff4d4f" }}>Please add your address!</span>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
-            {currentUser.ratingCount > 0 ? (
+            {profile.ratingCount > 0 ? (
               <>
-                {currentUser.ratingAverage} <StarFilled />
-                <span> ({currentUser.ratingCount} reviews)</span>
+                {profile.ratingAverage} <StarFilled />
+                <span> ({profile.ratingCount} reviews)</span>
               </>
             ) : (
               <span>No reviews</span>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Member Since">
-            {new Date(currentUser.createdAt).toLocaleDateString()}
+            {new Date(profile.createdAt).toLocaleDateString()}
           </Descriptions.Item>
         </Descriptions>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            marginTop: "20px",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            type="primary"
+            onClick={handleEdit}
+            style={{ minWidth: "100px" }}
+          >
+            Edit Profile
+          </Button>
+          <LogoutButton />
+        </div>
       </Card>
+      <Modal
+        open={openModal}
+        footer={null}
+        width={800}
+        closable={false}
+        centered={true}
+      >
+        <ProfileEditForm
+          setOpenModal={setOpenModal}
+          setProfile={setProfile}
+          form={form}
+          profile={profile}
+        />
+      </Modal>
     </div>
   );
 };

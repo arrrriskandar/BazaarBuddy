@@ -71,7 +71,13 @@ function SellerProducts() {
           />
         )}
       </div>
-      <Modal open={openModal} footer={null} closable={false}>
+      <Modal
+        open={openModal}
+        footer={null}
+        closable={false}
+        centered={true}
+        width={800}
+      >
         <ProductAddForm setOpenModal={setOpenModal} setProducts={setProducts} />
       </Modal>
     </>
