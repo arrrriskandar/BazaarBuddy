@@ -54,9 +54,6 @@ export const getMyProductsController = async (req, res) => {
 
 export const updateProductController = async (req, res) => {
   try {
-    const { name } = req.body;
-    if (!name)
-      return res.status(400).json({ message: "Name field must not be empty" });
     const updatedProduct = await updateProduct(req.params.id, req.body);
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });

@@ -70,7 +70,7 @@ export const getMyProducts = async (userId, queryParams) => {
   const sortOptions = { updatedAt: -1 };
 
   const availabilityQuery = { ...query, stock: "Available" };
-  const oOSQuery = { ...query, stock: "Out Of Stock" };
+  const oOSQuery = { ...query, stock: "Out of Stock" };
   const discontinuedQuery = { ...query, stock: "Discontinued" };
 
   const availableProducts = await ProductModel.find(availabilityQuery).sort(

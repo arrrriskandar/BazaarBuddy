@@ -18,5 +18,5 @@ export const categories = [
 
 export const stockOptions = [
   { value: "Available", label: "Available" },
-  { value: "Out Of Stock", label: "Out Of Stock" },
+  { value: "Out of Stock", label: "Out of Stock" },
 ];
