@@ -15,6 +15,9 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
   const handleCancelClick = () => {
     setProfilePicture(profile.photoUrl);
     setOpenModal(false);
+    form.setFieldsValue({
+      username: profile.username,
+    });
   };
 
   const handleFormSubmit = async (values) => {

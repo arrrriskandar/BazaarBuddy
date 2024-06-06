@@ -24,7 +24,6 @@ const Profile = () => {
   const handleEdit = () => {
     setOpenModal(true);
     form.setFieldsValue({
-      photoUrl: profile.photoUrl,
       username: profile.username,
     });
   };
