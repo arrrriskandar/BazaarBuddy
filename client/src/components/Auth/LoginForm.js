@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  message,
+  Typography,
+  Card,
+  Row,
+  Col,
+  Avatar,
+} from "antd";
 import { login } from "../../firebase/auth";
 import ResetPasswordModal from "./ResetPasswordModal";
 
@@ -33,17 +43,7 @@ const LoginForm = ({ toggleRegister }) => {
     >
       <Col>
         <Card bordered={true} style={{ width: 400, textAlign: "center" }}>
-          <img
-            src="/logo1.png"
-            alt="BazaarBuddy"
-            style={{
-              marginBottom: 20,
-              maxWidth: "100%",
-              height: "auto",
-              maxHeight: 200,
-              borderRadius: 100,
-            }}
-          />
+          <Avatar src="/logo1.png" alt="BazaarBuddy" size={200} />
           <Typography.Title level={2}>Login</Typography.Title>
           <Form form={form} onFinish={onFinish}>
             <Form.Item

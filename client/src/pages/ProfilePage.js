@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { Card, Avatar, Descriptions, Divider, Modal, Button, Form } from "antd";
+import {
+  Card,
+  Avatar,
+  Descriptions,
+  Divider,
+  Modal,
+  Button,
+  Form,
+  Typography,
+} from "antd";
 import { StarFilled } from "@ant-design/icons";
 import { useUser } from "../contexts/UserContext";
 import LogoutButton from "../components/auth/LogoutButton";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
 
+const { Title } = Typography;
 const Profile = () => {
   const { currentUser } = useUser();
   const [openModal, setOpenModal] = useState(false);
@@ -14,6 +24,7 @@ const Profile = () => {
   const handleEdit = () => {
     setOpenModal(true);
     form.setFieldsValue({
+      photoUrl: profile.photoUrl,
       username: profile.username,
     });
   };
@@ -31,8 +42,10 @@ const Profile = () => {
         }
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <h2>{profile.username}</h2>
-          <span style={{ color: "#888" }}>{profile.email}</span>
+          <Title level={3}>{profile.username}</Title>
+          <Title level={3} style={{ color: "#888" }}>
+            {profile.email}
+          </Title>
         </div>
         <Divider />
         <Descriptions layout="vertical" bordered column={1}>

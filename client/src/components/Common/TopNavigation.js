@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Avatar, Layout, Menu } from "antd";
 import {
   DollarOutlined,
   ShoppingCartOutlined,
@@ -39,11 +39,7 @@ const TopNavigation = () => {
           alignItems: "center",
         }}
       >
-        <img
-          src="/logo3.png"
-          alt="Your Logo"
-          style={{ maxHeight: "100%", marginRight: "5px" }}
-        />
+        <Avatar src="/logo1.png" alt="BazaarBuddy" size={70} shape="square" />
       </div>
       <Menu
         theme="light"

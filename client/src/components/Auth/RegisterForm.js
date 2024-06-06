@@ -1,5 +1,15 @@
 import React from "react";
-import { Form, Input, Button, message, Typography, Card, Row, Col } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  message,
+  Typography,
+  Card,
+  Row,
+  Col,
+  Avatar,
+} from "antd";
 import { register } from "../../firebase/auth";
 import axios from "axios";
 import { useUser } from "../../contexts/UserContext";
@@ -49,17 +59,7 @@ const RegisterForm = ({ toggleRegister }) => {
     >
       <Col>
         <Card bordered={true} style={{ width: 400, textAlign: "center" }}>
-          <img
-            src="/logo1.png"
-            alt="BazaarBuddy"
-            style={{
-              marginBottom: 20,
-              maxWidth: "100%",
-              height: "auto",
-              maxHeight: 200,
-              borderRadius: 100,
-            }}
-          />
+          <Avatar src="/logo1.png" alt="BazaarBuddy" size={200} />
           <Typography.Title level={2}>Register</Typography.Title>
           <Form form={form} onFinish={onFinish}>
             <Form.Item
