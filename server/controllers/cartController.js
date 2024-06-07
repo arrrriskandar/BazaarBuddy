@@ -30,10 +30,7 @@ export const getCartController = async (req, res) => {
 export const getCartsController = async (req, res) => {
   try {
     const carts = await getCarts(req.params.userId);
-    if (!carts) {
-      return res.status(404).json({ message: "No carts found" });
-    }
-    res.json(cart);
+    res.json(carts);
   } catch {
     res.status(500).json({ message: err.message });
   }

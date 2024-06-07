@@ -31,9 +31,6 @@ export const getProductController = async (req, res) => {
 export const getBrowseProductsController = async (req, res) => {
   try {
     const products = await getBrowseProducts(req.params.userId, req.query);
-    if (!products) {
-      return res.status(404).json({ message: "No Products found" });
-    }
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -43,9 +40,6 @@ export const getBrowseProductsController = async (req, res) => {
 export const getMyProductsController = async (req, res) => {
   try {
     const products = await getMyProducts(req.params.userId, req.query);
-    if (!products) {
-      return res.status(404).json({ message: "No Products found" });
-    }
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
