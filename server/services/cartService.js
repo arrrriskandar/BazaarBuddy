@@ -11,7 +11,11 @@ export const getCart = async (id) => {
 };
 
 export const getCarts = async (userId) => {
-  return await cartModel.find({ userId }).populate("productId");
+  const sortOptions = { updatedAt: -1 };
+  return await cartModel
+    .find({ userId })
+    .populate("productId")
+    .sort(sortOptions);
 };
 
 export const updateCart = async (id, cartData) => {
