@@ -1,4 +1,3 @@
-import userModel from "./userModel.js";
 import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
@@ -23,7 +22,7 @@ const ProductSchema = new mongoose.Schema({
   },
   seller: {
     type: String,
-    ref: userModel,
+    ref: "UserModel",
     required: true,
   },
   stock: {
