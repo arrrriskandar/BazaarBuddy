@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Avatar, Layout, Menu } from "antd";
+import { Avatar, Layout, Menu, Badge } from "antd";
 import {
   DollarOutlined,
   ShoppingCartOutlined,
@@ -8,11 +8,14 @@ import {
   WechatOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
+import { useCart } from "../../contexts/CartContext";
 
 const { Header } = Layout;
 
 const TopNavigation = () => {
   const location = useLocation();
+  const { cart } = useCart();
+
   const getSelectedKey = () => {
     if (location.pathname.startsWith("/buy")) return "1";
     if (location.pathname.startsWith("/sell")) return "2";
@@ -21,7 +24,9 @@ const TopNavigation = () => {
     if (location.pathname.startsWith("/profile")) return "5";
     return "1";
   };
+
   const selectedKey = getSelectedKey();
+
   return (
     <Header
       style={{
@@ -50,15 +55,29 @@ const TopNavigation = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          paddingLeft: "20px",
+          paddingRight: "20px",
         }}
       >
-        <Menu.Item key="1" icon={<ShoppingOutlined />}>
+        <Menu.Item
+          key="1"
+          icon={<ShoppingOutlined style={{ fontSize: "24px" }} />}
+          style={{ width: "120px" }} // Adjusted width
+        >
           <Link to="/buy/product">Buy</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<DollarOutlined />}>
-          <Link to="/sell/product">My Products</Link>
+        <Menu.Item
+          key="2"
+          icon={<DollarOutlined style={{ fontSize: "24px" }} />}
+          style={{ width: "120px" }} // Adjusted width
+        >
+          <Link to="/sell/product">Sell</Link>
         </Menu.Item>
-        <Menu.Item key="3" icon={<WechatOutlined />}>
+        <Menu.Item
+          key="3"
+          icon={<WechatOutlined style={{ fontSize: "24px" }} />}
+          style={{ width: "120px" }} // Adjusted width
+        >
           <Link to="/">Chats</Link>
         </Menu.Item>
       </Menu>
@@ -68,11 +87,26 @@ const TopNavigation = () => {
         selectedKeys={[selectedKey]}
         style={{ display: "flex", alignItems: "center" }}
       >
-        <Menu.Item key="4" icon={<ShoppingCartOutlined />}>
-          <Link to="/cart"></Link>
+        <Menu.Item
+          key="4"
+          icon={<ShoppingCartOutlined style={{ fontSize: "24px" }} />}
+        >
+          <Link to="/cart">
+            <Badge
+              count={cart ? cart.length : 0}
+              overflowCount={10}
+              style={{
+                backgroundColor: "#52c41a",
+                boxShadow: "none",
+                position: "absolute",
+                top: "-30px",
+                right: "-5px",
+              }}
+            ></Badge>
+          </Link>
         </Menu.Item>
-        <Menu.Item key="5" icon={<UserOutlined />}>
-          <Link to="/profile"></Link>
+        <Menu.Item key="5" icon={<UserOutlined style={{ fontSize: "24px" }} />}>
+          <Link to="/profile" />
         </Menu.Item>
       </Menu>
     </Header>

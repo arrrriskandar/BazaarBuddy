@@ -36,7 +36,7 @@ function SellerProducts() {
     };
 
     fetchProducts();
-  }, [currentUser._id, searchParams]);
+  }, [currentUser, searchParams]);
 
   const handleAdd = () => {
     setOpenModal(true);

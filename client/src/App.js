@@ -16,6 +16,8 @@ import TopNavigation from "./components/common/TopNavigation";
 import { Content } from "antd/es/layout/layout";
 import SellerProducts from "./pages/sell/ProductsPage";
 import SellerProductDetails from "./pages/sell/ProductDetailsPage";
+import Cart from "./pages/CartPage";
+import { CartProvider } from "./contexts/CartContext";
 
 const AuthenticatedApp = () => {
   return (
@@ -34,6 +36,7 @@ const AuthenticatedApp = () => {
             path="/sell/product/:productId"
             element={<SellerProductDetails />}
           />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>
@@ -62,7 +65,9 @@ const Root = () => (
   <AuthProvider>
     <UserProvider>
       <Router>
-        <App />
+        <CartProvider>
+          <App />
+        </CartProvider>
       </Router>
     </UserProvider>
   </AuthProvider>

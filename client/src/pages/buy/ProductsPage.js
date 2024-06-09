@@ -40,7 +40,7 @@ function BrowseProducts() {
     };
 
     fetchProducts();
-  }, [currentUser._id, searchParams, currentPage, pageSize]);
+  }, [currentUser, searchParams, currentPage, pageSize]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

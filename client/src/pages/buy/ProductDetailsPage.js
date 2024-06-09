@@ -4,11 +4,13 @@ import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Button, Row, Col, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
+import { useCart } from "../../contexts/CartContext";
 
 function BrowseProductDetails() {
   const { productId } = useParams();
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -22,9 +24,13 @@ function BrowseProductDetails() {
     fetchProduct();
   }, [productId]);
 
-  const handleAddToCart = () => {
-    // Implement add to cart functionality
-    message.success("Product added to cart!");
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(productId, quantity);
+      message.success("Product added to cart!");
+    } catch (error) {
+      message.error("Failed to add to cart. Please try again", error.message);
+    }
   };
 
   const handleBuyNow = () => {
