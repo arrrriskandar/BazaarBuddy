@@ -1,14 +1,14 @@
 import {
-  createCart,
+  addToCart,
   deleteCart,
   getCart,
   getCarts,
-  updateCart,
+  updateCartItemQuantity,
 } from "../services/cartService.js";
 
-export const createCartController = async (req, res) => {
+export const addToCartController = async (req, res) => {
   try {
-    const cart = await createCart(req.body);
+    const cart = await addToCart(req.body);
     res.status(201).json(cart);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -36,9 +36,9 @@ export const getCartsController = async (req, res) => {
   }
 };
 
-export const updateCartController = async (req, res) => {
+export const updateCartItemQuantityController = async (req, res) => {
   try {
-    const updatedCart = await updateCart(req.params.id, req.body);
+    const updatedCart = await updateCartItemQuantity(req.params.id, req.body);
     if (!updatedCart) {
       return res.status(404).json({ message: "Cart not found" });
     }

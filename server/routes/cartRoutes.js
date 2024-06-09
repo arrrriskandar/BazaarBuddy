@@ -1,9 +1,9 @@
 import express from "express";
 import {
-  createCartController,
+  addToCartController,
   getCartController,
   getCartsController,
-  updateCartController,
+  updateCartItemQuantityController,
   deleteCartController,
 } from "../controllers/cartController.js";
 
@@ -11,8 +11,7 @@ import {
   createCartValidationRules,
   updateCartValidationRules,
   validate,
-  checkValidUserId,
-  checkValidProductId,
+  checkValidIds,
 } from "../validation/cartValidation.js";
 
 const router = express.Router();
@@ -22,15 +21,14 @@ router
   .post(
     createCartValidationRules(),
     validate,
-    checkValidUserId,
-    checkValidProductId,
-    createCartController
+    checkValidIds,
+    addToCartController
   );
 router.route("/user/:userId").get(getCartsController);
 router.route("/:id").get(getCartController);
 router
   .route("/:id")
-  .put(updateCartValidationRules(), validate, updateCartController);
+  .put(updateCartValidationRules(), validate, updateCartItemQuantityController);
 router.route("/:id").delete(deleteCartController);
 
 export default router;
