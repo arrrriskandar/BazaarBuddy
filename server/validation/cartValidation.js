@@ -67,6 +67,12 @@ export const checkProductExistInCart = async (req, res, next) => {
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
+    if (!req.body.quantity && cart.items.length === 1) {
+      return res.status(404).json({
+        message:
+          "You cannot remove the last item in the cart. Please delete instead.",
+      });
+    }
     const item = cart.items.find((item) =>
       item.product.equals(req.body.product)
     );
