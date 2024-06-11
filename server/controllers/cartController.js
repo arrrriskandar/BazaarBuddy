@@ -4,6 +4,7 @@ import {
   getCart,
   getCarts,
   updateCartItemQuantity,
+  removeCartItem,
 } from "../services/cartService.js";
 
 export const addToCartController = async (req, res) => {
@@ -31,16 +32,32 @@ export const getCartsController = async (req, res) => {
   try {
     const carts = await getCarts(req.params.userId);
     res.json(carts);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
 export const updateCartItemQuantityController = async (req, res) => {
   try {
-    const updatedCart = await updateCartItemQuantity(req.params.id, req.body);
+    const updatedCart = await updateCartItemQuantity(
+      req.params.id,
+      req.body.product,
+      req.body.quantity
+    );
     if (!updatedCart) {
       return res.status(404).json({ message: "Cart not found" });
+    }
+    res.json(updatedCart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const removeCartItemController = async (req, res) => {
+  try {
+    const updatedCart = await removeCartItem(req.params.id, req.body.product);
+    if (!updatedCart) {
+      res.json({ message: "Cart deleted" });
     }
     res.json(updatedCart);
   } catch (err) {

@@ -1,6 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { getProduct } from "../services/productService.js";
 import { getUser } from "../services/userService.js";
+import { getCart } from "../services/cartService.js";
 
 export const createCartValidationRules = () => {
   return [
@@ -18,13 +19,15 @@ export const createCartValidationRules = () => {
   ];
 };
 
-export const updateCartValidationRules = () => {
+export const updateQuantityValidationRules = () => {
   return [
-    body("user").not().exists().withMessage("User ID cannot be updated"),
-    body("product").not().exists().withMessage("Product ID cannot be updated"),
-    body("updatedAt").not().exists().withMessage("Restricted request"),
     body("quantity").isNumeric().withMessage("Quantity must be a number"),
+    body("product").notEmpty().withMessage("Product ID is required"),
   ];
+};
+
+export const removeItemValidationRules = () => {
+  return [body("product").notEmpty().withMessage("Product ID is required")];
 };
 
 export const validate = (req, res, next) => {
@@ -51,6 +54,26 @@ export const checkValidIds = async (req, res, next) => {
     }
     if (product.stock === "Discontinued" || product.stock === "Out of Stock") {
       return res.status(404).json({ message: "Product is not available" });
+    }
+    next();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const checkProductExistInCart = async (req, res, next) => {
+  try {
+    const cart = await getCart(req.params.id);
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+    const item = cart.items.find((item) =>
+      item.product.equals(req.body.product)
+    );
+    if (!item) {
+      return res
+        .status(404)
+        .json({ message: "Product does not exist in cart" });
     }
     next();
   } catch (error) {
