@@ -14,7 +14,7 @@ const { Header } = Layout;
 
 const TopNavigation = () => {
   const location = useLocation();
-  const { cart } = useCart();
+  const { carts } = useCart();
 
   const getSelectedKey = () => {
     if (location.pathname.startsWith("/buy")) return "1";
@@ -93,7 +93,7 @@ const TopNavigation = () => {
         >
           <Link to="/cart">
             <Badge
-              count={cart ? cart.length : 0}
+              count={carts ? carts.length : 0}
               overflowCount={10}
               style={{
                 backgroundColor: "#52c41a",

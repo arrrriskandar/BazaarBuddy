@@ -26,7 +26,7 @@ function BrowseProductDetails() {
 
   const handleAddToCart = async () => {
     try {
-      await addToCart(productId, quantity);
+      await addToCart(product, quantity);
       message.success("Product added to cart!");
     } catch (error) {
       message.error("Failed to add to cart. Please try again", error.message);

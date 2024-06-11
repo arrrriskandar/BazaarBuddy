@@ -1,38 +1,136 @@
 import React from "react";
-import { Card, Table, Typography } from "antd";
 import { useCart } from "../contexts/CartContext";
+import {
+  Button,
+  InputNumber,
+  List,
+  Avatar,
+  Row,
+  Col,
+  Space,
+  message,
+} from "antd";
 
-const { Title } = Typography;
+const Cart = () => {
+  const { carts, removeFromCart, updateQuantity, deleteCart } = useCart();
 
-function Cart() {
-  const { cart } = useCart();
+  const handleRemove = async (id, product) => {
+    try {
+      await removeFromCart(id, product);
+      message.success("Product removed from cart!");
+    } catch (error) {
+      message.error(
+        "Failed to remove item from cart. Please try again",
+        error.message
+      );
+    }
+  };
 
-  const columns = [
-    {
-      title: "Product Name",
-      dataIndex: ["productId", "name"],
-      key: "name",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-  ];
+  const handleDelete = async (id) => {
+    try {
+      await deleteCart(id);
+      message.success("Cart deleted!");
+    } catch (error) {
+      message.error("Failed to delete cart. Please try again", error.message);
+    }
+  };
+
+  const handleQuantityChange = async (id, product, quantity) => {
+    try {
+      await updateQuantity(id, product, quantity);
+      message.success("Product quantity changed!");
+    } catch (error) {
+      message.error(
+        "Failed to update quantity. Please try again",
+        error.message
+      );
+    }
+  };
 
   return (
-    <div style={{ padding: "24px" }}>
-      <Card>
-        <Title level={2}>Your Cart</Title>
-        <Table
-          dataSource={cart}
-          columns={columns}
-          rowKey={(record) => record._id}
-          pagination={false}
-        />
-      </Card>
+    <div>
+      {carts.map((cart) => (
+        <div key={cart._id} style={{ marginBottom: "20px" }}>
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Row align="middle">
+                <Avatar
+                  src={cart.seller.photoUrl || "/default-avatar.png"}
+                  style={{ marginRight: "10px" }}
+                />
+                <h1 style={{ margin: 0 }}>{cart.seller.username}</h1>
+              </Row>
+            </Col>
+            <Col>
+              <Button danger type="text" onClick={() => handleDelete(cart._id)}>
+                x
+              </Button>
+            </Col>
+          </Row>
+          <List
+            itemLayout="horizontal"
+            dataSource={cart.items}
+            renderItem={(item) => (
+              <List.Item>
+                <Row style={{ width: "100%" }} align="top" gutter={16}>
+                  <Col>
+                    <Avatar
+                      shape="square"
+                      src={item.product.images}
+                      size={200}
+                    />
+                  </Col>
+                  <Col flex="auto">
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <h2 style={{ margin: 0 }}>{item.product.name}</h2>
+                      <Space direction="vertical" style={{ marginTop: "10px" }}>
+                        <div>Price: ${item.product.price}</div>
+                        <Row align="middle">
+                          <Col>
+                            <span>Quantity: </span>
+                          </Col>
+                          <Col>
+                            <InputNumber
+                              min={1}
+                              value={item.quantity}
+                              onChange={(value) =>
+                                handleQuantityChange(
+                                  cart._id,
+                                  item.product._id,
+                                  value
+                                )
+                              }
+                            />
+                          </Col>
+                        </Row>
+                      </Space>
+                    </div>
+                  </Col>
+                  <Col>
+                    {cart.items.length > 1 && (
+                      <Button
+                        danger
+                        onClick={() => handleRemove(cart._id, item.product._id)}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              </List.Item>
+            )}
+          />
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default Cart;

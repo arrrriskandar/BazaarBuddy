@@ -45,6 +45,10 @@ export const getCarts = async (user) => {
       path: "items.product",
       model: "ProductModel",
     })
+    .populate({
+      path: "seller",
+      model: "UserModel",
+    })
     .sort(sortOptions);
 };
 
@@ -57,7 +61,7 @@ export const updateCartItemQuantity = async (id, product, quantity) => {
 };
 
 export const removeCartItem = async (id, product) => {
-  const cart = await cartModel.findOneAndUpdate(
+  return await cartModel.findOneAndUpdate(
     { _id: id },
     {
       $pull: { items: { product: product } },
@@ -65,12 +69,6 @@ export const removeCartItem = async (id, product) => {
     },
     { new: true }
   );
-
-  if (cart.items.length === 0) {
-    await cartModel.findByIdAndDelete(id);
-    return null;
-  }
-  return cart;
 };
 
 export const deleteCart = async (id) => {
