@@ -16,6 +16,12 @@ const TopNavigation = () => {
   const location = useLocation();
   const { carts } = useCart();
 
+  const totalQuantity = carts.reduce(
+    (acc, cart) =>
+      acc + cart.items.reduce((sum, item) => sum + item.quantity, 0),
+    0
+  );
+
   const getSelectedKey = () => {
     if (location.pathname.startsWith("/buy")) return "1";
     if (location.pathname.startsWith("/sell")) return "2";
@@ -93,7 +99,7 @@ const TopNavigation = () => {
         >
           <Link to="/cart">
             <Badge
-              count={carts ? carts.length : 0}
+              count={totalQuantity}
               overflowCount={10}
               style={{
                 backgroundColor: "#52c41a",
