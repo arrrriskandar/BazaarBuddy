@@ -1,7 +1,7 @@
 import express from "express";
 import {
   createProductController,
-  getProductController,
+  getProductsBySellerController,
   getBrowseProductsController,
   getMyProductsController,
   updateProductController,
@@ -31,7 +31,7 @@ router
   );
 router.route("/buy/:userId").get(getBrowseProductsController);
 router.route("/sell/:userId").get(getMyProductsController);
-router.route("/:id").get(getProductController);
+router.route("/:id").get(getProductsBySellerController);
 router
   .route("/:id")
   .put(

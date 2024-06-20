@@ -9,6 +9,22 @@ export const getProduct = async (id) => {
   return await ProductModel.findById(id);
 };
 
+export const getProductsBySeller = async (id) => {
+  const product = await ProductModel.findById(id).populate({
+    path: "seller",
+    model: "UserModel",
+  });
+  const { seller } = product;
+  const products = await ProductModel.find({
+    seller: seller,
+    _id: { $ne: id },
+  }).populate({
+    path: "seller",
+    model: "UserModel",
+  });
+  return { product, products };
+};
+
 export const getBrowseProducts = async (userId, queryParams) => {
   const { category, name, sortCriteria, page, limit } = queryParams;
   const pageNumber = parseInt(page) || 1;

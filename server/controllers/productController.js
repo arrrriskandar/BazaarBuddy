@@ -1,7 +1,7 @@
 import {
   createProduct,
   deleteProduct,
-  getProduct,
+  getProductsBySeller,
   getBrowseProducts,
   getMyProducts,
   updateProduct,
@@ -16,9 +16,9 @@ export const createProductController = async (req, res) => {
   }
 };
 
-export const getProductController = async (req, res) => {
+export const getProductsBySellerController = async (req, res) => {
   try {
-    const product = await getProduct(req.params.id);
+    const product = await getProductsBySeller(req.params.id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
