@@ -5,6 +5,7 @@ import { apiEndpoint } from "../../constants/constants";
 import FilePicker from "../common/FilePicker";
 import { uploadFile } from "../../firebase/storage";
 import { useUser } from "../../contexts/UserContext";
+import AddressForm from "../common/AddressForm";
 
 function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
   const [profilePicture, setProfilePicture] = useState(profile.photoUrl);
@@ -17,6 +18,8 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
     setOpenModal(false);
     form.setFieldsValue({
       username: profile.username,
+      address: profile.address,
+      unitNumber: profile.unitNumber,
     });
   };
 
@@ -91,6 +94,11 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
         >
           <Input placeholder="Username" />
         </Form.Item>
+        <AddressForm
+          form={form}
+          initialAddress={profile.address}
+          initialUnitNumber={profile.unitNumber}
+        />
         <Form.Item>
           <Row
             style={{

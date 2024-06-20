@@ -22,6 +22,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  unitNumber: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -25,6 +25,8 @@ const Profile = () => {
     setOpenModal(true);
     form.setFieldsValue({
       username: profile.username,
+      address: profile.address,
+      unitNumber: profile.unitNumber,
     });
   };
 
@@ -49,9 +51,9 @@ const Profile = () => {
         <Divider />
         <Descriptions layout="vertical" bordered column={1}>
           <Descriptions.Item label="Address">
-            {profile.address || (
-              <span style={{ color: "#ff4d4f" }}>Please add your address!</span>
-            )}
+            {profile.unitNumber
+              ? `${profile.address} ${profile.unitNumber}`
+              : profile.address}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
             {profile.ratingCount > 0 ? (

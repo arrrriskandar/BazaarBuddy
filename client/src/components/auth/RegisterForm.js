@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Form,
   Input,
@@ -9,39 +9,36 @@ import {
   Row,
   Col,
   Avatar,
-  AutoComplete,
 } from "antd";
 import { register } from "../../firebase/auth";
 import axios from "axios";
 import { useUser } from "../../contexts/UserContext";
 import { apiEndpoint } from "../../constants/constants";
-import { getSingaporeAddress } from "../../oneMap/addressLookup";
+import AddressForm from "../common/AddressForm";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
   const { Text } = Typography;
   const { setRegistering } = useUser();
-  const [addressOptions, setAddressOptions] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const onFinish = async ({
     email,
     password,
     username,
-    unitNumber,
     address,
+    unitNumber,
   }) => {
     try {
       setRegistering(true);
       const userCredentials = await register(email, password);
       const uid = userCredentials.uid;
-      const fullAddress = unitNumber ? `${address} #${unitNumber}` : address;
 
       await axios.post(apiEndpoint + "/user", {
         _id: uid,
         username,
         email,
-        address: fullAddress,
+        address,
+        unitNumber,
       });
 
       message.success("Registration successful!");
@@ -61,52 +58,6 @@ const RegisterForm = ({ toggleRegister }) => {
     return Promise.reject(
       "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
     );
-  };
-
-  const validateAddress = (_, value) => {
-    if (!selectedAddress) {
-      return Promise.reject(
-        "Please select a valid address from the dropdown list!"
-      );
-    }
-    return Promise.resolve();
-  };
-
-  const validateUnitNumber = (_, value) => {
-    const unitNumberRegex = /^#\d{2}-\d{3}$/;
-    if (!value || value.match(unitNumberRegex)) {
-      return Promise.resolve();
-    }
-    return Promise.reject("Unit number must follow the format #XX-YYY!");
-  };
-
-  const handleAddressSearch = async (value) => {
-    if (value) {
-      try {
-        const addresses = await getSingaporeAddress(value);
-        setAddressOptions(
-          addresses.map((addr) => ({
-            value: addr.ADDRESS,
-            label: addr.ADDRESS,
-          }))
-        );
-      } catch (error) {
-        console.error(error);
-        message.error("Error fetching address");
-      }
-    } else {
-      setAddressOptions([]);
-    }
-  };
-
-  const handleAddressSelect = (value) => {
-    setSelectedAddress(value);
-  };
-
-  const handleAddressChange = (value) => {
-    if (!addressOptions.some((option) => option.value === value)) {
-      setSelectedAddress(null);
-    }
   };
 
   return (
@@ -157,37 +108,7 @@ const RegisterForm = ({ toggleRegister }) => {
             >
               <Input.Password placeholder="Password" />
             </Form.Item>
-            <Form.Item
-              name="address"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter your address!",
-                },
-                {
-                  validator: validateAddress,
-                },
-              ]}
-            >
-              <AutoComplete
-                options={addressOptions}
-                onSearch={handleAddressSearch}
-                onSelect={handleAddressSelect}
-                onChange={handleAddressChange}
-                placeholder="Search your address"
-                style={{ textAlign: "left" }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="unitNumber"
-              rules={[
-                {
-                  validator: validateUnitNumber,
-                },
-              ]}
-            >
-              <Input placeholder="Unit Number" />
-            </Form.Item>
+            <AddressForm form={form} />
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Register
