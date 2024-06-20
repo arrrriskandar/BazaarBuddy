@@ -1,20 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../contexts/CartContext";
-import {
-  Button,
-  InputNumber,
-  List,
-  Avatar,
-  Row,
-  Col,
-  Space,
-  message,
-} from "antd";
+import { List, message, Divider, Button } from "antd";
 import { ShoppingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import CartActions from "../components/cart/CartActions";
+import CartItem from "../components/cart/CartItem";
+import CartSummary from "../components/cart/CartSummary";
 
 const Cart = () => {
   const { carts, removeFromCart, updateQuantity, deleteCart } = useCart();
+  const [checkedItems, setCheckedItems] = useState({});
 
   const handleRemove = async (id, product) => {
     try {
@@ -28,7 +23,7 @@ const Cart = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDeleteCart = async (id) => {
     try {
       await deleteCart(id);
       message.success("Cart deleted!");
@@ -40,6 +35,13 @@ const Cart = () => {
   const handleQuantityChange = async (id, product, quantity) => {
     try {
       await updateQuantity(id, product, quantity);
+      setCheckedItems((prevCheckedItems) => {
+        const newCheckedItems = { ...prevCheckedItems };
+        if (newCheckedItems[`${id}-${product}`]) {
+          newCheckedItems[`${id}-${product}`] = true;
+        }
+        return newCheckedItems;
+      });
       message.success("Product quantity changed!");
     } catch (error) {
       message.error(
@@ -49,98 +51,100 @@ const Cart = () => {
     }
   };
 
+  const handleCheckboxChange = (cartId, productId, checked) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [`${cartId}-${productId}`]: checked,
+    }));
+  };
+
+  const handleCheckAllChange = (cartId, checked) => {
+    const newCheckedItems = {};
+    carts
+      .find((cart) => cart._id === cartId)
+      .items.forEach((item) => {
+        newCheckedItems[`${cartId}-${item.product._id}`] = checked;
+      });
+    setCheckedItems(newCheckedItems);
+  };
+
+  const isChecked = (cartId, productId) => {
+    return checkedItems[`${cartId}-${productId}`] || false;
+  };
+
+  const getTotalCheckedItems = (cartId) => {
+    let totalItems = 0;
+    carts
+      .find((cart) => cart._id === cartId)
+      .items.forEach((item) => {
+        if (checkedItems[`${cartId}-${item.product._id}`]) {
+          totalItems += item.quantity; // Add the quantity to the total
+        }
+      });
+    return totalItems;
+  };
+
+  const getTotalCheckedPrice = (cartId) => {
+    let totalPrice = 0;
+    carts
+      .find((cart) => cart._id === cartId)
+      .items.forEach((item) => {
+        if (checkedItems[`${cartId}-${item.product._id}`]) {
+          totalPrice += item.product.price * item.quantity;
+        }
+      });
+    return totalPrice.toFixed(2); // Adjust as per your currency format
+  };
+
+  const handleBuyNow = (cartId) => {
+    console.log("Buy Now clicked for cart:", cartId);
+  };
+
   return (
     <div>
       {carts.length > 0 ? (
-        carts.map((cart) => (
-          <div key={cart._id} style={{ marginBottom: "20px" }}>
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Row align="middle">
-                  <Avatar
-                    src={cart.seller.photoUrl || "/default-avatar.png"}
-                    style={{ marginRight: "10px" }}
-                  />
-                  <h1 style={{ margin: 0 }}>{cart.seller.username}</h1>
-                </Row>
-              </Col>
-              <Col>
-                <Button
-                  danger
-                  type="text"
-                  onClick={() => handleDelete(cart._id)}
-                >
-                  x
-                </Button>
-              </Col>
-            </Row>
-            <List
-              itemLayout="horizontal"
-              dataSource={cart.items}
-              renderItem={(item) => (
-                <List.Item>
-                  <Row style={{ width: "100%" }} align="top" gutter={16}>
-                    <Col>
-                      <Avatar
-                        shape="square"
-                        src={item.product.images}
-                        size={200}
-                      />
-                    </Col>
-                    <Col flex="auto">
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          height: "100%",
-                        }}
-                      >
-                        <h2 style={{ margin: 0 }}>{item.product.name}</h2>
-                        <Space
-                          direction="vertical"
-                          style={{ marginTop: "10px" }}
-                        >
-                          <div>Price: ${item.product.price}</div>
-                          <Row align="middle">
-                            <Col>
-                              <span>Quantity: </span>
-                            </Col>
-                            <Col>
-                              <InputNumber
-                                min={1}
-                                value={item.quantity}
-                                onChange={(value) =>
-                                  handleQuantityChange(
-                                    cart._id,
-                                    item.product._id,
-                                    value
-                                  )
-                                }
-                              />
-                            </Col>
-                          </Row>
-                        </Space>
-                      </div>
-                    </Col>
-                    <Col>
-                      {cart.items.length > 1 && (
-                        <Button
-                          danger
-                          onClick={() =>
-                            handleRemove(cart._id, item.product._id)
-                          }
-                        >
-                          Remove
-                        </Button>
-                      )}
-                    </Col>
-                  </Row>
-                </List.Item>
-              )}
-            />
-          </div>
-        ))
+        <>
+          {carts.map((cart) => {
+            return (
+              <div
+                key={cart._id}
+                style={{
+                  marginBottom: "20px",
+                  border: "1px solid #e8e8e8",
+                  padding: "10px",
+                }}
+              >
+                <CartActions
+                  cart={cart}
+                  handleDeleteCart={handleDeleteCart}
+                  handleCheckAllChange={handleCheckAllChange}
+                />
+                <List
+                  itemLayout="horizontal"
+                  dataSource={cart.items}
+                  renderItem={(item) => (
+                    <CartItem
+                      cartId={cart._id}
+                      item={item}
+                      isChecked={isChecked}
+                      handleCheckboxChange={handleCheckboxChange}
+                      handleQuantityChange={handleQuantityChange}
+                      handleRemove={handleRemove}
+                      cart={cart}
+                    />
+                  )}
+                />
+                <Divider />
+                <CartSummary
+                  cartId={cart._id}
+                  totalItems={getTotalCheckedItems(cart._id)}
+                  totalPrice={getTotalCheckedPrice(cart._id)}
+                  handleBuyNow={handleBuyNow}
+                />
+              </div>
+            );
+          })}
+        </>
       ) : (
         <div
           style={{
