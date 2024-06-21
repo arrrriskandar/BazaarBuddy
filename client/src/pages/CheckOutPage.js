@@ -1,7 +1,18 @@
 import { useLocation } from "react-router-dom";
-import { List, Avatar, Form, Button, Divider, Modal } from "antd";
+import {
+  Avatar,
+  Divider,
+  Form,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Modal,
+  Table,
+} from "antd";
 import React, { useState } from "react";
 import { useUser } from "../contexts/UserContext";
+const { Title, Text } = Typography;
 
 const Checkout = () => {
   const location = useLocation();
@@ -16,6 +27,59 @@ const Checkout = () => {
   const openModal = () => {
     setVisible(true);
   };
+  const totalPrice = selectedItems.reduce(
+    (sum, item) => sum + item.quantity * item.product.price,
+    0
+  );
+
+  const columns = [
+    {
+      title: "Product",
+      dataIndex: "product",
+      key: "product",
+      render: (product) => (
+        <Row align="middle">
+          <Col>
+            <Avatar src={product.images} size={64} />
+          </Col>
+          <Col style={{ paddingLeft: "10px" }}>
+            <Title level={5} style={{ margin: 0 }}>
+              {product.name}
+            </Title>
+          </Col>
+        </Row>
+      ),
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      align: "center",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      align: "center",
+      render: (price) => `$${price.toFixed(2)}`,
+    },
+    {
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
+      align: "center",
+      render: (total) => `$${total.toFixed(2)}`,
+    },
+  ];
+
+  // Prepare data source for the table
+  const dataSource = selectedItems.map((item, index) => ({
+    key: index,
+    product: item.product,
+    quantity: item.quantity,
+    price: item.product.price,
+    total: item.quantity * item.product.price,
+  }));
 
   return (
     <div style={{ padding: "20px" }}>
@@ -24,17 +88,24 @@ const Checkout = () => {
       <Button type="primary" onClick={openModal}>
         Change Address
       </Button>
-      <List
-        itemLayout="horizontal"
-        dataSource={selectedItems}
-        renderItem={(item) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Avatar src={item.product.images} />}
-              title={item.product.name}
-              description={`Quantity: ${item.quantity} | Price: $${item.product.price}`}
-            />
-          </List.Item>
+
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        pagination={false}
+        summary={() => (
+          <Table.Summary.Row>
+            <Table.Summary.Cell colSpan={3} align="right">
+              <Text strong style={{ fontSize: "24px" }}>
+                Total Price:
+              </Text>
+            </Table.Summary.Cell>
+            <Table.Summary.Cell align="center">
+              <Text strong style={{ fontSize: "24px" }}>
+                ${totalPrice.toFixed(2)}
+              </Text>
+            </Table.Summary.Cell>
+          </Table.Summary.Row>
         )}
       />
       <Divider />
