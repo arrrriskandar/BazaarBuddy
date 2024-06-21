@@ -78,7 +78,7 @@ const Cart = () => {
       .find((cart) => cart._id === cartId)
       .items.forEach((item) => {
         if (checkedItems[`${cartId}-${item.product._id}`]) {
-          totalItems += item.quantity; // Add the quantity to the total
+          totalItems += item.quantity;
         }
       });
     return totalItems;
@@ -93,11 +93,13 @@ const Cart = () => {
           totalPrice += item.product.price * item.quantity;
         }
       });
-    return totalPrice.toFixed(2); // Adjust as per your currency format
+    return totalPrice.toFixed(2);
   };
 
   const handleBuyNow = (cartId) => {
-    console.log("Buy Now clicked for cart:", cartId);
+    return carts
+      .find((cart) => cart._id === cartId)
+      .items.filter((item) => checkedItems[`${cartId}-${item.product._id}`]);
   };
 
   return (
@@ -136,10 +138,9 @@ const Cart = () => {
                 />
                 <Divider />
                 <CartSummary
-                  cartId={cart._id}
                   totalItems={getTotalCheckedItems(cart._id)}
                   totalPrice={getTotalCheckedPrice(cart._id)}
-                  handleBuyNow={handleBuyNow}
+                  handleBuyNow={handleBuyNow(cart._id)}
                 />
               </div>
             );

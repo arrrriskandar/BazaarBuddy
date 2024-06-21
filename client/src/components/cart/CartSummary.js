@@ -1,7 +1,8 @@
 import React from "react";
 import { Row, Col, Button, Space } from "antd";
+import { Link } from "react-router-dom";
 
-const CartSummary = ({ cartId, totalItems, totalPrice, handleBuyNow }) => (
+const CartSummary = ({ totalItems, totalPrice, handleBuyNow }) => (
   <Row justify="center" style={{ marginTop: "20px" }}>
     <Col>
       <Row justify="center">
@@ -11,13 +12,11 @@ const CartSummary = ({ cartId, totalItems, totalPrice, handleBuyNow }) => (
         </Space>
       </Row>
       <Row justify="center" style={{ marginTop: "10px" }}>
-        <Button
-          type="primary"
-          disabled={totalItems === 0}
-          onClick={() => handleBuyNow(cartId)}
-        >
-          Buy Now
-        </Button>
+        <Link to="/checkout" state={{ selectedItems: handleBuyNow }}>
+          <Button type="primary" disabled={totalItems === 0}>
+            Buy Now
+          </Button>
+        </Link>
       </Row>
     </Col>
   </Row>
