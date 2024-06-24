@@ -20,8 +20,7 @@ export const getOrders = async (queryParams) => {
   if (seller) {
     filter.seller = seller;
   }
-  return await orderModel
-    .find(filter)
+  return await OrderModel.find(filter)
     .populate({
       path: "items.product",
       model: "ProductModel",

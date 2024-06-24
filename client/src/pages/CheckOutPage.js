@@ -67,7 +67,6 @@ const Checkout = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      {JSON.stringify(selectedItems)}
       <h1>Checkout</h1>
       <Row></Row>
       <Row
