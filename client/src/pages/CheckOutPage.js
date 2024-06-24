@@ -8,12 +8,15 @@ import {
   Col,
   Modal,
   Table,
+  message,
 } from "antd";
 import React, { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
 import getColumns from "../components/checkout/Columns";
 import EditDeliveryAddressForm from "../components/checkout/EditDeliveryAddressForm";
+import axios from "axios";
+import { apiEndpoint } from "../constants/constants";
 const { Text } = Typography;
 
 const Checkout = () => {
@@ -24,8 +27,24 @@ const Checkout = () => {
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
 
-  const onFinish = () => {
-    console.log("Success");
+  const onFinish = async () => {
+    try {
+      const items = selectedItems.map((item) => ({
+        product: item.product._id,
+        quantity: item.quantity,
+      }));
+      await axios.post(`${apiEndpoint}/order`, {
+        user: currentUser._id,
+        seller: selectedItems[0].product.seller,
+        items: items,
+        totalPrice: totalPrice,
+        shippingAddress: address,
+        unitNumber: unitNumber,
+      });
+      message.success("Order placed");
+    } catch (error) {
+      message.error("Failed to place order: ", error);
+    }
   };
 
   const handleOpenModal = () => {
@@ -48,6 +67,7 @@ const Checkout = () => {
 
   return (
     <div style={{ padding: "20px" }}>
+      {JSON.stringify(selectedItems)}
       <h1>Checkout</h1>
       <Row></Row>
       <Row

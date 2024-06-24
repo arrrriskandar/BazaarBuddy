@@ -32,7 +32,8 @@ const OrderSchema = new Schema({
   orderDate: { type: Date, default: Date.now, required: true },
   totalPrice: { type: Number },
   shippingAddress: { type: String, required: true },
-  status: { type: String, default: "Order Placed" },
+  unitNumber: { type: String, required: true },
+  status: { type: String, default: "Pending Payment" },
 });
 
 export default mongoose.model("OrderModel", OrderSchema);
