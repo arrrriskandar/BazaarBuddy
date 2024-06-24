@@ -94,11 +94,7 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
         >
           <Input placeholder="Username" />
         </Form.Item>
-        <AddressForm
-          form={form}
-          initialAddress={profile.address}
-          initialUnitNumber={profile.unitNumber}
-        />
+        <AddressForm form={form} />
         <Form.Item>
           <Row
             style={{

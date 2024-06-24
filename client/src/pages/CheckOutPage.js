@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import {
-  Avatar,
   Divider,
   Form,
   Button,
@@ -12,19 +11,24 @@ import {
 } from "antd";
 import React, { useState } from "react";
 import { useUser } from "../contexts/UserContext";
-const { Title, Text } = Typography;
+import { EditOutlined } from "@ant-design/icons";
+import getColumns from "../components/checkout/Columns";
+import EditDeliveryAddressForm from "../components/checkout/EditDeliveryAddressForm";
+const { Text } = Typography;
 
 const Checkout = () => {
   const location = useLocation();
   const { selectedItems } = location.state || { selectedItems: [] };
   const { currentUser } = useUser();
   const [visible, setVisible] = useState(false);
+  const [address, setAddress] = useState(currentUser.address);
+  const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
 
   const onFinish = () => {
     console.log("Success");
   };
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setVisible(true);
   };
   const totalPrice = selectedItems.reduce(
@@ -32,47 +36,8 @@ const Checkout = () => {
     0
   );
 
-  const columns = [
-    {
-      title: "Product",
-      dataIndex: "product",
-      key: "product",
-      render: (product) => (
-        <Row align="middle">
-          <Col>
-            <Avatar src={product.images} size={64} />
-          </Col>
-          <Col style={{ paddingLeft: "10px" }}>
-            <Title level={5} style={{ margin: 0 }}>
-              {product.name}
-            </Title>
-          </Col>
-        </Row>
-      ),
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      align: "center",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      align: "center",
-      render: (price) => `$${price.toFixed(2)}`,
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-      align: "center",
-      render: (total) => `$${total.toFixed(2)}`,
-    },
-  ];
+  const columns = getColumns();
 
-  // Prepare data source for the table
   const dataSource = selectedItems.map((item, index) => ({
     key: index,
     product: item.product,
@@ -84,10 +49,27 @@ const Checkout = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Checkout</h1>
-      <h3>{currentUser.address}</h3>
-      <Button type="primary" onClick={openModal}>
-        Change Address
-      </Button>
+      <Row></Row>
+      <Row
+        justify="space-between"
+        align="middle"
+        style={{ marginBottom: "20px" }}
+      >
+        <Col style={{ maxWidth: "75%" }}>
+          <h3>
+            Shipping Address: {address}
+            {unitNumber && `, Unit Number: ${unitNumber}`}
+          </h3>
+        </Col>
+        <Col>
+          <Button
+            shape={"round"}
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={handleOpenModal}
+          />
+        </Col>
+      </Row>
 
       <Table
         columns={columns}
@@ -123,10 +105,16 @@ const Checkout = () => {
       </Form>
       <Modal
         open={visible}
-        onOk={() => setVisible(false)}
-        onCancel={() => setVisible(false)}
+        footer={false}
         closable={false}
-      ></Modal>
+        title="Shipping Address"
+      >
+        <EditDeliveryAddressForm
+          setAddress={setAddress}
+          setUnitNumber={setUnitNumber}
+          setVisible={setVisible}
+        />
+      </Modal>
     </div>
   );
 };
