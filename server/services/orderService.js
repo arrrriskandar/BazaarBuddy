@@ -11,6 +11,7 @@ export const getOrder = async (id) => {
 
 export const getOrders = async (queryParams) => {
   const { user, seller } = queryParams;
+  console.log(seller);
   const sortOptions = { updatedAt: -1 };
 
   const filter = {};

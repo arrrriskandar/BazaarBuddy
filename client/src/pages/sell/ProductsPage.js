@@ -7,6 +7,7 @@ import ProductNameSearch from "../../components/product/ProductNameSearch";
 import { PlusOutlined } from "@ant-design/icons";
 import ProductAddForm from "../../components/product/ProductAddForm";
 import ProductsSection from "../../components/product/ProductsSection";
+import { Link } from "react-router-dom";
 
 function SellerProducts() {
   const [products, setProducts] = useState({
@@ -45,7 +46,15 @@ function SellerProducts() {
   return (
     <>
       <Row style={{ justifyContent: "end" }}>
-        <Button icon={<PlusOutlined />} onClick={handleAdd} type="primary">
+        <Link to="/sell/order">
+          <Button type="primary">View Orders</Button>
+        </Link>
+        <Button
+          icon={<PlusOutlined />}
+          onClick={handleAdd}
+          type="primary"
+          style={{ marginLeft: 8 }}
+        >
           Add Product
         </Button>
       </Row>
