@@ -1,6 +1,6 @@
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
-import { Col, Row, message, Pagination, Divider } from "antd";
+import { Col, Row, message, Pagination, Divider, Button } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
@@ -47,7 +47,13 @@ function BrowseProducts() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <>
+      <Row style={{ justifyContent: "end" }}>
+        <Link to="/buy/order">
+          <Button type="primary">View Orders</Button>
+        </Link>
+      </Row>
+      <div style={{ padding: "20px" }}></div>
       <BrowseProductSearch
         searchParams={searchParams}
         setSearchParams={setSearchParams}
@@ -71,7 +77,7 @@ function BrowseProducts() {
           onChange={handlePageChange}
         />
       </div>
-    </div>
+    </>
   );
 }
 

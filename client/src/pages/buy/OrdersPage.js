@@ -12,7 +12,7 @@ function SellerOrdersPage() {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(apiEndpoint + `/order`, {
-          params: { seller: currentUser._id },
+          params: { user: currentUser._id },
         });
         setOrders(response.data);
       } catch (error) {
