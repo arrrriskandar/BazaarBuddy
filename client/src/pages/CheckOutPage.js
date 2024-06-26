@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Divider,
@@ -10,13 +11,14 @@ import {
   Table,
   message,
 } from "antd";
-import React, { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
 import getColumns from "../components/checkout/Columns";
 import EditDeliveryAddressForm from "../components/checkout/EditDeliveryAddressForm";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
+import { useCart } from "../contexts/CartContext";
+
 const { Text } = Typography;
 
 const Checkout = () => {
@@ -26,38 +28,52 @@ const Checkout = () => {
   const [visible, setVisible] = useState(false);
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
+  const { removeFromCart, deleteCart } = useCart();
 
   const onFinish = async () => {
     try {
-      const items = selectedItems.map((item) => ({
+      const items = selectedItems.items.map((item) => ({
         product: item.product._id,
         quantity: item.quantity,
       }));
+      const totalPrice = selectedItems.items.reduce(
+        (sum, item) => sum + item.quantity * item.product.price,
+        0
+      );
+
       await axios.post(`${apiEndpoint}/order`, {
         user: currentUser._id,
-        seller: selectedItems[0].product.seller,
+        seller: selectedItems.items[0].product.seller,
         items: items,
         totalPrice: totalPrice,
         shippingAddress: address,
         unitNumber: unitNumber,
       });
+      if (selectedItems.allItemsChecked) {
+        await deleteCart(selectedItems.cartId);
+      } else {
+        for (let item of items) {
+          await removeFromCart(selectedItems.cartId, item.product._id);
+        }
+      }
       message.success("Order placed");
     } catch (error) {
-      message.error("Failed to place order: ", error);
+      message.error("Failed to place order: " + error.message);
     }
   };
 
   const handleOpenModal = () => {
     setVisible(true);
   };
-  const totalPrice = selectedItems.reduce(
+
+  const totalPrice = selectedItems.items.reduce(
     (sum, item) => sum + item.quantity * item.product.price,
     0
   );
 
   const columns = getColumns();
 
-  const dataSource = selectedItems.map((item, index) => ({
+  const dataSource = selectedItems.items.map((item, index) => ({
     key: index,
     product: item.product,
     quantity: item.quantity,
@@ -68,7 +84,6 @@ const Checkout = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Checkout</h1>
-      <Row></Row>
       <Row
         justify="space-between"
         align="middle"

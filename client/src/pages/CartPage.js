@@ -97,9 +97,12 @@ const Cart = () => {
   };
 
   const handleBuyNow = (cartId) => {
-    return carts
-      .find((cart) => cart._id === cartId)
-      .items.filter((item) => checkedItems[`${cartId}-${item.product._id}`]);
+    const cart = carts.find((cart) => cart._id === cartId);
+    const items = cart.items.filter(
+      (item) => checkedItems[`${cartId}-${item.product._id}`]
+    );
+    const allItemsChecked = items.length === cart.items.length;
+    return { cartId, items, allItemsChecked };
   };
 
   return (
