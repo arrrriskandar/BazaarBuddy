@@ -29,6 +29,10 @@ export const getOrders = async (queryParams) => {
       path: "seller",
       model: "UserModel",
     })
+    .populate({
+      path: "user",
+      model: "UserModel",
+    })
     .sort(sortOptions);
 };
 

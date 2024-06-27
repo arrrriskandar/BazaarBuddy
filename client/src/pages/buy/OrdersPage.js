@@ -3,6 +3,7 @@ import { useUser } from "../../contexts/UserContext";
 import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
 import { message } from "antd";
+import OrderList from "../../components/order/OrderList";
 
 function SellerOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -22,7 +23,11 @@ function SellerOrdersPage() {
 
     fetchOrders();
   }, [currentUser]);
-  return <div>{JSON.stringify(orders)}</div>;
+  return (
+    <div style={{ padding: "20px" }}>
+      <OrderList orders={orders} isSellerOrder={false} />
+    </div>
+  );
 }
 
 export default SellerOrdersPage;
