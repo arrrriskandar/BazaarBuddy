@@ -11,51 +11,33 @@ import {
   Table,
   message,
 } from "antd";
-import { useUser } from "../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
-import getColumns from "../components/checkout/Columns";
-import EditDeliveryAddressForm from "../components/checkout/EditDeliveryAddressForm";
+import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddressForm";
 import axios from "axios";
-import { apiEndpoint } from "../constants/constants";
-import { useCart } from "../contexts/CartContext";
+import { apiEndpoint } from "../../constants/constants";
 
 const { Text } = Typography;
 
-const Checkout = () => {
+const ProductCheckout = () => {
   const location = useLocation();
-  const { selectedItems } = location.state || { selectedItems: [] };
+  const { item } = location.state;
   const { currentUser } = useUser();
   const [visible, setVisible] = useState(false);
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
-  const { removeFromCart, deleteCart } = useCart();
 
   const onFinish = async () => {
     try {
-      const items = selectedItems.items.map((item) => ({
-        product: item.product._id,
-        quantity: item.quantity,
-      }));
-      const totalPrice = selectedItems.items.reduce(
-        (sum, item) => sum + item.quantity * item.product.price,
-        0
-      );
-
+      const totalPrice = item.quantity * item.product.price;
       await axios.post(`${apiEndpoint}/order`, {
         user: currentUser._id,
-        seller: selectedItems.items[0].product.seller,
-        items: items,
+        seller: item.product.seller,
+        items: [{ product: item.product._id, quantity: item.quantity }],
         totalPrice: totalPrice,
         shippingAddress: address,
         unitNumber: unitNumber,
       });
-      if (selectedItems.allItemsChecked) {
-        await deleteCart(selectedItems.cartId);
-      } else {
-        for (let item of items) {
-          await removeFromCart(selectedItems.cartId, item.product._id);
-        }
-      }
       message.success("Order placed");
     } catch (error) {
       message.error("Failed to place order: " + error.message);
@@ -66,20 +48,7 @@ const Checkout = () => {
     setVisible(true);
   };
 
-  const totalPrice = selectedItems.items.reduce(
-    (sum, item) => sum + item.quantity * item.product.price,
-    0
-  );
-
-  const columns = getColumns();
-
-  const dataSource = selectedItems.items.map((item, index) => ({
-    key: index,
-    product: item.product,
-    quantity: item.quantity,
-    price: item.product.price,
-    total: item.quantity * item.product.price,
-  }));
+  const totalPrice = item.quantity * item.product.price;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -106,8 +75,19 @@ const Checkout = () => {
       </Row>
 
       <Table
-        columns={columns}
-        dataSource={dataSource}
+        columns={[
+          { title: "Product", dataIndex: ["product", "name"], key: "product" },
+          { title: "Quantity", dataIndex: "quantity", key: "quantity" },
+          { title: "Price", dataIndex: ["product", "price"], key: "price" },
+          {
+            title: "Total",
+            key: "total",
+            render: (_, record) => `$${record.quantity * record.product.price}`,
+          },
+        ]}
+        dataSource={[
+          { key: 1, product: item.product, quantity: item.quantity },
+        ]}
         pagination={false}
         summary={() => (
           <Table.Summary.Row>
@@ -153,4 +133,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default ProductCheckout;

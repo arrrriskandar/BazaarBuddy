@@ -18,9 +18,10 @@ import SellerProducts from "./pages/sell/ProductsPage";
 import SellerProductDetails from "./pages/sell/ProductDetailsPage";
 import Cart from "./pages/CartPage";
 import { CartProvider } from "./contexts/CartContext";
-import CheckOut from "./pages/CheckOutPage";
+import CartCheckout from "./pages/checkout/CartCheckOutPage";
 import SellerOrdersPage from "./pages/sell/OrdersPage";
 import BuyerOrdersPage from "./pages/buy/OrdersPage";
+import ProductCheckout from "./pages/checkout/ProductCheckOutPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -40,7 +41,8 @@ const AuthenticatedApp = () => {
             element={<SellerProductDetails />}
           />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/cart/checkout" element={<CartCheckout />} />
+          <Route path="/buy/checkout" element={<ProductCheckout />} />
           <Route path="/sell/order" element={<SellerOrdersPage />} />
           <Route path="/buy/order" element={<BuyerOrdersPage />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />

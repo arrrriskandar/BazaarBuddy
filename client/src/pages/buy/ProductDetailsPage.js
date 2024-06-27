@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
 import { message, Button, Row, Col, Divider } from "antd";
@@ -38,8 +38,7 @@ function BrowseProductDetails() {
   };
 
   const handleBuyNow = () => {
-    // Implement buy now functionality
-    message.success("Proceeding to checkout!");
+    return { product, quantity };
   };
 
   const incrementQuantity = () => {
@@ -113,9 +112,9 @@ function BrowseProductDetails() {
                 >
                   Add to Cart
                 </Button>
-                <Button type="default" onClick={handleBuyNow}>
-                  Buy Now
-                </Button>
+                <Link to="/buy/checkout" state={{ item: handleBuyNow() }}>
+                  <Button type="default">Buy Now</Button>
+                </Link>
               </Row>
             </Col>
           </Row>

@@ -12,7 +12,7 @@ const CartSummary = ({ totalItems, totalPrice, handleBuyNow }) => (
         </Space>
       </Row>
       <Row justify="center" style={{ marginTop: "10px" }}>
-        <Link to="/checkout" state={{ selectedItems: handleBuyNow }}>
+        <Link to="/cart/checkout" state={{ selectedItems: handleBuyNow }}>
           <Button type="primary" disabled={totalItems === 0}>
             Buy Now
           </Button>
