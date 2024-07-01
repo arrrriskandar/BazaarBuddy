@@ -11,6 +11,7 @@ import {
 import { useCart } from "../../contexts/CartContext";
 
 const { Header } = Layout;
+const { SubMenu } = Menu;
 
 const TopNavigation = () => {
   const location = useLocation();
@@ -65,20 +66,40 @@ const TopNavigation = () => {
           paddingRight: "20px",
         }}
       >
-        <Menu.Item
+        <SubMenu
           key="1"
-          icon={<ShoppingOutlined style={{ fontSize: "24px" }} />}
+          title={
+            <span>
+              <ShoppingOutlined style={{ fontSize: "24px" }} />
+              <span>Buy</span>
+            </span>
+          }
           style={{ width: "120px" }} // Adjusted width
         >
-          <Link to="/buy/product">Buy</Link>
-        </Menu.Item>
-        <Menu.Item
+          <Menu.Item key="1-1">
+            <Link to="/buy/product">Browse Products</Link>
+          </Menu.Item>
+          <Menu.Item key="1-2">
+            <Link to="/buy/order">View Orders</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
           key="2"
-          icon={<DollarOutlined style={{ fontSize: "24px" }} />}
+          title={
+            <span>
+              <DollarOutlined style={{ fontSize: "24px" }} />
+              <span>Sell</span>
+            </span>
+          }
           style={{ width: "120px" }} // Adjusted width
         >
-          <Link to="/sell/product">Sell</Link>
-        </Menu.Item>
+          <Menu.Item key="2-1">
+            <Link to="/sell/product">My Products</Link>
+          </Menu.Item>
+          <Menu.Item key="2-2">
+            <Link to="/sell/order">View Orders</Link>
+          </Menu.Item>
+        </SubMenu>
         <Menu.Item
           key="3"
           icon={<WechatOutlined style={{ fontSize: "24px" }} />}
