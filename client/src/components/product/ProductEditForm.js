@@ -28,11 +28,11 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
     setOpenEditModal(false);
     setProductPhoto(product.images);
     form.setFieldsValue({
-      name: product?.name,
-      description: product?.description,
-      price: product?.price,
-      category: product?.category,
-      stock: product?.stock,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category: product.category,
+      stock: product.stock,
     });
   };
   const handleFormSubmit = async (values) => {

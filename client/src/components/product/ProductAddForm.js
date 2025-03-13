@@ -32,39 +32,38 @@ function ProductAddForm({ setOpenModal, setProducts }) {
   };
   const handleFormSubmit = async (values) => {
     try {
-      const addResponse = await axios.post(`${apiEndpoint}/product`, {
-        ...values,
-        seller: currentUser._id,
-      });
-      const path = `${currentUser._id}/${addResponse.data._id}/`;
       let photoUrl = null;
+
+      // If a file is selected, upload it first
       if (selectedFile) {
         try {
-          // Attempt to upload the file
-          photoUrl = await uploadFile(selectedFile, path);
+          const path = `${currentUser._id}/products/`; // Define storage path
+          photoUrl = await uploadFile(selectedFile, path); // Wait for upload
         } catch (uploadError) {
-          // If upload fails, cancel product creation and show error
-          message.error("Failed to create product. Please try again.");
-          setOpenModal(false);
-          return; // Exit early to prevent further code execution
+          message.error("Failed to upload image. Please try again.");
+          return; // Stop execution if image upload fails
         }
       }
-      const updateResponse = await axios.post(`${apiEndpoint}/product`, {
+
+      // Now, post the product with the uploaded image URL
+      const response = await axios.post(`${apiEndpoint}/product`, {
         ...values,
         seller: currentUser._id,
-        images: photoUrl,
+        images: photoUrl, // Now includes the image URL
       });
-      if (updateResponse.data.stock === "Available") {
-        setProducts((prevProducts) => ({
-          ...prevProducts,
-          available: [...prevProducts.available, updateResponse.data],
-        }));
-      } else {
-        setProducts((prevProducts) => ({
-          ...prevProducts,
-          outOfStock: [...prevProducts.outOfStock, updateResponse.data],
-        }));
-      }
+
+      // Update state based on stock status
+      setProducts((prevProducts) => ({
+        ...prevProducts,
+        [response.data.stock === "Available" ? "available" : "outOfStock"]: [
+          ...prevProducts[
+            response.data.stock === "Available" ? "available" : "outOfStock"
+          ],
+          response.data,
+        ],
+      }));
+
+      // Reset form and modal
       form.resetFields();
       setSelectedFile(null);
       setProductPhoto("");
