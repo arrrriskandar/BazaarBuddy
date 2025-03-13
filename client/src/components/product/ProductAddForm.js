@@ -37,9 +37,17 @@ function ProductAddForm({ setOpenModal, setProducts }) {
         seller: currentUser._id,
       });
       const path = `${currentUser._id}/${addResponse.data._id}/`;
-      let photoUrl = productPhoto;
+      let photoUrl = null;
       if (selectedFile) {
-        photoUrl = await uploadFile(selectedFile, path);
+        try {
+          // Attempt to upload the file
+          photoUrl = await uploadFile(selectedFile, path);
+        } catch (uploadError) {
+          // If upload fails, cancel product creation and show error
+          message.error("Failed to create product. Please try again.");
+          setOpenModal(false);
+          return; // Exit early to prevent further code execution
+        }
       }
       const updateResponse = await axios.post(`${apiEndpoint}/product`, {
         ...values,
@@ -58,10 +66,12 @@ function ProductAddForm({ setOpenModal, setProducts }) {
         }));
       }
       form.resetFields();
-      message.success("Product created successfully");
+      setSelectedFile(null);
+      setProductPhoto("");
+      message.success("Product created successfully!");
       setOpenModal(false);
     } catch (error) {
-      message.error("Failed to create product");
+      message.error("Failed to create product. Please try again.");
     }
   };
 
