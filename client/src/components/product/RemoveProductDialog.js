@@ -2,10 +2,12 @@ import React from "react";
 import { Button, Row, Typography, message } from "antd";
 import { apiEndpoint } from "../../constants/constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Paragraph } = Typography;
 
 function RemoveProductDialog({ setOpenRemoveModal, setProduct, product }) {
+  const navigate = useNavigate();
   const handleConfirm = async () => {
     try {
       const response = await axios.put(
@@ -15,6 +17,7 @@ function RemoveProductDialog({ setOpenRemoveModal, setProduct, product }) {
       setProduct(response.data);
       message.success("Product discontinued");
       setOpenRemoveModal(false);
+      navigate("/sell/product");
     } catch (error) {
       message.error("Failed to discontinue product");
     }

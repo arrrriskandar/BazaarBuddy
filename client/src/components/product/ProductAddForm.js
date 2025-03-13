@@ -56,10 +56,10 @@ function ProductAddForm({ setOpenModal, setProducts }) {
       setProducts((prevProducts) => ({
         ...prevProducts,
         [response.data.stock === "Available" ? "available" : "outOfStock"]: [
+          response.data,
           ...prevProducts[
             response.data.stock === "Available" ? "available" : "outOfStock"
           ],
-          response.data,
         ],
       }));
 
