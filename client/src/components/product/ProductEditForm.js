@@ -44,7 +44,7 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
       }
       const response = await axios.put(
         `${apiEndpoint}/product/${product._id}`,
-        { values, images: photoUrl }
+        { ...values, images: photoUrl }
       );
       setProduct(response.data);
       message.success("Product details updated successfully");

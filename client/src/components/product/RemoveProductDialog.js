@@ -10,7 +10,7 @@ function RemoveProductDialog({ setOpenRemoveModal, setProduct, product }) {
     try {
       const response = await axios.put(
         `${apiEndpoint}/product/${product._id}`,
-        { ...product, stock: "Discontinued" }
+        { stock: "Discontinued" }
       );
       setProduct(response.data);
       message.success("Product discontinued");
