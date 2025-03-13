@@ -17,7 +17,9 @@ function BrowseProductDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`${apiEndpoint}/product/${productId}`);
+        const response = await axios.get(
+          `${apiEndpoint}/product/sellerproducts/${productId}`
+        );
         const { product, products } = response.data;
         setProduct(product);
         setProducts(products);

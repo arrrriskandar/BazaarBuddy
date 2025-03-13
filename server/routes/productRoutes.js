@@ -6,6 +6,7 @@ import {
   getMyProductsController,
   updateProductController,
   deleteProductController,
+  getProductController,
 } from "../controllers/productController.js";
 
 import {
@@ -30,8 +31,9 @@ router
     createProductController
   );
 router.route("/buy/:userId").get(getBrowseProductsController);
-router.route("/sell/:userId").get(getMyProductsController);
-router.route("/:id").get(getProductsBySellerController);
+router.route("/myproducts/:userId").get(getMyProductsController);
+router.route("/sellerproducts/:id").get(getProductsBySellerController);
+router.route("/:id").get(getProductController);
 router
   .route("/:id")
   .put(

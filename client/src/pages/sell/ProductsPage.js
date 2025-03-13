@@ -24,7 +24,7 @@ function SellerProducts() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          apiEndpoint + `/product/sell/${currentUser._id}`,
+          apiEndpoint + `/product/myproducts/${currentUser._id}`,
           {
             params: searchParams,
           }

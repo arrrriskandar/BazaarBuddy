@@ -5,6 +5,7 @@ import {
   getBrowseProducts,
   getMyProducts,
   updateProduct,
+  getProduct,
 } from "../services/productService.js";
 
 export const createProductController = async (req, res) => {
@@ -32,6 +33,15 @@ export const getBrowseProductsController = async (req, res) => {
   try {
     const products = await getBrowseProducts(req.params.userId, req.query);
     res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getProductController = async (req, res) => {
+  try {
+    const product = await getProduct(req.params.id);
+    res.json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
