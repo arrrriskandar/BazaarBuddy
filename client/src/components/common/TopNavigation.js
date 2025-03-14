@@ -51,7 +51,9 @@ const TopNavigation = () => {
           alignItems: "center",
         }}
       >
-        <Avatar src="/logo1.png" alt="BazaarBuddy" size={70} shape="square" />
+        <Link to="/buy/product">
+          <Avatar src="/logo1.png" alt="BazaarBuddy" size={70} shape="square" />
+        </Link>
       </div>
       <Menu
         theme="light"
