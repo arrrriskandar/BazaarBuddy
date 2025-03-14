@@ -80,7 +80,7 @@ const TopNavigation = () => {
             <Link to="/buy/product">Browse Products</Link>
           </Menu.Item>
           <Menu.Item key="1-2">
-            <Link to="/buy/order">View Orders</Link>
+            <Link to="/buy/order">My Purchases</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -97,7 +97,7 @@ const TopNavigation = () => {
             <Link to="/sell/product">My Products</Link>
           </Menu.Item>
           <Menu.Item key="2-2">
-            <Link to="/sell/order">View Orders</Link>
+            <Link to="/sell/order">My Sales</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item

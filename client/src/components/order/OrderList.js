@@ -12,11 +12,11 @@ const OrderList = ({ orders, isSellerOrder }) => {
             <Descriptions title={`Order ID: ${order._id}`} bordered column={2}>
               {isSellerOrder ? (
                 <Descriptions.Item label="Buyer">
-                  {order.user.username} ({order.user._id})
+                  {order.user.username}
                 </Descriptions.Item>
               ) : (
                 <Descriptions.Item label="Seller">
-                  {order.seller.username} ({order.seller._id})
+                  {order.seller.username}
                 </Descriptions.Item>
               )}
               <Descriptions.Item label="Total Price">
