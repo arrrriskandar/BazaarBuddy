@@ -16,6 +16,7 @@ function SellerOrdersPage() {
           params: { user: currentUser._id },
         });
         setOrders(response.data);
+        console.log(response.data);
       } catch (error) {
         message.error("Failed to retrieve orders");
       }

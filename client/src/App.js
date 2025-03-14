@@ -22,6 +22,8 @@ import CartCheckout from "./pages/checkout/CartCheckOutPage";
 import SellerOrdersPage from "./pages/sell/OrdersPage";
 import BuyerOrdersPage from "./pages/buy/OrdersPage";
 import ProductCheckout from "./pages/checkout/ProductCheckOutPage";
+import PaymentPage from "./pages/PaymentPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -45,6 +47,8 @@ const AuthenticatedApp = () => {
           <Route path="/buy/checkout" element={<ProductCheckout />} />
           <Route path="/sell/order" element={<SellerOrdersPage />} />
           <Route path="/buy/order" element={<BuyerOrdersPage />} />
+          <Route path="/payment/:orderId" element={<PaymentPage />} />
+          <Route path="/confirmation/:orderId" element={<ConfirmationPage />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>

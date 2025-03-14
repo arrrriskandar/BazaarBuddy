@@ -18,6 +18,7 @@ import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddre
 import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
 import { useCart } from "../../contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -29,6 +30,7 @@ const CartCheckout = () => {
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
   const { removeFromCart, deleteCart } = useCart();
+  const navigate = useNavigate();
 
   const onFinish = async () => {
     try {
@@ -37,7 +39,7 @@ const CartCheckout = () => {
         quantity: item.quantity,
       }));
 
-      await axios.post(`${apiEndpoint}/order`, {
+      const response = await axios.post(`${apiEndpoint}/order`, {
         user: currentUser._id,
         seller: selectedItems.items[0].product.seller,
         items: items,
@@ -49,10 +51,11 @@ const CartCheckout = () => {
         await deleteCart(selectedItems.cartId);
       } else {
         for (let item of items) {
-          await removeFromCart(selectedItems.cartId, item.product._id);
+          await removeFromCart(selectedItems.cartId, item.product);
         }
       }
-      message.success("Order placed");
+      const orderId = response.data._id;
+      navigate(`/payment/${orderId}`);
     } catch (error) {
       message.error("Failed to place order: " + error.message);
     }

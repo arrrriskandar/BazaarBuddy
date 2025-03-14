@@ -63,7 +63,6 @@ const TopNavigation = () => {
         theme="light"
         mode="horizontal"
         selectedKeys={selectedKeys}
-        defaultOpenKeys={["1", "2"]}
         style={{
           flex: 1,
           display: "flex",

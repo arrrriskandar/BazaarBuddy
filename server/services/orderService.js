@@ -6,12 +6,24 @@ export const createOrder = async (orderData) => {
 };
 
 export const getOrder = async (id) => {
-  return await OrderModel.findById(id);
+  return await OrderModel.findById(id)
+    .populate({
+      path: "items.product",
+      model: "ProductModel",
+    })
+    .populate({
+      path: "seller",
+      model: "UserModel",
+    })
+    .populate({
+      path: "user",
+      model: "UserModel",
+    });
 };
 
 export const getOrders = async (queryParams) => {
   const { user, seller } = queryParams;
-  const sortOptions = { updatedAt: -1 };
+  const sortOptions = { orderDate: -1 };
 
   const filter = {};
   if (user) {

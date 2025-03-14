@@ -16,6 +16,7 @@ import { EditOutlined } from "@ant-design/icons";
 import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddressForm";
 import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -26,11 +27,12 @@ const ProductCheckout = () => {
   const [visible, setVisible] = useState(false);
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
+  const navigate = useNavigate();
 
   const onFinish = async () => {
     try {
       const totalPrice = item.quantity * item.product.price;
-      await axios.post(`${apiEndpoint}/order`, {
+      const response = await axios.post(`${apiEndpoint}/order`, {
         user: currentUser._id,
         seller: item.product.seller,
         items: [{ product: item.product._id, quantity: item.quantity }],
@@ -38,7 +40,8 @@ const ProductCheckout = () => {
         shippingAddress: address,
         unitNumber: unitNumber,
       });
-      message.success("Order placed");
+      const orderId = response.data._id;
+      navigate(`/payment/${orderId}`);
     } catch (error) {
       message.error("Failed to place order: " + error.message);
     }
