@@ -24,15 +24,19 @@ const TopNavigation = () => {
   );
 
   const getSelectedKey = () => {
-    if (location.pathname.startsWith("/buy")) return "1";
-    if (location.pathname.startsWith("/sell")) return "2";
-    if (location.pathname.startsWith("/chat")) return "3";
-    if (location.pathname.startsWith("/cart")) return "4";
-    if (location.pathname.startsWith("/profile")) return "5";
-    return "1";
+    if (location.pathname.startsWith("/buy")) {
+      return ["1", location.pathname === "/buy/order" ? "1-2" : "1-1"];
+    }
+    if (location.pathname.startsWith("/sell")) {
+      return ["2", location.pathname === "/sell/order" ? "2-2" : "2-1"];
+    }
+    if (location.pathname.startsWith("/chat")) return ["3"];
+    if (location.pathname.startsWith("/cart")) return ["4"];
+    if (location.pathname.startsWith("/profile")) return ["5"];
+    return ["1"];
   };
 
-  const selectedKey = getSelectedKey();
+  const selectedKeys = getSelectedKey();
 
   return (
     <Header
@@ -58,7 +62,8 @@ const TopNavigation = () => {
       <Menu
         theme="light"
         mode="horizontal"
-        selectedKeys={[selectedKey]}
+        selectedKeys={selectedKeys}
+        defaultOpenKeys={["1", "2"]}
         style={{
           flex: 1,
           display: "flex",
@@ -113,7 +118,7 @@ const TopNavigation = () => {
       <Menu
         theme="light"
         mode="horizontal"
-        selectedKeys={[selectedKey]}
+        selectedKeys={selectedKeys}
         style={{ display: "flex", alignItems: "center" }}
       >
         <Menu.Item
