@@ -18,7 +18,7 @@ function PaymentPage() {
         status: "To Ship", // Update status
       });
 
-      message.success("Payment successful!'");
+      message.success("Payment successful!");
 
       navigate(`/confirmation/${orderId}`); // Redirect to your confirmation page
     } catch (error) {

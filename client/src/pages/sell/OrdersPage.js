@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
@@ -11,20 +11,19 @@ const SellerOrdersPage = () => {
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship");
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(`${apiEndpoint}/order`, {
-          params: { seller: currentUser._id },
-        });
-        setOrders(response.data);
-      } catch (error) {
-        message.error("Failed to retrieve orders");
-      }
-    };
-
-    fetchOrders();
+  const fetchOrders = useCallback(async () => {
+    try {
+      const response = await axios.get(`${apiEndpoint}/order`, {
+        params: { seller: currentUser._id },
+      });
+      setOrders(response.data);
+    } catch (error) {
+      message.error("Failed to retrieve orders");
+    }
   }, [currentUser]);
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   useEffect(() => {
     // Filter orders based on active tab status
@@ -43,6 +42,19 @@ const SellerOrdersPage = () => {
     }
   }, [activeTab, orders]);
 
+  const handleOrderStatusUpdate = async (orderId) => {
+    try {
+      await axios.put(`${apiEndpoint}/order/${orderId}`, {
+        status: "To Receive", // Update status
+      });
+
+      message.success("Order shipped!");
+      fetchOrders();
+    } catch (error) {
+      message.error("Failed to update order status: " + error.message);
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <Tabs activeKey={activeTab} onChange={setActiveTab}>
@@ -50,7 +62,11 @@ const SellerOrdersPage = () => {
         <Tabs.TabPane tab="Shipped" key="Shipped" />
         <Tabs.TabPane tab="Completed" key="Completed" />
       </Tabs>
-      <OrderList orders={filteredOrders} isSellerOrder={true} />
+      <OrderList
+        orders={filteredOrders}
+        isSellerOrder={true}
+        handleOrderStatusUpdate={handleOrderStatusUpdate}
+      />
     </div>
   );
 };

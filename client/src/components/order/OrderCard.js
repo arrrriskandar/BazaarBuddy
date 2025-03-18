@@ -1,9 +1,9 @@
 import React from "react";
-import { List, Card, Descriptions, Divider } from "antd";
+import { List, Card, Descriptions, Divider, Button } from "antd";
 
-function OrderCard({ order, isSellerOrder }) {
+function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
   return (
-    <List.Item>
+    <List.Item style={{ listStyleType: "none" }}>
       <Card style={{ marginBottom: "20px" }}>
         <Descriptions title={`Order ID: ${order._id}`} bordered column={2}>
           {isSellerOrder ? (
@@ -48,6 +48,17 @@ function OrderCard({ order, isSellerOrder }) {
             </List.Item>
           )}
         />
+        {((isSellerOrder && order.status === "To Ship") ||
+          (!isSellerOrder && order.status === "To Receive")) && (
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              type="primary"
+              onClick={() => handleOrderStatusUpdate(order._id)}
+            >
+              {isSellerOrder ? "Shipped Order" : "Received Order"}
+            </Button>
+          </div>
+        )}
       </Card>
     </List.Item>
   );
