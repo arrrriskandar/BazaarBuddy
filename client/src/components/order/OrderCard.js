@@ -1,7 +1,9 @@
-import React from "react";
-import { List, Card, Descriptions, Divider, Button } from "antd";
+import React, { useState } from "react";
+import { List, Card, Descriptions, Divider, Button, Modal } from "antd";
+import ReviewOrder from "./ReviewOrder";
 
 function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <List.Item style={{ listStyleType: "none" }}>
       <Card style={{ marginBottom: "20px" }}>
@@ -48,6 +50,13 @@ function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
             </List.Item>
           )}
         />
+        {order.status === "To Rate" && (
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button type="primary" onClick={() => setOpenModal(true)}>
+              To Rate
+            </Button>
+          </div>
+        )}
         {((isSellerOrder && order.status === "To Ship") ||
           (!isSellerOrder && order.status === "To Receive")) && (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -60,6 +69,16 @@ function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
           </div>
         )}
       </Card>
+
+      <Modal
+        open={openModal}
+        footer={null}
+        closable={false}
+        centered={true}
+        width={800}
+      >
+        <ReviewOrder setOpenModal={setOpenModal} order={order} />
+      </Modal>
     </List.Item>
   );
 }
