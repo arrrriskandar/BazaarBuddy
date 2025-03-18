@@ -42,6 +42,10 @@ const ProductSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  photouuid: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("ProductModel", ProductSchema);

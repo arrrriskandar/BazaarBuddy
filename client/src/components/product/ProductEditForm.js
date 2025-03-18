@@ -37,7 +37,7 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
   };
   const handleFormSubmit = async (values) => {
     try {
-      const path = `${currentUser._id}/${product._id}/`;
+      const path = `${currentUser._id}/products/${product.photouuid}/`;
       let photoUrl = productPhoto;
       if (selectedFile) {
         photoUrl = await uploadFile(selectedFile, path);

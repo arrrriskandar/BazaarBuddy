@@ -15,6 +15,7 @@ import { categories, stockOptions } from "../../constants/constants";
 import { useUser } from "../../contexts/UserContext";
 import FilePicker from "../common/FilePicker";
 import { uploadFile } from "../../firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -33,11 +34,12 @@ function ProductAddForm({ setOpenModal, setProducts }) {
   const handleFormSubmit = async (values) => {
     try {
       let photoUrl = null;
+      let photouuid = uuidv4();
 
       // If a file is selected, upload it first
       if (selectedFile) {
         try {
-          const path = `${currentUser._id}/products/`; // Define storage path
+          const path = `${currentUser._id}/products/${photouuid}`; // Define storage path
           photoUrl = await uploadFile(selectedFile, path); // Wait for upload
         } catch (uploadError) {
           message.error("Failed to upload image. Please try again.");
@@ -50,6 +52,7 @@ function ProductAddForm({ setOpenModal, setProducts }) {
         ...values,
         seller: currentUser._id,
         images: photoUrl, // Now includes the image URL
+        photouuid: photouuid,
       });
 
       // Update state based on stock status
