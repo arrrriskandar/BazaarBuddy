@@ -21,6 +21,7 @@ function BrowseProducts() {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      if (!currentUser?._id) return;
       try {
         const response = await axios.get(
           `${apiEndpoint}/product/buy/${currentUser._id}`,
