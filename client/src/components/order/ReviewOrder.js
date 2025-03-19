@@ -56,12 +56,12 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
         if (!product) {
           return null;
         }
-
         return {
           user: currentUser._id,
           product: product.product._id,
           comment: reviewData.comment,
           rating: reviewData.rating,
+          seller: product.product.seller,
         };
       })
       .filter(Boolean); // Remove null values (products that were not found)

@@ -32,7 +32,7 @@ const ProductSchema = new mongoose.Schema({
   },
   createdAt: { type: Date, default: Date.now, required: true },
   updatedAt: { type: Date, default: Date.now, required: true },
-  ratingAverage: {
+  ratingTotal: {
     type: Number,
     default: 0,
     required: true,

@@ -4,6 +4,10 @@ import React from "react";
 const { Meta } = Card;
 
 function ProductCard({ product }) {
+  const averageRating =
+    product.ratingCount > 0
+      ? (product.ratingTotal / product.ratingCount).toFixed(1)
+      : 0;
   return (
     <Card
       hoverable
@@ -30,8 +34,9 @@ function ProductCard({ product }) {
       <div style={{ marginTop: "10px", textAlign: "center" }}>
         {product.ratingCount > 0 ? (
           <>
-            <Rate disabled defaultValue={product.ratingAverage} />
-            <div>{product.ratingAverage.toFixed(1)} / 5</div>
+            <Rate disabled value={parseFloat(averageRating)} />
+            <div>{averageRating} / 5.0</div>
+            <div>{product.ratingCount} reviews</div>
           </>
         ) : (
           <div>No reviews</div>

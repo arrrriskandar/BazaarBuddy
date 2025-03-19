@@ -30,6 +30,11 @@ const Profile = () => {
     });
   };
 
+  const averageRating =
+    profile.ratingCount > 0
+      ? (profile.ratingTotal / profile.ratingCount).toFixed(1)
+      : 0; // Rounds to 1 decimal place
+
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
       <Card
@@ -58,7 +63,7 @@ const Profile = () => {
           <Descriptions.Item label="Rating">
             {profile.ratingCount > 0 ? (
               <>
-                {profile.ratingAverage} <StarFilled />
+                {averageRating} <StarFilled />
                 <span> ({profile.ratingCount} reviews)</span>
               </>
             ) : (

@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
-  ratingAverage: {
+  ratingTotal: {
     type: Number,
     default: 0,
     required: true,
