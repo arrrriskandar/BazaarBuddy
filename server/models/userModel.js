@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   username: {
     type: String,
@@ -16,14 +17,15 @@ const UserSchema = new mongoose.Schema({
   photoUrl: {
     type: String,
     default: "",
-    require: true,
+    required: true,
   },
   address: {
     type: String,
-    require: true,
+    required: true,
   },
   unitNumber: {
     type: String,
+    required: true,
   },
   createdAt: {
     type: Date,

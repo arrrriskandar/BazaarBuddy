@@ -2,7 +2,12 @@ import React from "react";
 import { List } from "antd";
 import OrderCard from "./OrderCard";
 
-const OrderList = ({ orders, isSellerOrder, handleOrderStatusUpdate }) => {
+const OrderList = ({
+  orders,
+  isSellerOrder,
+  handleOrderStatusUpdate,
+  fetchOrders,
+}) => {
   return (
     <List
       grid={{ gutter: 16, column: 1 }}
@@ -12,6 +17,7 @@ const OrderList = ({ orders, isSellerOrder, handleOrderStatusUpdate }) => {
           order={order}
           isSellerOrder={isSellerOrder}
           handleOrderStatusUpdate={handleOrderStatusUpdate}
+          fetchOrders={fetchOrders}
         />
       )}
     />

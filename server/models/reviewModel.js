@@ -13,11 +13,13 @@ const ReviewSchema = new Schema({
     ref: "ProductModel",
     required: true,
   },
-  reviewDate: { type: Date, default: Date.now, required: true },
+  reviewDate: { type: Date, default: Date.now },
   comment: { type: String, required: true },
   rating: {
     type: Number,
     required: true,
+    min: 1,
+    max: 5,
   },
 });
 

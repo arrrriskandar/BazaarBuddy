@@ -5,7 +5,7 @@ import { apiEndpoint } from "../../constants/constants";
 import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
 
-function SellerOrdersPage() {
+function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
@@ -59,6 +59,7 @@ function SellerOrdersPage() {
                 orders={filteredOrders}
                 isSellerOrder={false}
                 handleOrderStatusUpdate={handleOrderStatusUpdate}
+                fetchOrders={fetchOrders}
               />
             </Tabs.TabPane>
           )
@@ -68,4 +69,4 @@ function SellerOrdersPage() {
   );
 }
 
-export default SellerOrdersPage;
+export default BuyerOrdersPage;

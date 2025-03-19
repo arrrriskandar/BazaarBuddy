@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { List, Card, Descriptions, Divider, Button, Modal } from "antd";
 import ReviewOrder from "./ReviewOrder";
 
-function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
+function OrderCard({
+  order,
+  isSellerOrder,
+  handleOrderStatusUpdate,
+  fetchOrders,
+}) {
   const [openModal, setOpenModal] = useState(false);
   return (
     <List.Item style={{ listStyleType: "none" }}>
@@ -50,7 +55,7 @@ function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
             </List.Item>
           )}
         />
-        {order.status === "To Rate" && (
+        {!isSellerOrder && order.status === "To Rate" && (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button type="primary" onClick={() => setOpenModal(true)}>
               To Rate
@@ -77,7 +82,11 @@ function OrderCard({ order, isSellerOrder, handleOrderStatusUpdate }) {
         centered={true}
         width={800}
       >
-        <ReviewOrder setOpenModal={setOpenModal} order={order} />
+        <ReviewOrder
+          setOpenModal={setOpenModal}
+          order={order}
+          fetchOrders={fetchOrders}
+        />
       </Modal>
     </List.Item>
   );
