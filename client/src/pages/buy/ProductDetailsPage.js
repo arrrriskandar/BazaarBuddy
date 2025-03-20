@@ -7,6 +7,7 @@ import ProductInfo from "../../components/product/ProductInfo";
 import { useCart } from "../../contexts/CartContext";
 import ProductCard from "../../components/product/ProductCard";
 import { getAverageRating } from "../../utils/ratingUtils";
+import ReviewList from "../../components/review/ReviewList";
 
 function BrowseProductDetails() {
   const { productId } = useParams();
@@ -126,6 +127,7 @@ function BrowseProductDetails() {
             </Col>
           </Row>
           <Divider />
+          <ReviewList product={product} />
           <Divider />
           <h2>
             More from {product.seller.username}{" "}

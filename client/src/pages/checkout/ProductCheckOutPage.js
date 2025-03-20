@@ -1,20 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  Divider,
-  Form,
-  Button,
-  Typography,
-  Row,
-  Col,
-  Modal,
-  Table,
-} from "antd";
+import { Divider, Form, Button, Row, Col, Modal, Table } from "antd";
 import { useUser } from "../../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
 import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddressForm";
-
-const { Text } = Typography;
 
 const ProductCheckout = () => {
   const location = useLocation();

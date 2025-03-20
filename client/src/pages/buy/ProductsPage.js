@@ -65,7 +65,9 @@ function BrowseProducts() {
           </Col>
         ))}
       </Row>
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
+      >
         <Pagination
           current={currentPage}
           total={totalItems}
