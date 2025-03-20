@@ -31,7 +31,7 @@ const PaymentPage = () => {
         : [{ product: item.product._id, quantity: item.quantity }];
 
       // Make the request to create an order
-      const response = await axios.post(`${apiEndpoint}/orde`, {
+      const response = await axios.post(`${apiEndpoint}/order`, {
         user: userId,
         seller: cartCheckout
           ? selectedItems.items[0].product.seller
