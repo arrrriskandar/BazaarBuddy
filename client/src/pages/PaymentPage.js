@@ -1,28 +1,74 @@
 import React from "react";
 import { Button, message } from "antd";
-import { useNavigate, useParams } from "react-router-dom"; // Use useParams for URL params
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
+import { useCart } from "../contexts/CartContext";
 
-function PaymentPage() {
+const PaymentPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { deleteCart, removeFromCart } = useCart();
 
-  // Get orderId from the URL parameters
-  const { orderId } = useParams();
+  const {
+    selectedItems,
+    item,
+    address,
+    unitNumber,
+    totalPrice,
+    userId,
+    cartCheckout,
+  } = location.state;
 
-  // Handle payment and status update
   const handlePayment = async () => {
     try {
-      // Make a PUT request to update the order status to "To Ship"
-      await axios.put(`${apiEndpoint}/order/${orderId}`, {
-        status: "To Ship", // Update status
+      // Create the order data (either cartCheckout or single product)
+      const items = cartCheckout
+        ? selectedItems.items.map((i) => ({
+            product: i.product._id,
+            quantity: i.quantity,
+          }))
+        : [{ product: item.product._id, quantity: item.quantity }];
+
+      // Make the request to create an order
+      const response = await axios.post(`${apiEndpoint}/orde`, {
+        user: userId,
+        seller: cartCheckout
+          ? selectedItems.items[0].product.seller
+          : item.product.seller,
+        items,
+        totalPrice,
+        shippingAddress: address,
+        unitNumber,
       });
 
-      message.success("Payment successful!");
-
-      navigate(`/confirmation/${orderId}`); // Redirect to your confirmation page
+      if (cartCheckout) {
+        if (selectedItems.allItemsChecked) {
+          // If the user has selected all items, delete the entire cart
+          await deleteCart(selectedItems.cartId);
+        } else {
+          // Otherwise, remove items from the cart
+          for (let i of items) {
+            await removeFromCart(selectedItems.cartId, i.product);
+          }
+        }
+      }
+      message.success("Thank you for your purchase!");
+      navigate(`/confirmation/${response.data._id}`);
     } catch (error) {
-      message.error("Failed to update order status: " + error.message);
+      // Handle the case if payment fails
+      message.error("Payment failed. Please try again.");
+
+      // Redirect to the previous page based on whether it was cart or product checkout
+      if (cartCheckout) {
+        navigate("/cart/checkout", {
+          state: { selectedItems }, // ✅ Keeps the selected cart items
+        });
+      } else {
+        navigate("/buy/checkout", {
+          state: { item },
+        });
+      }
     }
   };
 
@@ -34,6 +80,6 @@ function PaymentPage() {
       </Button>
     </div>
   );
-}
+};
 
 export default PaymentPage;

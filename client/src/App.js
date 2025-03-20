@@ -47,7 +47,7 @@ const AuthenticatedApp = () => {
           <Route path="/buy/checkout" element={<ProductCheckout />} />
           <Route path="/sell/order" element={<SellerOrdersPage />} />
           <Route path="/buy/order" element={<BuyerOrdersPage />} />
-          <Route path="/payment/:orderId" element={<PaymentPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
           <Route path="/confirmation/:orderId" element={<ConfirmationPage />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>

@@ -9,7 +9,7 @@ function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
-  const [activeTab, setActiveTab] = useState("To Pay"); // Default tab
+  const [activeTab, setActiveTab] = useState("To Ship"); // Default tab
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -51,19 +51,17 @@ function BuyerOrdersPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Tabs defaultActiveKey="To Pay" onChange={handleTabChange}>
-        {["To Pay", "To Ship", "To Receive", "To Rate", "Completed"].map(
-          (status) => (
-            <Tabs.TabPane tab={status} key={status}>
-              <OrderList
-                orders={filteredOrders}
-                isSellerOrder={false}
-                handleOrderStatusUpdate={handleOrderStatusUpdate}
-                fetchOrders={fetchOrders}
-              />
-            </Tabs.TabPane>
-          )
-        )}
+      <Tabs defaultActiveKey="To Ship" onChange={handleTabChange}>
+        {["To Ship", "To Receive", "To Rate", "Completed"].map((status) => (
+          <Tabs.TabPane tab={status} key={status}>
+            <OrderList
+              orders={filteredOrders}
+              isSellerOrder={false}
+              handleOrderStatusUpdate={handleOrderStatusUpdate}
+              fetchOrders={fetchOrders}
+            />
+          </Tabs.TabPane>
+        ))}
       </Tabs>
     </div>
   );
