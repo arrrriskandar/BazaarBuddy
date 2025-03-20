@@ -6,6 +6,7 @@ import { message, Button, Row, Col, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
 import { useCart } from "../../contexts/CartContext";
 import ProductCard from "../../components/product/ProductCard";
+import { getAverageRating } from "../../utils/ratingUtils";
 
 function BrowseProductDetails() {
   const { productId } = useParams();
@@ -61,6 +62,10 @@ function BrowseProductDetails() {
     setProduct(clickedProduct);
     window.scrollTo(0, 0);
   };
+
+  const averageSellerRating = product
+    ? getAverageRating(product.seller.ratingCount, product.seller.ratingTotal)
+    : 0;
 
   return (
     <div>
@@ -121,7 +126,18 @@ function BrowseProductDetails() {
             </Col>
           </Row>
           <Divider />
-          <h2>More from {product.seller.username}:</h2>
+          <Divider />
+          <h2>
+            More from {product.seller.username}{" "}
+            {product.seller.ratingCount > 0 ? (
+              <span>
+                | {averageSellerRating} ⭐ ({product.seller.ratingCount}{" "}
+                reviews)
+              </span>
+            ) : (
+              <span> | No reviews</span>
+            )}
+          </h2>
           <Row gutter={[16, 16]}>
             {products.map((relatedProduct) => (
               <Col xs={24} sm={12} md={8} lg={6} key={relatedProduct._id}>

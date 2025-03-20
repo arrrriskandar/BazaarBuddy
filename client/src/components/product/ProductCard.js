@@ -1,13 +1,15 @@
 import { Card, Rate } from "antd";
 import React from "react";
+import { getAverageRating } from "../../utils/ratingUtils";
 
 const { Meta } = Card;
 
 function ProductCard({ product }) {
-  const averageRating =
-    product.ratingCount > 0
-      ? (product.ratingTotal / product.ratingCount).toFixed(1)
-      : 0;
+  const averageRating = getAverageRating(
+    product.ratingCount,
+    product.ratingTotal
+  );
+
   return (
     <Card
       hoverable
@@ -35,8 +37,10 @@ function ProductCard({ product }) {
         {product.ratingCount > 0 ? (
           <>
             <Rate disabled value={parseFloat(averageRating)} />
-            <div>{averageRating} / 5.0</div>
-            <div>{product.ratingCount} reviews</div>
+            <div>
+              {averageRating} ⭐ ({product.ratingCount} reviews)
+            </div>
+            <div></div>
           </>
         ) : (
           <div>No reviews</div>
