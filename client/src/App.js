@@ -24,6 +24,7 @@ import BuyerOrdersPage from "./pages/buy/OrdersPage";
 import ProductCheckout from "./pages/checkout/ProductCheckOutPage";
 import PaymentPage from "./pages/PaymentPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
+import { SocketProvider } from "./contexts/SocketContext";
 
 const AuthenticatedApp = () => {
   return (
@@ -78,7 +79,9 @@ const Root = () => (
     <UserProvider>
       <Router>
         <CartProvider>
-          <App />
+          <SocketProvider>
+            <App />
+          </SocketProvider>
         </CartProvider>
       </Router>
     </UserProvider>
