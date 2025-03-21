@@ -178,6 +178,7 @@ function ReviewList({ product }) {
           total={totalReviews}
           pageSize={10}
           onChange={handlePageChange}
+          showTotal={(total) => `Page ${page} / ${Math.ceil(total / 10)}`}
         />
       </div>
     </Card>

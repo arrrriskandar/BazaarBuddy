@@ -73,6 +73,9 @@ function BrowseProducts() {
           total={totalItems}
           pageSize={pageSize}
           onChange={handlePageChange}
+          showTotal={(total) =>
+            `Page ${currentPage} / ${Math.ceil(total / 10)}`
+          }
         />
       </div>
     </>
