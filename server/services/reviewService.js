@@ -36,10 +36,8 @@ export const getReviews = async (queryParams) => {
     sortOptions = { rating: -1 }; // Descending order for rating
   }
 
-  const reviews = await ReviewModel.find(query);
-
   // Fetch reviews with pagination
-  const filterReviews = await ReviewModel.find(query)
+  const reviews = await ReviewModel.find(query)
     .sort(sortOptions)
     .skip((page - 1) * limit)
     .limit(limit)
