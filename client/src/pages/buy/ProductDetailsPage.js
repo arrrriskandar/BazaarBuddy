@@ -127,8 +127,6 @@ function BrowseProductDetails() {
             </Col>
           </Row>
           <Divider />
-          <ReviewList product={product} />
-          <Divider />
           <h2>
             More from {product.seller.username}{" "}
             {product.seller.ratingCount > 0 ? (
@@ -149,6 +147,8 @@ function BrowseProductDetails() {
               </Col>
             ))}
           </Row>
+          <Divider />
+          <ReviewList product={product} />
         </>
       ) : (
         <p>Loading...</p>

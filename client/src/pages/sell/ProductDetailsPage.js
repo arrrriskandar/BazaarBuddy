@@ -6,6 +6,7 @@ import { message, Row, Col, Modal, Button, Form, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
 import ProductEditForm from "../../components/product/ProductEditForm";
 import RemoveProductDialog from "../../components/product/RemoveProductDialog";
+import ReviewList from "../../components/review/ReviewList";
 
 function SellerProductDetails() {
   const { productId } = useParams();
@@ -109,6 +110,8 @@ function SellerProductDetails() {
               product={product}
             />
           </Modal>
+          <Divider />
+          <ReviewList product={product} />
         </>
       ) : (
         <p>Loading...</p>
