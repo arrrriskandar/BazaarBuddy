@@ -4,11 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
 import { useCart } from "../contexts/CartContext";
+import { useSocket } from "../contexts/SocketContext";
 
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { deleteCart, removeFromCart } = useCart();
+  const { sendNotification } = useSocket();
 
   const {
     selectedItems,
@@ -23,6 +25,9 @@ const PaymentPage = () => {
   const handlePayment = async () => {
     try {
       // Create the order data (either cartCheckout or single product)
+      const seller = cartCheckout
+        ? selectedItems.items[0].product.seller
+        : item.product.seller;
       const items = cartCheckout
         ? selectedItems.items.map((i) => ({
             product: i.product._id,
@@ -33,9 +38,7 @@ const PaymentPage = () => {
       // Make the request to create an order
       const response = await axios.post(`${apiEndpoint}/order`, {
         user: userId,
-        seller: cartCheckout
-          ? selectedItems.items[0].product.seller
-          : item.product.seller,
+        seller,
         items,
         totalPrice,
         shippingAddress: address,
@@ -53,6 +56,10 @@ const PaymentPage = () => {
           }
         }
       }
+      sendNotification(
+        seller._id,
+        `You received a new order! Order ID: ${response.data._id}`
+      );
       message.success("Thank you for your purchase!");
       navigate(`/confirmation/${response.data._id}`);
     } catch (error) {

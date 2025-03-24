@@ -1,8 +1,22 @@
 import OrderModel from "../models/orderModel.js";
+import { createNotification } from "./notificationService.js";
 
 export const createOrder = async (orderData) => {
-  const order = new OrderModel(orderData);
-  return await order.save();
+  const { seller } = orderData;
+  console.log(seller._id);
+  try {
+    const order = await OrderModel.create(orderData);
+
+    await createNotification({
+      userId: seller,
+      message: `You received a new order! Order ID: ${response.data._id}`,
+    });
+
+    return order;
+  } catch (error) {
+    console.error("Error creating order and notification:", error);
+    throw new Error("Failed to create order and notification");
+  }
 };
 
 export const getOrder = async (id) => {
