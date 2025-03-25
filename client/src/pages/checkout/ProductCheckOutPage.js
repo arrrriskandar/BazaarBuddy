@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Form, Button, Row, Col, Modal, Table } from "antd";
+import {
+  Divider,
+  Form,
+  Button,
+  Row,
+  Col,
+  Modal,
+  Table,
+  Avatar,
+  Typography,
+} from "antd";
 import { useUser } from "../../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
 import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddressForm";
+
+const { Title } = Typography;
 
 const ProductCheckout = () => {
   const location = useLocation();
@@ -27,6 +39,46 @@ const ProductCheckout = () => {
       },
     });
   };
+
+  const columns = [
+    {
+      title: "Product",
+      key: "product",
+      render: () => (
+        <Row align="middle">
+          <Col>
+            <Avatar src={item.product.images} size={64} />
+          </Col>
+          <Col style={{ paddingLeft: "10px" }}>
+            <Title level={5} style={{ margin: 0 }}>
+              {item.product.name}
+            </Title>
+          </Col>
+        </Row>
+      ),
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Price",
+      dataIndex: ["product", "price"],
+      key: "price",
+      render: (price) => `$${price.toFixed(2)}`, // Format the price to two decimals
+    },
+    {
+      title: "Total",
+      key: "total",
+      render: (_, record) =>
+        `$${(record.quantity * record.product.price).toFixed(2)}`, // Calculate and format total
+    },
+  ];
+
+  const dataSource = [
+    { key: 1, product: item.product, quantity: item.quantity },
+  ];
 
   return (
     <div style={{ padding: "20px" }}>
@@ -53,20 +105,23 @@ const ProductCheckout = () => {
       </Row>
 
       <Table
-        columns={[
-          { title: "Product", dataIndex: ["product", "name"], key: "product" },
-          { title: "Quantity", dataIndex: "quantity", key: "quantity" },
-          { title: "Price", dataIndex: ["product", "price"], key: "price" },
-          {
-            title: "Total",
-            key: "total",
-            render: (_, record) => `$${record.quantity * record.product.price}`,
-          },
-        ]}
-        dataSource={[
-          { key: 1, product: item.product, quantity: item.quantity },
-        ]}
+        columns={columns}
+        dataSource={dataSource}
         pagination={false}
+        summary={() => (
+          <Table.Summary.Row>
+            <Table.Summary.Cell colSpan={3} align="right">
+              <Typography.Text strong style={{ fontSize: "24px" }}>
+                Total Price:
+              </Typography.Text>
+            </Table.Summary.Cell>
+            <Table.Summary.Cell align="center">
+              <Typography.Text strong style={{ fontSize: "24px" }}>
+                ${totalPrice.toFixed(2)}
+              </Typography.Text>
+            </Table.Summary.Cell>
+          </Table.Summary.Row>
+        )}
       />
       <Divider />
       <Form
