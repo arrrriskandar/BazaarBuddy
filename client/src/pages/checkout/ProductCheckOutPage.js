@@ -23,7 +23,6 @@ const ProductCheckout = () => {
         address,
         unitNumber,
         totalPrice,
-        userId: currentUser._id,
         cartCheckout: false, // Indicate this is for a single product
       },
     });

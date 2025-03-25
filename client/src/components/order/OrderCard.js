@@ -58,7 +58,7 @@ function OrderCard({
         {!isSellerOrder && order.status === "To Rate" && (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button type="primary" onClick={() => setOpenModal(true)}>
-              To Rate
+              Rate
             </Button>
           </div>
         )}

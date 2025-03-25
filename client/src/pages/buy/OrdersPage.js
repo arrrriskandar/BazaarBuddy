@@ -4,12 +4,14 @@ import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
 import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
+import { useSocket } from "../../contexts/SocketContext";
 
 function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship"); // Default tab
+  const { sendNotification, getNotificationMessage } = useSocket();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -38,10 +40,18 @@ function BuyerOrdersPage() {
 
   const handleOrderStatusUpdate = async (orderId) => {
     try {
-      // Make a PUT request to update the order status to "To Ship"
-      await axios.put(`${apiEndpoint}/order/${orderId}`, {
-        status: "To Rate", // Update status
+      const notificationMessage = getNotificationMessage("order_received", {
+        orderId,
+        buyer: currentUser.username,
       });
+      // Make a PUT request to update the order status to "To Ship"
+      const response = await axios.put(`${apiEndpoint}/order/${orderId}`, {
+        status: "To Rate", // Update status
+        notificationMessage,
+        notifyBuyer: false,
+      });
+      const receiverId = response.data.seller;
+      sendNotification(receiverId, notificationMessage);
       message.success("Order received!");
       fetchOrders();
     } catch (error) {

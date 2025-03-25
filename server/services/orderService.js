@@ -2,13 +2,15 @@ import OrderModel from "../models/orderModel.js";
 import { createNotification } from "./notificationService.js";
 
 export const createOrder = async (orderData) => {
-  const { seller } = orderData;
+  console.log(orderData);
+  const { notificationMessage, seller } = orderData;
   try {
     const order = await OrderModel.create(orderData);
+    console.log(notificationMessage);
 
     await createNotification({
       userId: seller,
-      message: `You received a new order! Order ID: ${order._id}`,
+      message: notificationMessage,
     });
 
     return order;
@@ -62,7 +64,24 @@ export const getOrders = async (queryParams) => {
 };
 
 export const updateOrder = async (id, orderData) => {
-  return await OrderModel.findByIdAndUpdate(id, orderData, { new: true });
+  const { notificationMessage, notifyBuyer } = orderData;
+  try {
+    const order = await OrderModel.findByIdAndUpdate(id, orderData, {
+      new: true,
+    });
+
+    const userId = notifyBuyer ? order.user : order.seller;
+
+    await createNotification({
+      userId,
+      message: notificationMessage,
+    });
+
+    return order;
+  } catch (error) {
+    console.error("Error updating order and creating notification:", error);
+    throw new Error("Failed to update order and create notification");
+  }
 };
 
 export const deleteOrder = async (id) => {

@@ -11,7 +11,7 @@ const SellerOrdersPage = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship");
-  const { sendNotification } = useSocket();
+  const { sendNotification, getNotificationMessage } = useSocket();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -25,7 +25,7 @@ const SellerOrdersPage = () => {
   }, [currentUser]);
   useEffect(() => {
     fetchOrders();
-  }, [fetchOrders]);
+  }, [fetchOrders, activeTab]);
 
   useEffect(() => {
     // Filter orders based on active tab status
@@ -45,15 +45,18 @@ const SellerOrdersPage = () => {
   }, [activeTab, orders]);
 
   const handleOrderStatusUpdate = async (orderId) => {
+    const notificationMessage = getNotificationMessage("order_shipped", {
+      orderId,
+      seller: currentUser.username,
+    });
     try {
       const response = await axios.put(`${apiEndpoint}/order/${orderId}`, {
         status: "To Receive", // Update status
+        notificationMessage,
+        notifyBuyer: true,
       });
-      const userId = response.data.user;
-      sendNotification(
-        userId,
-        `Your order has been shipped! Order ID: ${orderId}`
-      );
+      const receiverId = response.data.user;
+      sendNotification(receiverId, notificationMessage);
       message.success("Order shipped!");
       fetchOrders();
     } catch (error) {

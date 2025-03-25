@@ -48,7 +48,6 @@ const CartCheckout = () => {
         address,
         unitNumber,
         totalPrice,
-        userId: currentUser._id,
         cartCheckout: true, // Indicate this is from the cart
       },
     });
