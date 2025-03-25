@@ -13,8 +13,7 @@ export const getNotification = async (id) => {
   });
 };
 
-export const getNotifications = async (queryParams) => {
-  const { userId } = queryParams;
+export const getNotifications = async (userId) => {
   const sortOptions = { isRead: 1, createdAt: -1 };
 
   const notifications = await NotificationModel.find({ userId })

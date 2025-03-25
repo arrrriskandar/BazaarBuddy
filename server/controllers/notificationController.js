@@ -20,7 +20,7 @@ export const getNotificationController = async (req, res) => {
 
 export const getNotificationsController = async (req, res) => {
   try {
-    const notifications = await getNotifications(req.query);
+    const notifications = await getNotifications(req.params.userId);
     res.json(notifications);
   } catch (err) {
     res.status(500).json({ message: err.message });

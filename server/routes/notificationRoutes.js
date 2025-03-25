@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.route("/").get(getNotificationsController);
+router.route("/user/:userId").get(getNotificationsController);
 router.route("/:id").get(getNotificationController);
 router.route("/:id").put(markNotificationAsReadController);
 router

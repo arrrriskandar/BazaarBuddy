@@ -25,6 +25,8 @@ import ProductCheckout from "./pages/checkout/ProductCheckOutPage";
 import PaymentPage from "./pages/PaymentPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import { SocketProvider } from "./contexts/SocketContext";
+import Notification from "./pages/NotificationPage";
+import NotificationDetail from "./pages/NotificationDetailsPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -33,6 +35,8 @@ const AuthenticatedApp = () => {
       <Content style={{ padding: "20px 50px" }}>
         <Routes>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/notifications/:id" element={<NotificationDetail />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route
             path="/buy/product/:productId"

@@ -143,7 +143,7 @@ const TopNavigation = () => {
           <Link to="/profile" />
         </Menu.Item>
         <Menu.Item key="6" icon={<BellOutlined style={{ fontSize: "24px" }} />}>
-          {/* <Link to="/profile" /> */}
+          <Link to="/notification" />
         </Menu.Item>
       </Menu>
     </Header>
