@@ -7,6 +7,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import chatRoutes from "./routes/notificationRoutes.js";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
@@ -34,6 +35,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/chat", chatRoutes);
 
 const onlineUsers = new Map();
 
