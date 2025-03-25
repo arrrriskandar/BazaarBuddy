@@ -22,14 +22,13 @@ const PaymentPage = () => {
       // Create the order data (either cartCheckout or single product)
       const seller = cartCheckout
         ? selectedItems.items[0].product.seller
-        : item.product.seller;
+        : item.product.seller._id;
       const items = cartCheckout
         ? selectedItems.items.map((i) => ({
             product: i.product._id,
             quantity: i.quantity,
           }))
         : [{ product: item.product._id, quantity: item.quantity }];
-
       const notificationMessage = getNotificationMessage("order_placed", {
         buyer: currentUser.username,
       });
@@ -56,7 +55,7 @@ const PaymentPage = () => {
           }
         }
       }
-      sendNotification(seller._id, notificationMessage);
+      sendNotification(seller, notificationMessage);
       message.success("Thank you for your purchase!");
       navigate(`/confirmation/${response.data._id}`);
     } catch (error) {
