@@ -15,9 +15,9 @@ export const getNotification = async (id) => {
 
 export const getNotifications = async (queryParams) => {
   const { userId } = queryParams;
-  const sortOptions = { createdAt: -1 };
+  const sortOptions = { isRead: 1, createdAt: -1 };
 
-  const notifications = await NotificationModel.find(userId)
+  const notifications = await NotificationModel.find({ userId })
     .populate({
       path: "userId",
       model: "UserModel",
@@ -33,10 +33,21 @@ export const getNotifications = async (queryParams) => {
   };
 };
 
-export const updateNotification = async (id, notificationData) => {
-  return await NotificationModel.findByIdAndUpdate(id, notificationData, {
-    new: true,
-  });
+export const markNotificationAsRead = async (id) => {
+  return await NotificationModel.findByIdAndUpdate(
+    id,
+    { isRead: true },
+    {
+      new: true,
+    }
+  );
+};
+
+export const markAllNotificationsAsRead = async (userId) => {
+  return await NotificationModel.updateMany(
+    { userId, isRead: false },
+    { $set: { isRead: true } }
+  );
 };
 
 export const deleteNotification = async (id) => {

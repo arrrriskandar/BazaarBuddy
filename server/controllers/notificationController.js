@@ -2,7 +2,8 @@ import {
   deleteNotification,
   getNotification,
   getNotifications,
-  updateNotification,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
 } from "../services/notificationService.js";
 
 export const getNotificationController = async (req, res) => {
@@ -26,16 +27,25 @@ export const getNotificationsController = async (req, res) => {
   }
 };
 
-export const updateNotificationController = async (req, res) => {
+export const markNotificationAsReadController = async (req, res) => {
   try {
-    const updatedNotification = await updateNotification(
-      req.params.id,
-      req.body
-    );
+    const updatedNotification = await markNotificationAsRead(req.params.id);
     if (!updatedNotification) {
       return res.status(404).json({ message: "Notification not found" });
     }
     res.json(updatedNotification);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const markAllNotificationsAsReadController = async (req, res) => {
+  try {
+    const result = await markAllNotificationsAsRead(req.params.userId);
+    if (!result.modifiedCount) {
+      return res.status(404).json({ message: "No unread notifications found" });
+    }
+    res.json({ message: "All notifications marked as read", result });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
