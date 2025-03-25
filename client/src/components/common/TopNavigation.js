@@ -7,6 +7,7 @@ import {
   UserOutlined,
   WechatOutlined,
   ShoppingOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 import { useCart } from "../../contexts/CartContext";
 
@@ -140,6 +141,9 @@ const TopNavigation = () => {
         </Menu.Item>
         <Menu.Item key="5" icon={<UserOutlined style={{ fontSize: "24px" }} />}>
           <Link to="/profile" />
+        </Menu.Item>
+        <Menu.Item key="6" icon={<BellOutlined style={{ fontSize: "24px" }} />}>
+          {/* <Link to="/profile" /> */}
         </Menu.Item>
       </Menu>
     </Header>
