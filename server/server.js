@@ -38,35 +38,30 @@ app.use("/api/notification", notificationRoutes);
 const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
-  console.log(`Socket connected: ${socket.id}`);
-
-  // Get userId from the query parameter
   const userId = socket.handshake.query.userId;
-  console.log(`User with ID ${userId} connected`);
 
-  // User joins with their ID
   if (userId) {
     onlineUsers.set(userId, socket.id);
-    console.log(`${userId} is online`);
   }
 
   // Handle sending notifications
   socket.on("send_notification", (data) => {
-    console.log("Notification received:", data);
-    const recipientSocketId = onlineUsers.get(data.receiverId);
+    const { receiverId, message } = data;
+    const recipientSocketId = onlineUsers.get(receiverId);
+
     if (recipientSocketId) {
-      io.to(recipientSocketId).emit("receive_notification", data);
+      io.to(recipientSocketId).emit("receive_notification", { message });
     }
   });
 
   // Handle disconnect
   socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
-    for (let [userId, socketId] of onlineUsers.entries()) {
-      if (socketId === socket.id) {
-        onlineUsers.delete(userId);
-        console.log(`${userId} disconnected`);
-      }
+    const userIdToRemove = [...onlineUsers.entries()].find(
+      ([, socketId]) => socketId === socket.id
+    )?.[0];
+
+    if (userIdToRemove) {
+      onlineUsers.delete(userIdToRemove);
     }
   });
 });

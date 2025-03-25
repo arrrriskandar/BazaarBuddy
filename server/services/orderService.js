@@ -3,13 +3,12 @@ import { createNotification } from "./notificationService.js";
 
 export const createOrder = async (orderData) => {
   const { seller } = orderData;
-  console.log(seller._id);
   try {
     const order = await OrderModel.create(orderData);
 
     await createNotification({
       userId: seller,
-      message: `You received a new order! Order ID: ${response.data._id}`,
+      message: `You received a new order! Order ID: ${order._id}`,
     });
 
     return order;

@@ -4,12 +4,14 @@ import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
 import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
+import { useSocket } from "../../contexts/SocketContext";
 
 const SellerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship");
+  const { sendNotification } = useSocket();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -44,10 +46,14 @@ const SellerOrdersPage = () => {
 
   const handleOrderStatusUpdate = async (orderId) => {
     try {
-      await axios.put(`${apiEndpoint}/order/${orderId}`, {
+      const response = await axios.put(`${apiEndpoint}/order/${orderId}`, {
         status: "To Receive", // Update status
       });
-
+      const userId = response.data.user;
+      sendNotification(
+        userId,
+        `Your order has been shipped! Order ID: ${orderId}`
+      );
       message.success("Order shipped!");
       fetchOrders();
     } catch (error) {

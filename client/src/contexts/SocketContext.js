@@ -8,37 +8,37 @@ export const useSocket = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
   const { currentAuthUser } = useAuth();
-  const socketRef = useRef(null); // ✅ Use `useRef` instead of `useState`
+  const socketRef = useRef(null);
 
   useEffect(() => {
-    if (currentAuthUser) {
-      socketRef.current = io("http://localhost:5001", {
-        query: { userId: currentAuthUser.uid },
-        transports: ["websocket"],
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 3000,
-      });
+    if (!currentAuthUser || socketRef.current) return; // Prevent unnecessary reinitialization
 
-      socketRef.current.on("connect_error", (err) => {
-        console.error("Socket connection error:", err);
-      });
+    socketRef.current = io("http://localhost:5001", {
+      query: { userId: currentAuthUser.uid },
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 3000,
+    });
 
-      // Listen for notifications globally here
-      socketRef.current.on("receive_notification", (data) => {
-        alert("Someone bought your product!");
-        console.log(data);
-      });
+    socketRef.current.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+    });
 
-      return () => {
+    socketRef.current.on("receive_notification", ({ message }) => {
+      alert(message);
+    });
+
+    return () => {
+      if (socketRef.current) {
         socketRef.current.disconnect();
-      };
-    }
+        socketRef.current = null;
+      }
+    };
   }, [currentAuthUser]);
 
   const sendNotification = (receiverId, message) => {
     if (socketRef.current) {
-      // ✅ Now it always references the latest socket
       socketRef.current.emit("send_notification", {
         receiverId,
         message,
@@ -48,7 +48,7 @@ export const SocketProvider = ({ children }) => {
 
   return (
     <SocketContext.Provider
-      value={{ socket: socketRef.current, sendNotification }}
+      value={{ socket: socketRef.current || null, sendNotification }}
     >
       {children}
     </SocketContext.Provider>
