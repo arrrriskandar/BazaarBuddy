@@ -2,15 +2,14 @@ import OrderModel from "../models/orderModel.js";
 import { createNotification } from "./notificationService.js";
 
 export const createOrder = async (orderData) => {
-  console.log(orderData);
   const { notificationMessage, seller } = orderData;
   try {
     const order = await OrderModel.create(orderData);
-    console.log(notificationMessage);
 
     await createNotification({
       userId: seller,
       message: notificationMessage,
+      order,
     });
 
     return order;

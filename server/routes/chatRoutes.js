@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.route("/:userId").get(getUserChatsController); // Get all chats for a user
-router.route("/:chatId/messages").get(getChatMessagesController); // Get messages in a chat
-router.route("/").post(getOrCreateChatController); // Get or create a chat
-router.route("/message").post(sendMessageController); // Send a message
-router.route("/:chatId/read").put(markMessagesAsReadController); // Mark messages as read
-router.route("/:chatId").delete(deleteChatController); // Delete a chat
+router.route("/:userId").get(getUserChatsController);
+router.route("/:chatId/messages").get(getChatMessagesController);
+router.route("/").post(getOrCreateChatController);
+router.route("/message").post(sendMessageController);
+router.route("/:chatId/read").put(markMessagesAsReadController);
+router.route("/:chatId").delete(deleteChatController);
 
 export default router;
