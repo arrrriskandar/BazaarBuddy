@@ -1,48 +1,28 @@
-import {
-  Card,
-  Spin,
-  Badge,
-  List,
-  Avatar,
-  Typography,
-  Button,
-  Row,
-  Col,
-} from "antd";
-import { apiEndpoint } from "../constants/constants";
-import { useUser } from "../contexts/UserContext";
-import { useState, useEffect } from "react";
+import { Card, List, Avatar, Typography, Button, Row, Col, Empty } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useNotifications } from "../contexts/NotificationContext";
 
 const { Text } = Typography;
 
 const Notification = () => {
-  const { currentUser } = useUser();
-  const [notifications, setNotifications] = useState(null);
+  const { notifications, markAllAsRead, markAsRead } = useNotifications();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchNotification = async () => {
-      if (!currentUser._id) return;
-      const res = await fetch(
-        `${apiEndpoint}/notification/user/${currentUser._id}`
-      );
-      const data = await res.json();
-      setNotifications(data);
-    };
-    fetchNotification();
-  }, [currentUser]);
-
-  if (!notifications) {
+  if (notifications?.length === 0) {
     return (
       <div style={{ textAlign: "center", padding: "50px" }}>
-        <Spin size="large" />
+        <Empty description="No notifications available" />
       </div>
     );
   }
 
-  const { notifications: notifList, unreadCount } = notifications;
+  const handleNotificationClick = (notificationId, orderId, isRead) => {
+    if (!isRead) {
+      markAsRead(notificationId);
+    }
+    navigate(`/notification/${orderId}`);
+  };
 
   return (
     <div style={{ maxWidth: "800px", margin: "50px auto" }}>
@@ -51,12 +31,13 @@ const Notification = () => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <BellOutlined />
-              <Text strong style={{ fontSize: "16px" }}>
+              <h1 strong style={{ fontSize: "16px" }}>
                 Notifications
-              </Text>
-              <Badge count={unreadCount} />
+              </h1>
             </div>
-            <Button type="link">Mark all as read</Button>
+            <Button type="link" onClick={markAllAsRead}>
+              Mark all as read
+            </Button>
           </div>
         }
         variant={false}
@@ -64,14 +45,18 @@ const Notification = () => {
       >
         <List
           itemLayout="vertical"
-          dataSource={notifList}
+          dataSource={notifications}
           renderItem={(item) => (
             <List.Item
               style={{
                 backgroundColor: item.isRead ? "#fff" : "#fff7f6",
                 padding: "20px",
                 borderBottom: "1px solid #f0f0f0",
+                cursor: "pointer",
               }}
+              onClick={() =>
+                handleNotificationClick(item._id, item.order, item.isRead)
+              }
             >
               <Row gutter={16} align="middle">
                 <Col>
@@ -89,15 +74,6 @@ const Notification = () => {
                   <Text type="secondary" style={{ fontSize: "12px" }}>
                     {new Date(item.createdAt).toLocaleString()}
                   </Text>
-                </Col>
-                <Col>
-                  <Button
-                    type="default"
-                    size="small"
-                    onClick={() => navigate(`/notifications/${item._id}`)}
-                  >
-                    View Details
-                  </Button>
                 </Col>
               </Row>
             </List.Item>

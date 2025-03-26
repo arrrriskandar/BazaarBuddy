@@ -27,6 +27,7 @@ import ConfirmationPage from "./pages/ConfirmationPage";
 import { SocketProvider } from "./contexts/SocketContext";
 import Notification from "./pages/NotificationPage";
 import NotificationDetail from "./pages/NotificationDetailsPage";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
 const AuthenticatedApp = () => {
   return (
@@ -36,7 +37,10 @@ const AuthenticatedApp = () => {
         <Routes>
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
-          <Route path="/notifications/:id" element={<NotificationDetail />} />
+          <Route
+            path="/notification/:orderId"
+            element={<NotificationDetail />}
+          />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route
             path="/buy/product/:productId"
@@ -84,7 +88,9 @@ const Root = () => (
       <Router>
         <CartProvider>
           <SocketProvider>
-            <App />
+            <NotificationProvider>
+              <App />
+            </NotificationProvider>
           </SocketProvider>
         </CartProvider>
       </Router>

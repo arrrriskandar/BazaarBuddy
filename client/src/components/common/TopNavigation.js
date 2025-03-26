@@ -10,6 +10,7 @@ import {
   BellOutlined,
 } from "@ant-design/icons";
 import { useCart } from "../../contexts/CartContext";
+import { useNotifications } from "../../contexts/NotificationContext";
 
 const { Header } = Layout;
 const { SubMenu } = Menu;
@@ -17,6 +18,7 @@ const { SubMenu } = Menu;
 const TopNavigation = () => {
   const location = useLocation();
   const { carts } = useCart();
+  const { unreadCount } = useNotifications();
 
   const totalQuantity = carts.reduce(
     (acc, cart) =>
@@ -33,7 +35,8 @@ const TopNavigation = () => {
     }
     if (location.pathname.startsWith("/chat")) return ["3"];
     if (location.pathname.startsWith("/cart")) return ["4"];
-    if (location.pathname.startsWith("/profile")) return ["5"];
+    if (location.pathname.startsWith("/notification")) return ["5"];
+    if (location.pathname.startsWith("/profile")) return ["6"];
     return ["1"];
   };
 
@@ -139,11 +142,23 @@ const TopNavigation = () => {
             ></Badge>
           </Link>
         </Menu.Item>
-        <Menu.Item key="5" icon={<UserOutlined style={{ fontSize: "24px" }} />}>
-          <Link to="/profile" />
+        <Menu.Item key="5" icon={<BellOutlined style={{ fontSize: "24px" }} />}>
+          <Link to="/notification">
+            <Badge
+              count={unreadCount}
+              overflowCount={10}
+              style={{
+                backgroundColor: "#52c41a",
+                boxShadow: "none",
+                position: "absolute",
+                top: "-30px",
+                right: "-5px",
+              }}
+            ></Badge>
+          </Link>
         </Menu.Item>
-        <Menu.Item key="6" icon={<BellOutlined style={{ fontSize: "24px" }} />}>
-          <Link to="/notification" />
+        <Menu.Item key="6" icon={<UserOutlined style={{ fontSize: "24px" }} />}>
+          <Link to="/profile" />
         </Menu.Item>
       </Menu>
     </Header>
