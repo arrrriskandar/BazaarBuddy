@@ -9,6 +9,11 @@ const NotificationSchema = new Schema(
       ref: "UserModel",
       required: true,
     },
+    order: {
+      type: Schema.Types.ObjectId,
+      ref: "OrderModel",
+      required: true,
+    },
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
   },

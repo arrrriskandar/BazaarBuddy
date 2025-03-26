@@ -1,18 +1,18 @@
 import {
   deleteNotification,
-  getNotification,
+  openNotification,
   getNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
 } from "../services/notificationService.js";
 
-export const getNotificationController = async (req, res) => {
+export const openNotificationController = async (req, res) => {
   try {
-    const notification = await getNotification(req.params.id);
-    if (!notification) {
+    const order = await openNotification(req.params.id);
+    if (!order) {
       return res.status(404).json({ message: "Notification not found" });
     }
-    res.json(notification);
+    res.json(order);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getNotificationController,
+  openNotificationController,
   getNotificationsController,
   markNotificationAsReadController,
   markAllNotificationsAsReadController,
@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.route("/user/:userId").get(getNotificationsController);
-router.route("/:id").get(getNotificationController);
+router.route("/:id").get(openNotificationController);
 router.route("/:id").put(markNotificationAsReadController);
 router
   .route("/markAllAsRead/:userId")

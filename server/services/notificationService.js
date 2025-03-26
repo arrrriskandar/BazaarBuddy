@@ -1,4 +1,5 @@
 import NotificationModel from "../models/notificationModel.js";
+import { getOrder } from "./orderService.js";
 
 export const createNotification = async (notificationData) => {
   const notification = new NotificationModel(notificationData);
@@ -6,11 +7,11 @@ export const createNotification = async (notificationData) => {
   return notification;
 };
 
-export const getNotification = async (id) => {
-  return await NotificationModel.findById(id).populate({
-    path: "userId",
-    model: "UserModel",
-  });
+export const openNotification = async (id) => {
+  const notification = await NotificationModel.findById(id);
+  const order = await getOrder(notification.order);
+  await markNotificationAsRead(id);
+  return order;
 };
 
 export const getNotifications = async (userId) => {
@@ -18,8 +19,8 @@ export const getNotifications = async (userId) => {
 
   const notifications = await NotificationModel.find({ userId })
     .populate({
-      path: "userId",
-      model: "UserModel",
+      path: "order",
+      model: "OrderModel",
     })
     .sort(sortOptions);
 
