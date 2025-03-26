@@ -17,7 +17,6 @@ const UserSchema = new mongoose.Schema({
   photoUrl: {
     type: String,
     default: "",
-    required: true,
   },
   address: {
     type: String,
@@ -30,17 +29,14 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    required: true,
   },
   ratingTotal: {
     type: Number,
     default: 0,
-    required: true,
   },
   ratingCount: {
     type: Number,
     default: 0,
-    required: true,
   },
 });
 

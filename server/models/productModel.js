@@ -27,20 +27,17 @@ const ProductSchema = new mongoose.Schema({
   },
   stock: {
     type: String,
-    required: true,
     default: "Available",
   },
-  createdAt: { type: Date, default: Date.now, required: true },
-  updatedAt: { type: Date, default: Date.now, required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
   ratingTotal: {
     type: Number,
     default: 0,
-    required: true,
   },
   ratingCount: {
     type: Number,
     default: 0,
-    required: true,
   },
   photouuid: {
     type: String,

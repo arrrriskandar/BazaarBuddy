@@ -29,7 +29,7 @@ const OrderSchema = new Schema({
     required: true,
   },
   items: [OrderItemSchema],
-  orderDate: { type: Date, default: Date.now, required: true },
+  orderDate: { type: Date, default: Date.now },
   totalPrice: { type: Number },
   shippingAddress: { type: String, required: true },
   unitNumber: { type: String, required: true },
