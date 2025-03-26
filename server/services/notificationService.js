@@ -10,16 +10,7 @@ export const getNotifications = async (userId) => {
   const sortOptions = { isRead: 1, createdAt: -1 };
 
   const notifications = await NotificationModel.find({ userId })
-    .populate({
-      path: "order",
-      model: "OrderModel",
-      populate: {
-        path: "items.product",
-        model: "ProductModel",
-        select: "images",
-      },
-    })
-    .sort(sortOptions);
+  .sort(sortOptions);
 
   const unreadCount = notifications.filter(
     (notification) => notification.isRead === false
