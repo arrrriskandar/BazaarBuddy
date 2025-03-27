@@ -43,7 +43,11 @@ const Profile = () => {
           <Avatar
             src={profile.photoUrl || "/default-avatar.png"}
             size={200}
-            style={{ margin: "20px auto" }}
+            style={{
+              margin: "20px auto",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
           />
         }
       >
