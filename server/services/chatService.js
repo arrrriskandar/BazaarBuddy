@@ -1,10 +1,16 @@
 import ChatModel from "../models/chatModel.js";
 
 export const getUserChats = async (userId) => {
-  const chat = await ChatModel.find({ participants: userId }).populate(
+  return await ChatModel.find({ participants: userId }).populate(
     "participants",
     "username photoUrl"
   );
+};
+
+export const getChatMessages = async (chatId, userId) => {
+  const chat = await ChatModel.findById(chatId)
+    .populate("participants", "username photoUrl") // Load user details once
+    .select("messages participants");
 
   if (!chat) throw new Error("Chat not found");
 
@@ -18,12 +24,6 @@ export const getUserChats = async (userId) => {
   await chat.save(); // Save updated chat with read messages
 
   return chat.messages;
-};
-
-export const getChatMessages = async (chatId) => {
-  return await ChatModel.findById(chatId)
-    .populate("participants", "username photoUrl") // Load user details once
-    .select("messages participants");
 };
 
 export const getOrCreateChat = async (senderId, receiverId) => {
@@ -54,7 +54,7 @@ export const sendMessage = async (
   const message = { sender: senderId, receiver: receiverId, content, isImage };
   chat.messages.push(message);
 
-  chat.lastMessage = isImage ? content : "📷 Image";
+  chat.lastMessage = isImage ? "📷 Image" : content;
   chat.lastMessageAt = new Date();
 
   await chat.save();

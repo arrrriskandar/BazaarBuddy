@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.route("/:userId").get(getUserChatsController);
-router.route("/:chatId/messages").get(getChatMessagesController);
+router.route("/:chatId/messages").put(getChatMessagesController);
 router.route("/").post(getOrCreateChatController);
 router.route("/message").post(sendMessageController);
 router.route("/:chatId").delete(deleteChatController);
