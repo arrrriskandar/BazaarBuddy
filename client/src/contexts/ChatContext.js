@@ -38,8 +38,11 @@ export const ChatProvider = ({ children }) => {
     const fetchMessages = async () => {
       if (!activeChat?._id) return;
       try {
-        const response = await axios.get(
-          `${apiEndpoint}/chat/${activeChat._id}/messages`
+        const response = await axios.put(
+          `${apiEndpoint}/chat/${activeChat._id}/messages`,
+          {
+            userId: currentUser._id,
+          }
         );
         setMessages(response.data);
       } catch (error) {
@@ -47,27 +50,27 @@ export const ChatProvider = ({ children }) => {
       }
     };
     fetchMessages();
-  }, [activeChat]);
+  }, [activeChat, currentUser]);
 
   // Listen for incoming messages via WebSocket
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewMessage = (newMessage, popUpMessage) => {
-      if (newMessage.chatId === activeChat?._id) {
+    const handleNewMessage = (data) => {
+      const { chatId, newMessage, popUpMessage } = data;
+      if (chatId === activeChat?._id) {
         setMessages((prevMessages) => {
-          return prevMessages.map((message) =>
-            message._id === newMessage._id
-              ? { ...message, isRead: true }
-              : message
-          );
+          return [
+            ...prevMessages,
+            { ...newMessage, isRead: true }, // Append new message and mark as read
+          ];
         });
       } else {
         alert(popUpMessage);
       }
       setChats((prevChats) => {
         return prevChats.map((chat) =>
-          chat._id === newMessage.chatId
+          chat._id === chatId
             ? {
                 ...chat,
                 lastMessage: newMessage.content,
@@ -101,7 +104,12 @@ export const ChatProvider = ({ children }) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
 
       if (socket && activeChat) {
-        socket.emit("send_message", { receiverId, popUpMessage, newMessage });
+        socket.emit("send_message", {
+          receiverId,
+          popUpMessage,
+          newMessage,
+          chatId,
+        });
       }
     } catch (error) {
       console.error("Failed to send message:", error);

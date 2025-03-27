@@ -58,13 +58,13 @@ io.on("connection", (socket) => {
 
   // Handle sending notifications
   socket.on("send_message", (data) => {
-    const { receiverId, popUpMessage, newMessage } = data;
+    const { receiverId, popUpMessage, newMessage, chatId } = data;
     const recipientSocketId = onlineUsers.get(receiverId);
-
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("receive_message", {
         popUpMessage,
         newMessage,
+        chatId,
       });
     }
   });

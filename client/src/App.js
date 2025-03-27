@@ -28,6 +28,8 @@ import { SocketProvider } from "./contexts/SocketContext";
 import Notification from "./pages/NotificationPage";
 import NotificationDetail from "./pages/NotificationDetailsPage";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { ChatProvider } from "./contexts/ChatContext";
+import ChatPage from "./pages/ChatPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -58,6 +60,8 @@ const AuthenticatedApp = () => {
           <Route path="/buy/order" element={<BuyerOrdersPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/confirmation/:orderId" element={<ConfirmationPage />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/chat/:chatId" element={<ChatPage />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />
         </Routes>
       </Content>
@@ -88,9 +92,11 @@ const Root = () => (
       <Router>
         <CartProvider>
           <SocketProvider>
-            <NotificationProvider>
-              <App />
-            </NotificationProvider>
+            <ChatProvider>
+              <NotificationProvider>
+                <App />
+              </NotificationProvider>
+            </ChatProvider>
           </SocketProvider>
         </CartProvider>
       </Router>

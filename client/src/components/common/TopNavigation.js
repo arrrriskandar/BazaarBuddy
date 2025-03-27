@@ -115,7 +115,7 @@ const TopNavigation = () => {
           icon={<WechatOutlined style={{ fontSize: "24px" }} />}
           style={{ width: "120px" }} // Adjusted width
         >
-          <Link to="/">Chats</Link>
+          <Link to="/chat">Chats</Link>
         </Menu.Item>
       </Menu>
       <Menu
