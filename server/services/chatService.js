@@ -1,15 +1,16 @@
 import ChatModel from "../models/chatModel.js";
 
 export const getUserChats = async (userId) => {
-  return await ChatModel.find({ participants: userId })
-    .populate("participants")
-    .select("name email");
+  return await ChatModel.find({ participants: userId }).populate(
+    "participants",
+    "username photoUrl"
+  );
 };
 
 export const getChatMessages = async (chatId) => {
   return await ChatModel.findById(chatId)
-    .populate("messages.sender messages.receiver")
-    .select("name email");
+    .populate("participants", "username photoUrl") // Load user details once
+    .select("messages participants");
 };
 
 export const getOrCreateChat = async (senderId, receiverId) => {
@@ -27,11 +28,11 @@ export const getOrCreateChat = async (senderId, receiverId) => {
   return chat;
 };
 
-export const sendMessage = async (chatId, senderId, content) => {
+export const sendMessage = async (chatId, senderId, content, receiverId) => {
   const chat = await ChatModel.findById(chatId);
   if (!chat) throw new Error("Chat not found");
 
-  const message = { sender: senderId, content };
+  const message = { sender: senderId, content, receiver: receiverId };
   chat.messages.push(message);
   chat.lastMessage = content;
   chat.lastMessageAt = new Date();

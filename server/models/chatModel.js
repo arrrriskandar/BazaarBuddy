@@ -6,12 +6,12 @@ const MessageSchema = new Schema(
   {
     sender: {
       type: String,
-      ref: "User",
+      ref: "UserModel",
       required: true,
     },
     receiver: {
       type: String,
-      ref: "User",
+      ref: "UserModel",
       required: true,
     },
     content: { type: String, required: true },
@@ -22,8 +22,8 @@ const MessageSchema = new Schema(
 
 const ChatSchema = new Schema(
   {
-    participants: [{ type: string, ref: "User" }],
-    messages: [messageSchema],
+    participants: [{ type: String, ref: "UserModel" }],
+    messages: [MessageSchema],
     lastMessage: { type: String },
     lastMessageAt: { type: Date },
   },

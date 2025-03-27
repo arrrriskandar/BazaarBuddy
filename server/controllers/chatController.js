@@ -37,8 +37,8 @@ export const getOrCreateChatController = async (req, res) => {
 
 export const sendMessageController = async (req, res) => {
   try {
-    const { chatId, senderId, content } = req.body;
-    const message = await sendMessage(chatId, senderId, content);
+    const { chatId, senderId, content, receiverId } = req.body;
+    const message = await sendMessage(chatId, senderId, content, receiverId);
     res.json(message);
   } catch (err) {
     res.status(500).json({ message: err.message });

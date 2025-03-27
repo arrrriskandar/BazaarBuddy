@@ -7,7 +7,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
-import chatRoutes from "./routes/notificationRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
