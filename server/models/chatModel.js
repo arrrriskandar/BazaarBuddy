@@ -15,6 +15,7 @@ const MessageSchema = new Schema(
       required: true,
     },
     content: { type: String, required: true },
+    isImage: { type: Boolean, required: true },
     isRead: { type: Boolean, default: false },
   },
   { timestamps: true }

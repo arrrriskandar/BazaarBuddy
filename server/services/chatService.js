@@ -28,14 +28,22 @@ export const getOrCreateChat = async (senderId, receiverId) => {
   return chat;
 };
 
-export const sendMessage = async (chatId, senderId, content, receiverId) => {
+export const sendMessage = async (
+  chatId,
+  senderId,
+  content,
+  receiverId,
+  isImage
+) => {
   const chat = await ChatModel.findById(chatId);
   if (!chat) throw new Error("Chat not found");
 
-  const message = { sender: senderId, content, receiver: receiverId };
+  const message = { sender: senderId, receiver: receiverId, content, isImage };
   chat.messages.push(message);
-  chat.lastMessage = content;
+
+  chat.lastMessage = isImage ? content : "📷 Image";
   chat.lastMessageAt = new Date();
+
   await chat.save();
   return message;
 };
