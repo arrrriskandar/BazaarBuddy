@@ -76,7 +76,7 @@ export const sendMessage = async (
   chat.lastMessageAt = new Date();
 
   await chat.save();
-  return message;
+  return chat.messages[chat.messages.length - 1].toObject();
 };
 
 export const deleteChat = async (chatId) => {
