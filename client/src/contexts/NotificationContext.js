@@ -48,21 +48,6 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [socket]);
 
-  const getNotificationMessage = (type, { buyer, seller, orderId }) => {
-    switch (type) {
-      case "order_placed":
-        return `New Order! ${buyer} has placed an order. Process it soon!`;
-      case "order_shipped":
-        return `Your order #${orderId} has been shipped by ${seller}.`;
-      case "order_received":
-        return `Order #${orderId} has been marked as received by ${buyer}.`;
-      case "review_received":
-        return `${buyer} has left a review on your product(s). Check it out!`;
-      default:
-        return "You have a new notification.";
-    }
-  };
-
   // Send notification via WebSocket
   const sendNotification = (receiverId, message) => {
     if (!socket) {
@@ -105,7 +90,6 @@ export const NotificationProvider = ({ children }) => {
       value={{
         notifications,
         unreadCount,
-        getNotificationMessage,
         sendNotification,
         markAsRead,
         markAllAsRead,

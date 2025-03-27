@@ -5,13 +5,14 @@ import { apiEndpoint } from "../../constants/constants";
 import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
 import { useSocket } from "../../contexts/SocketContext";
+import { getNotificationMessage } from "../../constants/constants";
 
 function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship"); // Default tab
-  const { sendNotification, getNotificationMessage } = useSocket();
+  const { sendNotification } = useSocket();
 
   const fetchOrders = useCallback(async () => {
     try {

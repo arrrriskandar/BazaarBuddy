@@ -6,12 +6,13 @@ import { apiEndpoint } from "../constants/constants";
 import { useCart } from "../contexts/CartContext";
 import { useUser } from "../contexts/UserContext";
 import { useNotifications } from "../contexts/NotificationContext";
+import { getNotificationMessage } from "../constants/constants";
 
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { deleteCart, removeFromCart } = useCart();
-  const { getNotificationMessage, sendNotification } = useNotifications();
+  const { sendNotification } = useNotifications();
   const { currentUser } = useUser();
 
   const { selectedItems, item, address, unitNumber, totalPrice, cartCheckout } =

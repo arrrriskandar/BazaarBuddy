@@ -15,13 +15,14 @@ import React from "react";
 import { apiEndpoint } from "../../constants/constants";
 import { useUser } from "../../contexts/UserContext";
 import { useSocket } from "../../contexts/SocketContext";
+import { getNotificationMessage } from "../../constants/constants";
 
 const { TextArea } = Input;
 
 function ReviewOrder({ setOpenModal, order, fetchOrders }) {
   const [forms] = Form.useForm();
   const { currentUser } = useUser();
-  const { getNotificationMessage, sendNotification } = useSocket();
+  const { sendNotification } = useSocket();
 
   const handleCancelClick = () => {
     setOpenModal(false);
