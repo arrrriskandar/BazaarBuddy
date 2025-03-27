@@ -3,7 +3,6 @@ import {
   getChatMessages,
   getOrCreateChat,
   sendMessage,
-  markMessagesAsRead,
   deleteChat,
 } from "../services/chatService.js";
 
@@ -46,15 +45,6 @@ export const sendMessageController = async (req, res) => {
       isImage
     );
     res.json(message);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-export const markMessagesAsReadController = async (req, res) => {
-  try {
-    const chat = await markMessagesAsRead(req.params.chatId, req.body.userId);
-    res.json(chat);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

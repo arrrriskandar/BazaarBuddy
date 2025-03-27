@@ -1,10 +1,23 @@
 import ChatModel from "../models/chatModel.js";
 
 export const getUserChats = async (userId) => {
-  return await ChatModel.find({ participants: userId }).populate(
+  const chat = await ChatModel.find({ participants: userId }).populate(
     "participants",
     "username photoUrl"
   );
+
+  if (!chat) throw new Error("Chat not found");
+
+  // Mark messages as read for the specific user
+  chat.messages.forEach((msg) => {
+    if (msg.receiver.toString() === userId && !msg.isRead) {
+      msg.isRead = true;
+    }
+  });
+
+  await chat.save(); // Save updated chat with read messages
+
+  return chat.messages;
 };
 
 export const getChatMessages = async (chatId) => {
@@ -46,18 +59,6 @@ export const sendMessage = async (
 
   await chat.save();
   return message;
-};
-
-export const markMessagesAsRead = async (chatId, userId) => {
-  const chat = await ChatModel.findById(chatId);
-  if (!chat) throw new Error("Chat not found");
-
-  chat.messages.forEach((msg) => {
-    if (msg.receiver.toString() === userId) msg.isRead = true;
-  });
-
-  await chat.save();
-  return chat;
 };
 
 export const deleteChat = async (chatId) => {
