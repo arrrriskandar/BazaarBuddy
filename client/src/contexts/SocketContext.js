@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "./AuthContext";
 
@@ -9,11 +15,24 @@ export const useSocket = () => useContext(SocketContext);
 export const SocketProvider = ({ children }) => {
   const { currentAuthUser } = useAuth();
   const socketRef = useRef(null);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    if (!currentAuthUser || socketRef.current) return; // Prevent unnecessary reinitialization
+    if (!currentAuthUser) {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+        setSocket(null);
+      }
+      return;
+    }
 
-    socketRef.current = io("http://localhost:5001", {
+    // Disconnect any existing socket before creating a new one
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
+    const newSocket = io("http://localhost:5001", {
       query: { userId: currentAuthUser.uid },
       transports: ["websocket"],
       reconnection: true,
@@ -21,54 +40,24 @@ export const SocketProvider = ({ children }) => {
       reconnectionDelay: 3000,
     });
 
-    socketRef.current.on("connect_error", (err) => {
+    newSocket.on("connect_error", (err) => {
       console.error("Socket connection error:", err);
     });
 
-    socketRef.current.on("receive_notification", ({ message }) => {
-      alert(message);
-    });
+    socketRef.current = newSocket;
+    setSocket(newSocket);
 
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current = null;
+        setSocket(null);
       }
     };
   }, [currentAuthUser]);
 
-  const getNotificationMessage = (type, { buyer, seller, orderId }) => {
-    switch (type) {
-      case "order_placed":
-        return `New Order! ${buyer} has placed an order. Process it soon!`;
-      case "order_shipped":
-        return `Your order #${orderId} has been shipped by ${seller}.`;
-      case "order_received":
-        return `Order #${orderId} has been marked as received by ${buyer}.`;
-      case "review_received":
-        return `${buyer} has left a review on your product(s). Check it out!`;
-      default:
-        return "You have a new notification.";
-    }
-  };
-
-  const sendNotification = (receiverId, message) => {
-    if (socketRef.current) {
-      socketRef.current.emit("send_notification", {
-        receiverId,
-        message,
-      });
-    }
-  };
-
   return (
-    <SocketContext.Provider
-      value={{
-        socket: socketRef.current || null,
-        sendNotification,
-        getNotificationMessage,
-      }}
-    >
+    <SocketContext.Provider value={{ socket }}>
       {children}
     </SocketContext.Provider>
   );

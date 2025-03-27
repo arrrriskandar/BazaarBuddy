@@ -4,14 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
 import { useCart } from "../contexts/CartContext";
-import { useSocket } from "../contexts/SocketContext";
 import { useUser } from "../contexts/UserContext";
+import { useNotifications } from "../contexts/NotificationContext";
 
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { deleteCart, removeFromCart } = useCart();
-  const { getNotificationMessage, sendNotification } = useSocket();
+  const { getNotificationMessage, sendNotification } = useNotifications();
   const { currentUser } = useUser();
 
   const { selectedItems, item, address, unitNumber, totalPrice, cartCheckout } =
