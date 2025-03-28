@@ -17,7 +17,7 @@ export const createOrderController = async (req, res) => {
 
 export const getOrderController = async (req, res) => {
   try {
-    const order = await getOrder(req.params.id);
+    const order = await getOrder(req.params);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }

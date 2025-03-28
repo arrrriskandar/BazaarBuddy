@@ -19,46 +19,63 @@ export const createOrder = async (orderData) => {
   }
 };
 
-export const getOrder = async (orderId) => {
-  return await OrderModel.findById(orderId)
-    .populate({
-      path: "items.product",
-      model: "ProductModel",
-    })
-    .populate({
-      path: "seller",
-      model: "UserModel",
-    })
-    .populate({
-      path: "user",
-      model: "UserModel",
-    });
+export const getOrder = async (orderParams) => {
+  const { orderId, userId } = orderParams;
+
+  // Fetch order details without populating seller and user
+  const order = await OrderModel.findById(orderId).populate({
+    path: "items.product",
+    model: "ProductModel",
+  });
+
+  // Determine which participant to populate
+  const otherParticipantPath =
+    order.seller.toString() !== userId ? "seller" : "user";
+
+  // Populate the other participant
+  await order.populate({
+    path: otherParticipantPath,
+    model: "UserModel",
+  });
+
+  return order;
 };
 
 export const getOrders = async (queryParams) => {
   const { user, seller } = queryParams;
   const sortOptions = { orderDate: -1 };
 
+  if (user && seller) {
+    throw new Error("You can only filter by either user or seller, not both.");
+  }
+
   const filter = {};
+  let populateOptions = [];
+
   if (user) {
     filter.user = user;
+    populateOptions = [
+      {
+        path: "seller", // Populate seller if the user is provided
+        model: "UserModel",
+      },
+    ];
   }
   if (seller) {
     filter.seller = seller;
+    populateOptions = [
+      {
+        path: "user", // Populate user if the seller is provided
+        model: "UserModel",
+      },
+    ];
   }
   return await OrderModel.find(filter)
     .populate({
       path: "items.product",
       model: "ProductModel",
     })
-    .populate({
-      path: "seller",
-      model: "UserModel",
-    })
-    .populate({
-      path: "user",
-      model: "UserModel",
-    })
+    .populate(populateOptions)
     .sort(sortOptions);
 };
 
