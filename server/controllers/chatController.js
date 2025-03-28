@@ -17,7 +17,7 @@ export const getUserChatsController = async (req, res) => {
 
 export const getChatMessagesController = async (req, res) => {
   try {
-    const messages = await getChatMessages(req.params.chatId, req.body.userId);
+    const messages = await getChatMessages(req.params.chatId, req.body);
     res.json(messages);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -26,8 +26,7 @@ export const getChatMessagesController = async (req, res) => {
 
 export const getOrCreateChatController = async (req, res) => {
   try {
-    const { senderId, receiverId } = req.body;
-    const chat = await getOrCreateChat(senderId, receiverId);
+    const chat = await getOrCreateChat(req.body);
     res.json(chat);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -36,14 +35,7 @@ export const getOrCreateChatController = async (req, res) => {
 
 export const sendMessageController = async (req, res) => {
   try {
-    const { chatId, senderId, content, receiverId, isImage } = req.body;
-    const message = await sendMessage(
-      chatId,
-      senderId,
-      content,
-      receiverId,
-      isImage
-    );
+    const message = await sendMessage(req.body);
     res.json(message);
   } catch (err) {
     res.status(500).json({ message: err.message });
