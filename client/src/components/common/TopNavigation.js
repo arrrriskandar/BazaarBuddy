@@ -131,7 +131,7 @@ const TopNavigation = () => {
           <Link to="/cart">
             <Badge
               count={totalQuantity}
-              overflowCount={10}
+              overflowCount={100}
               style={{
                 backgroundColor: "#52c41a",
                 boxShadow: "none",
@@ -146,7 +146,7 @@ const TopNavigation = () => {
           <Link to="/notification">
             <Badge
               count={unreadCount}
-              overflowCount={10}
+              overflowCount={100}
               style={{
                 backgroundColor: "#52c41a",
                 boxShadow: "none",

@@ -12,7 +12,7 @@ export const createOrder = async (orderData) => {
       order,
     });
 
-    return { ...order.toObject(), notificationId: notification._id };
+    return { order, notification };
   } catch (error) {
     console.error("Error creating order and notification:", error);
     throw new Error("Failed to create order and notification");

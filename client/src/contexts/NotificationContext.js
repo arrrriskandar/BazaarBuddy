@@ -42,13 +42,11 @@ export const NotificationProvider = ({ children }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewNotification = (data) => {
-      const { message, notificationId } = data;
-      alert(message);
-      markAsRead(notificationId);
-      fetchNotifications();
-      // setNotifications((prev) => [{ message, isRead: false }, ...prev]);
-      // setUnreadCount((prev) => prev + 1);
+    const handleNewNotification = ({ notification }) => {
+      console.log(notification);
+      alert(notification.message);
+      setNotifications((prev) => [notification, ...prev]);
+      setUnreadCount((prev) => prev + 1);
     };
 
     socket.on("receive_notification", handleNewNotification);
@@ -59,7 +57,7 @@ export const NotificationProvider = ({ children }) => {
   }, [socket, fetchNotifications]);
 
   // Send notification via WebSocket
-  const sendNotification = (receiverId, message, notificationId) => {
+  const sendNotification = (receiverId, notification) => {
     if (!socket) {
       console.warn("Socket is not connected yet");
       return;
@@ -67,8 +65,7 @@ export const NotificationProvider = ({ children }) => {
     if (socket) {
       socket.emit("send_notification", {
         receiverId,
-        message,
-        notificationId,
+        notification,
       });
     }
   };

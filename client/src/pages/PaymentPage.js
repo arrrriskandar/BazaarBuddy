@@ -44,7 +44,7 @@ const PaymentPage = () => {
         unitNumber,
         notificationMessage,
       });
-      const { notificationId } = response.data;
+      const { order, notification } = response.data;
 
       if (cartCheckout) {
         if (selectedItems.allItemsChecked) {
@@ -57,9 +57,9 @@ const PaymentPage = () => {
           }
         }
       }
-      sendNotification(seller, notificationMessage, notificationId);
+      sendNotification(seller, notification);
       message.success("Thank you for your purchase!");
-      navigate(`/confirmation/${response.data._id}`);
+      navigate(`/confirmation/${order._id}`);
     } catch (error) {
       // Handle the case if payment fails
       message.error("Payment failed. Please try again.");
@@ -80,7 +80,7 @@ const PaymentPage = () => {
 
   return (
     <div>
-      <h1>Payment Page</h1>
+      <h1>Payment Pagedd</h1>
       <Button type="primary" onClick={handlePayment}>
         Complete Payment
       </Button>
