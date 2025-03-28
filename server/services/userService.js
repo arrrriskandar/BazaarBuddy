@@ -5,14 +5,14 @@ export const createUser = async (userData) => {
   return await user.save();
 };
 
-export const getUser = async (id) => {
-  return await UserModel.findById(id);
+export const getUser = async (userId) => {
+  return await UserModel.findById(userId);
 };
 
-export const updateUser = async (id, userData) => {
-  return await UserModel.findByIdAndUpdate(id, userData, { new: true });
+export const updateUser = async (userId, userData) => {
+  return await UserModel.findByIdAndUpdate(userId, userData, { new: true });
 };
 
-export const deleteUser = async (id) => {
-  return await UserModel.findByIdAndDelete(id);
+export const deleteUser = async (userId) => {
+  return await UserModel.findByIdAndDelete(userId);
 };
