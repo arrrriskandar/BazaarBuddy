@@ -9,7 +9,7 @@ export const createOrder = async (orderData) => {
     const notification = await createNotification({
       userId: seller,
       message: notificationMessage,
-      order,
+      order: order._id,
     });
 
     return { order, notification };
@@ -88,12 +88,13 @@ export const updateOrder = async (orderId, orderData) => {
 
     const userId = notifyBuyer ? order.user : order.seller;
 
-    await createNotification({
+    const notification = await createNotification({
       userId,
       message: notificationMessage,
+      order: orderId,
     });
 
-    return order;
+    return { order, notification };
   } catch (error) {
     console.error("Error updating order and creating notification:", error);
     throw new Error("Failed to update order and create notification");
