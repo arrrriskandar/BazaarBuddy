@@ -17,19 +17,23 @@ const CartItemSchema = new Schema(
   { _id: false }
 );
 
-const CartSchema = new Schema({
-  user: {
-    type: String,
-    ref: "UserModel",
-    required: true,
+const CartSchema = new Schema(
+  {
+    user: {
+      type: String,
+      ref: "UserModel",
+      required: true,
+    },
+    seller: {
+      type: String,
+      ref: "UserModel",
+      required: true,
+    },
+    items: [CartItemSchema],
   },
-  seller: {
-    type: String,
-    ref: "UserModel",
-    required: true,
-  },
-  items: [CartItemSchema],
-  updatedAt: { type: Date, default: Date.now, required: true },
-});
+  {
+    timestamps: { createdAt: false, updatedAt: true },
+  }
+);
 
 export default mongoose.model("CartModel", CartSchema);

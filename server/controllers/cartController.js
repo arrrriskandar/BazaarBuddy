@@ -39,11 +39,7 @@ export const getCartsController = async (req, res) => {
 
 export const updateCartItemQuantityController = async (req, res) => {
   try {
-    const updatedCart = await updateCartItemQuantity(
-      req.params.id,
-      req.body.product,
-      req.body.quantity
-    );
+    const updatedCart = await updateCartItemQuantity(req.params.id, req.body);
     if (!updatedCart) {
       return res.status(404).json({ message: "Cart not found" });
     }
@@ -55,7 +51,7 @@ export const updateCartItemQuantityController = async (req, res) => {
 
 export const removeCartItemController = async (req, res) => {
   try {
-    const updatedCart = await removeCartItem(req.params.id, req.body.product);
+    const updatedCart = await removeCartItem(req.params.id, req.body);
     if (!updatedCart) {
       res.json({ message: "Cart deleted" });
     }

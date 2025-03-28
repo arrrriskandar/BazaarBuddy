@@ -3,7 +3,7 @@ import cartModel from "../models/cartModel.js";
 export const addToCart = async (cartData) => {
   const { user, product, quantity, seller } = cartData;
 
-  let cart = await cartModel.findOne({ user: user, seller: seller });
+  let cart = await cartModel.findOne({ user, seller });
 
   if (!cart) {
     cart = new cartModel({
@@ -24,14 +24,14 @@ export const addToCart = async (cartData) => {
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
-      cart.items.push({ product: product, quantity });
+      cart.items.push({ product, quantity });
     }
   }
   return await cart.save();
 };
 
-export const getCart = async (id) => {
-  return await cartModel.findById(id).populate({
+export const getCart = async (cartId) => {
+  return await cartModel.findById(cartId).populate({
     path: "items.product",
     model: "ProductModel",
   });
@@ -40,7 +40,7 @@ export const getCart = async (id) => {
 export const getCarts = async (user) => {
   const sortOptions = { updatedAt: -1 };
   return await cartModel
-    .find({ user: user })
+    .find({ user })
     .populate({
       path: "items.product",
       model: "ProductModel",
@@ -52,25 +52,26 @@ export const getCarts = async (user) => {
     .sort(sortOptions);
 };
 
-export const updateCartItemQuantity = async (id, product, quantity) => {
+export const updateCartItemQuantity = async (cartId, cartData) => {
+  const { product, quantity } = cartData;
   return await cartModel.findOneAndUpdate(
-    { _id: id, "items.product": product },
-    { $set: { "items.$.quantity": quantity, updatedAt: Date.now() } },
+    { _id: cartId, "items.product": product },
+    { $set: { "items.$.quantity": quantity } },
     { new: true }
   );
 };
 
-export const removeCartItem = async (id, product) => {
+export const removeCartItem = async (cartId, cartData) => {
+  const { product } = cartData;
   return await cartModel.findOneAndUpdate(
-    { _id: id },
+    { _id: cartId },
     {
-      $pull: { items: { product: product } },
-      $set: { updatedAt: Date.now() },
+      $pull: { items: { product } },
     },
     { new: true }
   );
 };
 
-export const deleteCart = async (id) => {
-  return await cartModel.findByIdAndDelete(id);
+export const deleteCart = async (cartId) => {
+  return await cartModel.findByIdAndDelete(cartId);
 };
