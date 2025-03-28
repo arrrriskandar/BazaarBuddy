@@ -44,6 +44,7 @@ const PaymentPage = () => {
         unitNumber,
         notificationMessage,
       });
+      const { notificationId } = response;
 
       if (cartCheckout) {
         if (selectedItems.allItemsChecked) {
@@ -56,7 +57,7 @@ const PaymentPage = () => {
           }
         }
       }
-      sendNotification(seller, notificationMessage);
+      sendNotification(seller, notificationMessage, notificationId);
       message.success("Thank you for your purchase!");
       navigate(`/confirmation/${response.data._id}`);
     } catch (error) {

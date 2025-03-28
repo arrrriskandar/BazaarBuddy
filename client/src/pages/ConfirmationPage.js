@@ -4,9 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
 import OrderCard from "../components/order/OrderCard";
+import { useUser } from "../contexts/UserContext";
 
 function ConfirmationPage() {
   const navigate = useNavigate();
+  const { currentUser } = useUser();
   const { orderId } = useParams();
   const [order, setOrder] = useState(null); // Initialize as null
   const [loading, setLoading] = useState(true); // Track loading state
@@ -14,7 +16,9 @@ function ConfirmationPage() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await axios.get(`${apiEndpoint}/order/${orderId}`);
+        const response = await axios.get(
+          `${apiEndpoint}/order/${orderId}/${currentUser}`
+        );
         setOrder(response.data);
         setLoading(false);
       } catch (error) {
@@ -26,7 +30,7 @@ function ConfirmationPage() {
     if (orderId) {
       fetchOrder();
     }
-  }, [orderId]);
+  }, [orderId, currentUser]);
 
   const handleViewOrder = () => {
     navigate("/buy/order");

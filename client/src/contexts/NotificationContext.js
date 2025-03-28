@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
 import { useUser } from "./UserContext";
@@ -14,29 +20,31 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
+  const fetchNotifications = useCallback(async () => {
+    if (!currentUser?._id) return;
+    try {
+      const response = await axios.get(
+        `${apiEndpoint}/notification/user/${currentUser._id}`
+      );
+      setNotifications(response.data.notifications);
+      setUnreadCount(response.data.unreadCount);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    }
+  }, [currentUser]);
+
   // Fetch notifications from API
   useEffect(() => {
-    const fetchNotifications = async () => {
-      if (!currentUser?._id) return;
-      try {
-        const response = await axios.get(
-          `${apiEndpoint}/notification/user/${currentUser._id}`
-        );
-        setNotifications(response.data.notifications);
-        setUnreadCount(response.data.unreadCount);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-      }
-    };
     fetchNotifications();
-  }, [currentUser]);
+  }, [fetchNotifications]);
 
   // Listen for real-time notifications via WebSocket
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewNotification = ({ message }) => {
-      alert(message);
+    const handleNewNotification = ({ message, notificationId }) => {
+      alert(message, notificationId);
+      fetchNotifications();
       // setNotifications((prev) => [{ message, isRead: false }, ...prev]);
       // setUnreadCount((prev) => prev + 1);
     };
@@ -46,16 +54,21 @@ export const NotificationProvider = ({ children }) => {
     return () => {
       socket.off("receive_notification", handleNewNotification);
     };
-  }, [socket]);
+  }, [socket, fetchNotifications]);
 
   // Send notification via WebSocket
-  const sendNotification = (receiverId, message) => {
+  const sendNotification = (receiverId, message, notificationId) => {
     if (!socket) {
       console.warn("Socket is not connected yet");
       return;
     }
+    console.log(notificationId);
     if (socket) {
-      socket.emit("send_notification", { receiverId, message });
+      socket.emit("send_notification", {
+        receiverId,
+        message,
+        notificationId,
+      });
     }
   };
 

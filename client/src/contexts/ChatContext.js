@@ -39,7 +39,7 @@ export const ChatProvider = ({ children }) => {
       if (!activeChat?._id) return;
       try {
         const response = await axios.put(
-          `${apiEndpoint}/chat/${activeChat._id}/messages`,
+          `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`,
           {
             userId: currentUser._id,
           }

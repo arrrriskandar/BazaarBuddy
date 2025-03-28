@@ -6,11 +6,13 @@ export const createOrder = async (orderData) => {
   try {
     const order = await OrderModel.create(orderData);
 
-    await createNotification({
+    const notification = await createNotification({
       userId: seller,
       message: notificationMessage,
       order,
     });
+    order.notificationId = notification._id;
+    await order.save();
 
     return order;
   } catch (error) {

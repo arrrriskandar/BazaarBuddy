@@ -48,11 +48,14 @@ io.on("connection", (socket) => {
 
   // Handle sending notifications
   socket.on("send_notification", (data) => {
-    const { receiverId, message } = data;
+    const { receiverId, message, notificationId } = data;
     const recipientSocketId = onlineUsers.get(receiverId);
 
     if (recipientSocketId) {
-      io.to(recipientSocketId).emit("receive_notification", { message });
+      io.to(recipientSocketId).emit("receive_notification", {
+        message,
+        notificationId,
+      });
     }
   });
 
