@@ -9,8 +9,9 @@ export const createNotification = async (notificationData) => {
 export const getNotifications = async (userId) => {
   const sortOptions = { isRead: 1, createdAt: -1 };
 
-  const notifications = await NotificationModel.find({ userId })
-  .sort(sortOptions);
+  const notifications = await NotificationModel.find({ userId }).sort(
+    sortOptions
+  );
 
   const unreadCount = notifications.filter(
     (notification) => notification.isRead === false
@@ -21,9 +22,9 @@ export const getNotifications = async (userId) => {
   };
 };
 
-export const markNotificationAsRead = async (id) => {
+export const markNotificationAsRead = async (notificationId) => {
   return await NotificationModel.findByIdAndUpdate(
-    id,
+    notificationId,
     { isRead: true },
     {
       new: true,
@@ -38,6 +39,6 @@ export const markAllNotificationsAsRead = async (userId) => {
   );
 };
 
-export const deleteNotification = async (id) => {
-  return await NotificationModel.findByIdAndDelete(id);
+export const deleteNotification = async (notificationId) => {
+  return await NotificationModel.findByIdAndDelete(notificationId);
 };
