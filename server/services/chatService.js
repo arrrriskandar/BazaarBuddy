@@ -25,8 +25,8 @@ export const getUserChats = async (userId) => {
   return transformedChats;
 };
 
-export const getChatMessages = async (chatId, chatData) => {
-  const { userId } = chatData;
+export const getChatMessages = async (chatParams) => {
+  const { chatId, userId } = chatParams;
   const chat = await ChatModel.findById(chatId)
     .populate("participants", "username photoUrl") // Load user details once
     .select("messages participants");
@@ -62,6 +62,7 @@ export const getOrCreateChat = async (chatData) => {
 };
 
 export const sendMessage = async (messageData) => {
+  console.log(messageData);
   const { chatId, senderId, content, receiverId, isImage } = messageData;
   const chat = await ChatModel.findById(chatId);
   if (!chat) throw new Error("Chat not found");

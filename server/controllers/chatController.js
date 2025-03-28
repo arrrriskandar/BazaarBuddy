@@ -17,7 +17,7 @@ export const getUserChatsController = async (req, res) => {
 
 export const getChatMessagesController = async (req, res) => {
   try {
-    const messages = await getChatMessages(req.params.chatId, req.body);
+    const messages = await getChatMessages(req.params);
     res.json(messages);
   } catch (err) {
     res.status(500).json({ message: err.message });
