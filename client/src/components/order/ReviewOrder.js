@@ -14,15 +14,15 @@ import axios from "axios";
 import React from "react";
 import { apiEndpoint } from "../../constants/constants";
 import { useUser } from "../../contexts/UserContext";
-import { useSocket } from "../../contexts/SocketContext";
 import { getNotificationMessage } from "../../constants/constants";
+import { useNotifications } from "../../contexts/NotificationContext";
 
 const { TextArea } = Input;
 
 function ReviewOrder({ setOpenModal, order, fetchOrders }) {
   const [forms] = Form.useForm();
   const { currentUser } = useUser();
-  const { sendNotification } = useSocket();
+  const { sendNotification } = useNotifications();
 
   const handleCancelClick = () => {
     setOpenModal(false);
@@ -88,8 +88,8 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
         notificationMessage,
         notifyBuyer: false,
       });
-      const { notification } = response.data;
-      const receiverId = response.data.seller;
+      const { order, notification } = response.data;
+      const receiverId = order.seller;
       sendNotification(receiverId, notification);
     } catch (error) {
       message.error("Failed to update order status: " + error.message);

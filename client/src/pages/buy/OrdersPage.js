@@ -4,15 +4,15 @@ import axios from "axios";
 import { apiEndpoint } from "../../constants/constants";
 import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
-import { useSocket } from "../../contexts/SocketContext";
 import { getNotificationMessage } from "../../constants/constants";
+import { useNotifications } from "../../contexts/NotificationContext";
 
 function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship"); // Default tab
-  const { sendNotification } = useSocket();
+  const { sendNotification } = useNotifications();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -51,8 +51,9 @@ function BuyerOrdersPage() {
         notificationMessage,
         notifyBuyer: false,
       });
-      const receiverId = response.data.seller;
-      sendNotification(receiverId, notificationMessage);
+      const { order, notification } = response.data;
+      const receiverId = order.seller;
+      sendNotification(receiverId, notification);
       message.success("Order received!");
       fetchOrders();
     } catch (error) {
