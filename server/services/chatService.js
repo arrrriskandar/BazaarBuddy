@@ -62,7 +62,6 @@ export const getOrCreateChat = async (chatData) => {
 };
 
 export const sendMessage = async (messageData) => {
-  console.log(messageData);
   const { chatId, senderId, content, receiverId, isImage } = messageData;
   const chat = await ChatModel.findById(chatId);
   if (!chat) throw new Error("Chat not found");

@@ -42,8 +42,10 @@ export const NotificationProvider = ({ children }) => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewNotification = ({ message, notificationId }) => {
-      alert(message, notificationId);
+    const handleNewNotification = (data) => {
+      const { message, notificationId } = data;
+      alert(message);
+      markAsRead(notificationId);
       fetchNotifications();
       // setNotifications((prev) => [{ message, isRead: false }, ...prev]);
       // setUnreadCount((prev) => prev + 1);
@@ -62,7 +64,6 @@ export const NotificationProvider = ({ children }) => {
       console.warn("Socket is not connected yet");
       return;
     }
-    console.log(notificationId);
     if (socket) {
       socket.emit("send_notification", {
         receiverId,

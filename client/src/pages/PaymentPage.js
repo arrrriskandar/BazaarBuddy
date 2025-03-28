@@ -44,7 +44,7 @@ const PaymentPage = () => {
         unitNumber,
         notificationMessage,
       });
-      const { notificationId } = response;
+      const { notificationId } = response.data;
 
       if (cartCheckout) {
         if (selectedItems.allItemsChecked) {

@@ -11,10 +11,8 @@ export const createOrder = async (orderData) => {
       message: notificationMessage,
       order,
     });
-    order.notificationId = notification._id;
-    await order.save();
 
-    return order;
+    return { ...order.toObject(), notificationId: notification._id };
   } catch (error) {
     console.error("Error creating order and notification:", error);
     throw new Error("Failed to create order and notification");
