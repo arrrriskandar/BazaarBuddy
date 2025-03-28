@@ -5,19 +5,19 @@ export const createProduct = async (productData) => {
   return await product.save();
 };
 
-export const getProduct = async (id) => {
-  return await ProductModel.findById(id);
+export const getProduct = async (productId) => {
+  return await ProductModel.findById(productId);
 };
 
-export const getProductsBySeller = async (id) => {
-  const product = await ProductModel.findById(id).populate({
+export const getProductsBySeller = async (productId) => {
+  const product = await ProductModel.findById(productId).populate({
     path: "seller",
     model: "UserModel",
   });
   const { seller } = product;
   const products = await ProductModel.find({
     seller: seller,
-    _id: { $ne: id },
+    _id: { $ne: productId },
   }).populate({
     path: "seller",
     model: "UserModel",
@@ -104,11 +104,13 @@ export const getMyProducts = async (userId, queryParams) => {
   };
 };
 
-export const updateProduct = async (id, productData) => {
+export const updateProduct = async (productId, productData) => {
   productData.updatedAt = Date.now();
-  return await ProductModel.findByIdAndUpdate(id, productData, { new: true });
+  return await ProductModel.findByIdAndUpdate(productId, productData, {
+    new: true,
+  });
 };
 
-export const deleteProduct = async (id) => {
-  return await ProductModel.findByIdAndDelete(id);
+export const deleteProduct = async (productId) => {
+  return await ProductModel.findByIdAndDelete(productId);
 };
