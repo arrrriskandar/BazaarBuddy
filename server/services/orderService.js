@@ -19,8 +19,8 @@ export const createOrder = async (orderData) => {
   }
 };
 
-export const getOrder = async (id) => {
-  return await OrderModel.findById(id)
+export const getOrder = async (orderId) => {
+  return await OrderModel.findById(orderId)
     .populate({
       path: "items.product",
       model: "ProductModel",
@@ -62,10 +62,10 @@ export const getOrders = async (queryParams) => {
     .sort(sortOptions);
 };
 
-export const updateOrder = async (id, orderData) => {
+export const updateOrder = async (orderId, orderData) => {
   const { notificationMessage, notifyBuyer } = orderData;
   try {
-    const order = await OrderModel.findByIdAndUpdate(id, orderData, {
+    const order = await OrderModel.findByIdAndUpdate(orderId, orderData, {
       new: true,
     });
 
@@ -83,6 +83,6 @@ export const updateOrder = async (id, orderData) => {
   }
 };
 
-export const deleteOrder = async (id) => {
-  return await OrderModel.findByIdAndDelete(id);
+export const deleteOrder = async (orderId) => {
+  return await OrderModel.findByIdAndDelete(orderId);
 };

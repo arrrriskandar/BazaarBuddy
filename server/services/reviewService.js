@@ -10,8 +10,8 @@ export const createReview = async (reviewData) => {
   return await review.save();
 };
 
-export const getReview = async (id) => {
-  return await ReviewModel.findById(id);
+export const getReview = async (reviewId) => {
+  return await ReviewModel.findById(reviewId);
 };
 
 export const getReviews = async (queryParams) => {
@@ -63,10 +63,12 @@ export const getReviews = async (queryParams) => {
   };
 };
 
-export const updateReview = async (id, reviewData) => {
-  return await ReviewModel.findByIdAndUpdate(id, reviewData, { new: true });
+export const updateReview = async (reviewId, reviewData) => {
+  return await ReviewModel.findByIdAndUpdate(reviewId, reviewData, {
+    new: true,
+  });
 };
 
-export const deleteReview = async (id) => {
-  return await ReviewModel.findByIdAndDelete(id);
+export const deleteReview = async (reviewId) => {
+  return await ReviewModel.findByIdAndDelete(reviewId);
 };
