@@ -2,12 +2,14 @@ import { Card, List, Avatar, Typography, Button, Row, Col, Empty } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "../contexts/NotificationContext";
+import { useUser } from "../contexts/UserContext";
 
 const { Text } = Typography;
 
 const Notification = () => {
   const { notifications, markAllAsRead, markAsRead } = useNotifications();
   const navigate = useNavigate();
+  const { currentUser } = useUser();
 
   if (notifications?.length === 0) {
     return (
@@ -17,11 +19,25 @@ const Notification = () => {
     );
   }
 
-  const handleNotificationClick = (notificationId, orderId, isRead) => {
+  const handleNotificationClick = (
+    notificationId,
+    order,
+    isRead,
+    isCompleted
+  ) => {
     if (!isRead) {
       markAsRead(notificationId);
     }
-    navigate(`/notification/${orderId}`);
+    if (isCompleted) {
+      navigate(`/notification/${order._id}`);
+    } else {
+      const { seller } = order;
+      if (seller._id === currentUser._id) {
+        navigate(`/sell/order?orderId=${order._id}`);
+      } else {
+        navigate(`/buy/order?orderId=${order._id}`);
+      }
+    }
   };
 
   return (
@@ -55,15 +71,29 @@ const Notification = () => {
                 cursor: "pointer",
               }}
               onClick={() =>
-                handleNotificationClick(item._id, item.order, item.isRead)
+                handleNotificationClick(
+                  item._id,
+                  item.order,
+                  item.isRead,
+                  item.isCompleted
+                )
               }
             >
               <Row gutter={16} align="middle">
                 <Col>
                   <Avatar
                     shape="square"
-                    size={64}
-                    src={item.userId?.photoUrl || "/default-avatar.png"}
+                    size={80}
+                    src={
+                      item.order?.seller?._id === currentUser._id
+                        ? item.order?.user?.photoUrl || "/default-avatar.png"
+                        : item.order?.seller?.photoUrl || "/default-avatar.png"
+                    }
+                    style={{
+                      margin: "20px auto",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
                   />
                 </Col>
                 <Col flex="auto">

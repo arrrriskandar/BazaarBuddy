@@ -87,6 +87,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
         status: "Completed",
         notificationMessage,
         notifyBuyer: false,
+        orderCompleted: true,
       });
       const { order, notification } = response.data;
       const receiverId = order.seller;

@@ -16,6 +16,7 @@ const NotificationSchema = new Schema(
     },
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
+    orderCompleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,

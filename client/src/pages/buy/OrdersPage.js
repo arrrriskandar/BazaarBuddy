@@ -6,6 +6,7 @@ import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
 import { getNotificationMessage } from "../../constants/constants";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useSearchParams } from "react-router-dom";
 
 function BuyerOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -13,6 +14,9 @@ function BuyerOrdersPage() {
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship"); // Default tab
   const { sendNotification } = useNotifications();
+  const [searchParams] = useSearchParams();
+  const orderId = searchParams.get("orderId");
+  const [highlight, setHighlight] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -25,9 +29,23 @@ function BuyerOrdersPage() {
       message.error("Failed to retrieve orders");
     }
   }, [currentUser, activeTab]);
+
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
+
+  useEffect(() => {
+    // If orderId is present in the URL, highlight the corresponding order
+    if (orderId) {
+      setHighlight(true);
+      // Find the order by ID to determine the tab
+      const order = orders.find((order) => order._id === orderId);
+      if (order) {
+        // Set the active tab based on the order's status
+        setActiveTab(order.status);
+      }
+    }
+  }, [orderId, orders]);
 
   const filterOrders = (allOrders, status) => {
     const filtered = allOrders.filter((order) => order.status === status);
@@ -63,7 +81,7 @@ function BuyerOrdersPage() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Tabs defaultActiveKey="To Ship" onChange={handleTabChange}>
+      <Tabs activeKey={activeTab} onChange={handleTabChange}>
         {["To Ship", "To Receive", "To Rate", "Completed"].map((status) => (
           <Tabs.TabPane tab={status} key={status}>
             <OrderList
@@ -71,6 +89,8 @@ function BuyerOrdersPage() {
               isSellerOrder={false}
               handleOrderStatusUpdate={handleOrderStatusUpdate}
               fetchOrders={fetchOrders}
+              highlight={highlight}
+              orderId={orderId}
             />
           </Tabs.TabPane>
         ))}

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { List, Card, Descriptions, Divider, Button, Modal } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { List, Card, Descriptions, Divider, Button, Modal, Alert } from "antd";
 import ReviewOrder from "./ReviewOrder";
 
 function OrderCard({
@@ -7,11 +7,27 @@ function OrderCard({
   isSellerOrder,
   handleOrderStatusUpdate,
   fetchOrders,
+  highlight,
+  orderId,
 }) {
   const [openModal, setOpenModal] = useState(false);
+  const cardRef = useRef(null);
+  useEffect(() => {
+    // Scroll to the highlighted order if it matches the orderId
+    if (highlight && order._id === orderId) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [highlight, order._id, orderId]);
+
   return (
-    <List.Item style={{ listStyleType: "none" }}>
-      <Card style={{ marginBottom: "20px" }}>
+    <List.Item style={{ listStyleType: "none" }} ref={cardRef}>
+      <Card
+        style={{
+          marginBottom: "20px",
+          borderColor:
+            highlight && order._id === orderId ? "#0000FF" : "#f0f0f0",
+        }}
+      >
         <Descriptions title={`Order ID: ${order._id}`} bordered column={2}>
           {isSellerOrder ? (
             <Descriptions.Item label="Buyer">

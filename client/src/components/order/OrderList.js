@@ -7,6 +7,8 @@ const OrderList = ({
   isSellerOrder,
   handleOrderStatusUpdate,
   fetchOrders,
+  highlight,
+  orderId,
 }) => {
   return (
     <List
@@ -14,10 +16,13 @@ const OrderList = ({
       dataSource={orders}
       renderItem={(order) => (
         <OrderCard
+          key={order._id}
           order={order}
           isSellerOrder={isSellerOrder}
           handleOrderStatusUpdate={handleOrderStatusUpdate}
           fetchOrders={fetchOrders}
+          highlight={highlight}
+          orderId={orderId}
         />
       )}
     />

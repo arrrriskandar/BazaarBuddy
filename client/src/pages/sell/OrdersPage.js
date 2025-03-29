@@ -6,6 +6,7 @@ import { message, Tabs } from "antd";
 import OrderList from "../../components/order/OrderList";
 import { getNotificationMessage } from "../../constants/constants";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useSearchParams } from "react-router-dom";
 
 const SellerOrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -13,6 +14,9 @@ const SellerOrdersPage = () => {
   const { currentUser } = useUser();
   const [activeTab, setActiveTab] = useState("To Ship");
   const { sendNotification } = useNotifications();
+  const [searchParams] = useSearchParams();
+  const orderId = searchParams.get("orderId");
+  const [highlight, setHighlight] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -44,6 +48,26 @@ const SellerOrdersPage = () => {
       );
     }
   }, [activeTab, orders]);
+
+  useEffect(() => {
+    if (orderId) {
+      // If there's an orderId in the URL, set the highlight flag to true
+      setHighlight(true);
+
+      // Find the order by ID to determine the tab to open
+      const order = orders.find((order) => order._id === orderId);
+      if (order) {
+        // Set the active tab based on the order status
+        if (order.status === "To Ship") {
+          setActiveTab("To Ship");
+        } else if (order.status === "To Receive") {
+          setActiveTab("Shipped");
+        } else if (order.status === "Completed" || order.status === "To Rate") {
+          setActiveTab("Completed");
+        }
+      }
+    }
+  }, [orderId, orders]);
 
   const handleOrderStatusUpdate = async (orderId) => {
     const notificationMessage = getNotificationMessage("order_shipped", {
@@ -77,6 +101,9 @@ const SellerOrdersPage = () => {
         orders={filteredOrders}
         isSellerOrder={true}
         handleOrderStatusUpdate={handleOrderStatusUpdate}
+        highlight={highlight}
+        fetchOrders={fetchOrders}
+        orderId={orderId}
       />
     </div>
   );
