@@ -65,6 +65,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
           comment: reviewData.comment,
           rating: reviewData.rating,
           seller: product.product.seller,
+          order,
         };
       })
       .filter(Boolean); // Remove null values (products that were not found)

@@ -80,7 +80,11 @@ export const getOrders = async (queryParams) => {
 };
 
 export const updateOrder = async (orderId, orderData) => {
-  const { notificationMessage, notifyBuyer } = orderData;
+  const {
+    notificationMessage,
+    notifyBuyer,
+    orderCompleted = false,
+  } = orderData;
   try {
     const order = await OrderModel.findByIdAndUpdate(orderId, orderData, {
       new: true,
@@ -92,6 +96,7 @@ export const updateOrder = async (orderId, orderData) => {
       userId,
       message: notificationMessage,
       order: orderId,
+      orderCompleted,
     });
 
     return { order, notification };

@@ -13,6 +13,11 @@ const ReviewSchema = new Schema({
     ref: "ProductModel",
     required: true,
   },
+  order: {
+    type: Schema.Types.ObjectId,
+    ref: "OrderModel",
+    required: true,
+  },
   reviewDate: { type: Date, default: Date.now },
   comment: { type: String, required: true },
   rating: {

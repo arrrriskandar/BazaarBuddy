@@ -23,13 +23,13 @@ const Notification = () => {
     notificationId,
     order,
     isRead,
-    isCompleted
+    orderCompleted
   ) => {
     if (!isRead) {
       markAsRead(notificationId);
     }
-    if (isCompleted) {
-      navigate(`/notification/${order._id}`);
+    if (orderCompleted) {
+      navigate(`/review/order/${order._id}`);
     } else {
       const { seller } = order;
       if (seller._id === currentUser._id) {
@@ -75,7 +75,7 @@ const Notification = () => {
                   item._id,
                   item.order,
                   item.isRead,
-                  item.isCompleted
+                  item.orderCompleted
                 )
               }
             >

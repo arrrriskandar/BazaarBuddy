@@ -2,8 +2,9 @@ import {
   createReview,
   deleteReview,
   getReview,
-  getReviews,
+  getReviewsByProduct,
   updateReview,
+  getReviewsByOrder,
 } from "../services/reviewService.js";
 
 export const createReviewController = async (req, res) => {
@@ -27,9 +28,18 @@ export const getReviewController = async (req, res) => {
   }
 };
 
-export const getReviewsController = async (req, res) => {
+export const getReviewsByProductController = async (req, res) => {
   try {
-    const reviews = await getReviews(req.query);
+    const reviews = await getReviewsByProduct(req.query);
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getReviewsByOrderController = async (req, res) => {
+  try {
+    const reviews = await getReviewsByOrder(req.params.orderId);
     res.json(reviews);
   } catch (err) {
     res.status(500).json({ message: err.message });

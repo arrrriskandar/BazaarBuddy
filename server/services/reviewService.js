@@ -14,7 +14,13 @@ export const getReview = async (reviewId) => {
   return await ReviewModel.findById(reviewId);
 };
 
-export const getReviews = async (queryParams) => {
+export const getReviewsByOrder = async (orderId) => {
+  return await ReviewModel.find({ order: orderId })
+    .populate("user", "username photoUrl")
+    .populate("product");
+};
+
+export const getReviewsByProduct = async (queryParams) => {
   const { product, rating, sortBy, page = 1, limit = 10 } = queryParams;
 
   let query = { product };

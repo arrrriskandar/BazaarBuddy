@@ -26,7 +26,7 @@ import PaymentPage from "./pages/PaymentPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import { SocketProvider } from "./contexts/SocketContext";
 import Notification from "./pages/NotificationPage";
-import NotificationDetail from "./pages/NotificationDetailsPage";
+import OrderReviewPage from "./pages/OrderReviewPage";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import ChatPage from "./pages/ChatPage";
@@ -39,10 +39,7 @@ const AuthenticatedApp = () => {
         <Routes>
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
-          <Route
-            path="/notification/:orderId"
-            element={<NotificationDetail />}
-          />
+          <Route path="/review/order/:orderId" element={<OrderReviewPage />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route
             path="/buy/product/:productId"
