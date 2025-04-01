@@ -38,11 +38,8 @@ export const ChatProvider = ({ children }) => {
     const fetchMessages = async () => {
       if (!activeChat?._id) return;
       try {
-        const response = await axios.put(
-          `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`,
-          {
-            userId: currentUser._id,
-          }
+        const response = await axios.get(
+          `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`
         );
         setMessages(response.data);
       } catch (error) {

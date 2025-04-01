@@ -15,7 +15,7 @@ const MessageSchema = new Schema(
       required: true,
     },
     content: { type: String, required: true },
-    isImage: { type: Boolean, required: true },
+    isImage: { type: Boolean, default: false },
     isRead: { type: Boolean, default: false },
   },
   { timestamps: true }
@@ -25,8 +25,6 @@ const ChatSchema = new Schema(
   {
     participants: [{ type: String, ref: "UserModel" }],
     messages: [MessageSchema],
-    lastMessage: { type: String },
-    lastMessageAt: { type: Date },
   },
   { timestamps: true }
 );
