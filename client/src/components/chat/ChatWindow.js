@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Input, Button, List, Typography } from "antd";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
@@ -19,51 +20,78 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
     }
   };
 
-  // Scroll to the bottom whenever messages change
+  // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
+  // Function to check if a new date separator is needed
+  const shouldShowDate = (prevMsg, currMsg) => {
+    if (!prevMsg) return true; // Show date for the first message
+    return !dayjs(prevMsg.createdAt).isSame(currMsg.createdAt, "day");
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-      }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ flex: 1, overflowY: "auto", padding: "10px" }}>
         <List
           dataSource={messages}
-          renderItem={(msg) => (
-            <List.Item
-              style={{
-                justifyContent:
-                  msg.senderId === activeChat.otherParticipant._id
-                    ? "flex-start"
-                    : "flex-end",
-              }}
-            >
-              <div
-                style={{
-                  background:
-                    msg.senderId === activeChat.otherParticipant._id
-                      ? "#f0f0f0"
-                      : "#1890ff",
-                  color:
-                    msg.senderId === activeChat.otherParticipant._id
-                      ? "black"
-                      : "white",
-                  padding: "8px 12px",
-                  borderRadius: "10px",
-                }}
-              >
-                <Text>{msg.content}</Text>
-              </div>
-            </List.Item>
-          )}
+          renderItem={(msg, index) => {
+            const prevMsg = messages[index - 1];
+            const isOtherUser = msg.sender === activeChat.otherParticipant._id;
+            const backgroundColor = isOtherUser ? "#ffffff" : "#1890ff";
+            const textColor = isOtherUser ? "black" : "white";
+
+            return (
+              <>
+                {shouldShowDate(prevMsg, msg) && (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      margin: "10px 0",
+                      fontSize: "12px",
+                      color: "#888",
+                    }}
+                  >
+                    {dayjs(msg.createdAt).format("DD/MM/YYYY")}
+                  </div>
+                )}
+                <List.Item
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    display: "flex",
+                    justifyContent: isOtherUser ? "flex-start" : "flex-end",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px", // Space between message and timestamp
+                      background: backgroundColor,
+                      color: textColor,
+                      padding: "8px 12px",
+                      borderRadius: "10px",
+                      maxWidth: "70%",
+                    }}
+                  >
+                    <Text>{msg.content}</Text>
+                    <Text
+                      style={{
+                        fontSize: "10px",
+                        color: textColor === "white" ? "#d1e7ff" : "#888",
+                      }}
+                    >
+                      {dayjs(msg.createdAt).format("HH:mm")}
+                    </Text>
+                  </div>
+                </List.Item>
+              </>
+            );
+          }}
         />
         <div ref={messagesEndRef} />
       </div>
