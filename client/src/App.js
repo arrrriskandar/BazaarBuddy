@@ -39,7 +39,7 @@ const AuthenticatedApp = () => {
         <Routes>
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
-          <Route path="/review/order/:orderId" element={<OrderReviewPage />} />
+          <Route path="/notification/:orderId" element={<OrderReviewPage />} />
           <Route path="/buy/product" element={<BrowseProducts />} />
           <Route
             path="/buy/product/:productId"

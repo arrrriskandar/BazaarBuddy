@@ -29,7 +29,7 @@ const Notification = () => {
       markAsRead(notificationId);
     }
     if (orderCompleted) {
-      navigate(`/review/order/${order._id}`);
+      navigate(`/notification/${order._id}`);
     } else {
       const { seller } = order;
       if (seller._id === currentUser._id) {

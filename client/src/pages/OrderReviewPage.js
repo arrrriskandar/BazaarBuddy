@@ -41,7 +41,7 @@ function OrderReviewPage() {
           <div key={review._id} style={{ marginBottom: "20px" }}>
             {/* Display Product Name and Image */}
             <div style={{ marginBottom: "16px" }}>
-              <Typography.Title level={4}>
+              <Typography.Title level={3}>
                 {review.product.name}
               </Typography.Title>
               {review.product.images && (
