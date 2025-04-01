@@ -3,7 +3,7 @@ import axios from "axios";
 import { useUser } from "./UserContext";
 import { useSocket } from "./SocketContext";
 import { apiEndpoint } from "../constants/constants";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ChatContext = createContext();
 
@@ -16,6 +16,13 @@ export const ChatProvider = ({ children }) => {
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    return () => {
+      setActiveChat(null); // Reset activeChat when leaving the chat page
+    };
+  }, [location.pathname]); // Runs when the page route changes
 
   // Fetch user's chats
   useEffect(() => {
@@ -42,6 +49,14 @@ export const ChatProvider = ({ children }) => {
           `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`
         );
         setMessages(response.data);
+
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat._id === activeChat._id
+              ? { ...chat, lastMessageRead: true } // Mark last message as read
+              : chat
+          )
+        );
       } catch (error) {
         console.error("Failed to fetch messages:", error);
       }
@@ -57,10 +72,7 @@ export const ChatProvider = ({ children }) => {
       const { chatId, newMessage, popUpMessage } = data;
       if (chatId === activeChat?._id) {
         setMessages((prevMessages) => {
-          return [
-            ...prevMessages,
-            { ...newMessage, isRead: true }, // Append new message and mark as read
-          ];
+          return [...prevMessages, { ...newMessage, isRead: true }];
         });
       } else {
         alert(popUpMessage);
@@ -72,6 +84,7 @@ export const ChatProvider = ({ children }) => {
                 ...chat,
                 lastMessage: newMessage.content,
                 lastMessageAt: newMessage.createdAt,
+                lastMessageRead: chatId === activeChat?._id,
               }
             : chat
         );
