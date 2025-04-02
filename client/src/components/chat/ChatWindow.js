@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Input, Button, List, Typography } from "antd";
+import { Input, Button, List, Typography, Avatar } from "antd";
 import dayjs from "dayjs";
 
 const { Text } = Typography;
@@ -9,15 +9,14 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
   const messagesEndRef = useRef(null);
 
   const handleSend = () => {
-    if (message.trim()) {
-      sendMessage(
-        activeChat._id,
-        message,
-        activeChat.otherParticipant._id,
-        false
-      );
-      setMessage("");
-    }
+    if (!message.trim()) return;
+    sendMessage(
+      activeChat._id,
+      message,
+      activeChat.otherParticipant._id,
+      false
+    );
+    setMessage("");
   };
 
   // Scroll to bottom when messages change
@@ -35,6 +34,23 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          padding: "12px",
+          borderBottom: "1px solid #ddd",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        <Avatar
+          src={activeChat.otherParticipant.photoUrl || "/default-avatar.png"}
+          size={40}
+        />
+        <Text strong style={{ marginLeft: "10px", fontSize: "16px" }}>
+          {activeChat.otherParticipant.username}
+        </Text>
+      </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "10px" }}>
         <List
           dataSource={messages}

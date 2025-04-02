@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { List, Card, Descriptions, Divider, Button, Modal } from "antd";
 import ReviewOrder from "./ReviewOrder";
+import ChatNowButton from "../common/ChatNowButton";
 
 function OrderCard({
   order,
@@ -18,6 +19,7 @@ function OrderCard({
       cardRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [highlight, order._id, orderId]);
+  const user = isSellerOrder ? order.user : order.seller;
 
   return (
     <List.Item style={{ listStyleType: "none" }} ref={cardRef}>
@@ -29,15 +31,7 @@ function OrderCard({
         }}
       >
         <Descriptions title={`Order ID: ${order._id}`} bordered column={2}>
-          {isSellerOrder ? (
-            <Descriptions.Item label="Buyer">
-              {order.user.username}
-            </Descriptions.Item>
-          ) : (
-            <Descriptions.Item label="Seller">
-              {order.seller.username}
-            </Descriptions.Item>
-          )}
+          <Descriptions.Item label="Buyer">{user.username}</Descriptions.Item>
           <Descriptions.Item label="Total Price">
             ${order.totalPrice}
           </Descriptions.Item>
@@ -71,24 +65,30 @@ function OrderCard({
             </List.Item>
           )}
         />
-        {!isSellerOrder && order.status === "To Rate" && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center", // Center the buttons
+            gap: "10px", // Space between the buttons
+            marginTop: "10px",
+          }}
+        >
+          <ChatNowButton receiverId={user._id}></ChatNowButton>
+          {!isSellerOrder && order.status === "To Rate" && (
             <Button type="primary" onClick={() => setOpenModal(true)}>
               Rate
             </Button>
-          </div>
-        )}
-        {((isSellerOrder && order.status === "To Ship") ||
-          (!isSellerOrder && order.status === "To Receive")) && (
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          )}
+          {((isSellerOrder && order.status === "To Ship") ||
+            (!isSellerOrder && order.status === "To Receive")) && (
             <Button
               type="primary"
               onClick={() => handleOrderStatusUpdate(order._id)}
             >
-              {isSellerOrder ? "Shipped Order" : "Received Order"}
+              {isSellerOrder ? "Shipped" : "Received"}
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </Card>
 
       <Modal

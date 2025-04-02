@@ -8,6 +8,7 @@ import { useCart } from "../../contexts/CartContext";
 import ProductCard from "../../components/product/ProductCard";
 import { getAverageRating } from "../../utils/ratingUtils";
 import ReviewList from "../../components/review/ReviewList";
+import ChatNowButton from "../../components/common/ChatNowButton";
 
 function BrowseProductDetails() {
   const { productId } = useParams();
@@ -113,15 +114,16 @@ function BrowseProductDetails() {
                   justifyContent: "center",
                 }}
               >
+                <ChatNowButton receiverId={product.seller._id}></ChatNowButton>
                 <Button
-                  type="primary"
+                  type="default"
                   onClick={handleAddToCart}
-                  style={{ marginRight: "10px" }}
+                  style={{ margin: "10px" }}
                 >
                   Add to Cart
                 </Button>
                 <Link to="/buy/checkout" state={{ item: handleBuyNow() }}>
-                  <Button type="default">Buy Now</Button>
+                  <Button type="primary">Buy Now</Button>
                 </Link>
               </Row>
             </Col>

@@ -17,7 +17,6 @@ const ChatPage = () => {
           setActiveChat={setActiveChat}
         />
       </Sider>
-
       <Content style={{ padding: "10px", background: "#f5f5f5" }}>
         {activeChat ? (
           <ChatWindow

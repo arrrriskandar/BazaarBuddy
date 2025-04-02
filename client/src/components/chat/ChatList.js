@@ -8,13 +8,16 @@ const ChatList = ({ chats, activeChat, setActiveChat }) => {
   return (
     <List
       itemLayout="horizontal"
-      dataSource={chats}
+      dataSource={chats
+        .filter((chat) => chat.lastMessage)
+        .sort((a, b) =>
+          dayjs(b.lastMessageAt).isBefore(dayjs(a.lastMessageAt)) ? -1 : 1
+        )}
       renderItem={(chat) => {
         const lastMessageAt = chat.lastMessageAt
           ? dayjs(chat.lastMessageAt)
           : null;
 
-        // Format the date based on whether it's today or not
         const formattedTime = lastMessageAt
           ? lastMessageAt.isSame(dayjs(), "day")
             ? lastMessageAt.format("HH:mm") // 24-hour format for today

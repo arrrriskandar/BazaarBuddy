@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import axios from "axios";
 import { useUser } from "./UserContext";
 import { useSocket } from "./SocketContext";
@@ -20,28 +26,33 @@ export const ChatProvider = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    return () => {
-      setActiveChat(null); // Reset activeChat when leaving the chat page
-    };
-  }, [location.pathname]); // Runs when the page route changes
+    let prevPath = location.pathname; // Store previous path
 
-  // Fetch user's chats
-  useEffect(() => {
-    const fetchChats = async () => {
-      if (!currentUser?._id) return;
-      try {
-        const response = await axios.get(
-          `${apiEndpoint}/chat/${currentUser._id}`
-        );
-        const { transformedChats, totalUnreadMessages } = response.data;
-        setChats(transformedChats);
-        setTotalUnreadMessages(totalUnreadMessages);
-      } catch (error) {
-        console.error("Failed to fetch chats:", error);
+    return () => {
+      if (prevPath.startsWith("/chat") && location.pathname !== "/chat") {
+        setActiveChat(null);
       }
+      prevPath = location.pathname; // Update previous path
     };
+  }, [location.pathname]);
+
+  const fetchChats = useCallback(async () => {
+    if (!currentUser?._id) return;
+    try {
+      const response = await axios.get(
+        `${apiEndpoint}/chat/${currentUser._id}`
+      );
+      const { transformedChats, totalUnreadMessages } = response.data;
+      setChats(transformedChats);
+      setTotalUnreadMessages(totalUnreadMessages);
+    } catch (error) {
+      console.error("Failed to fetch chats:", error);
+    }
+  }, [currentUser]); // Dependencies
+
+  useEffect(() => {
     fetchChats();
-  }, [currentUser]);
+  }, [fetchChats]);
 
   // Fetch messages for active chat
   useEffect(() => {
@@ -52,7 +63,9 @@ export const ChatProvider = ({ children }) => {
           `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`
         );
         setMessages(response.data);
-        setTotalUnreadMessages((prev) => prev - activeChat.unreadMessagesCount);
+        setTotalUnreadMessages(
+          (prev) => prev - (activeChat?.unreadMessagesCount || 0)
+        );
 
         setChats((prevChats) =>
           prevChats.map((chat) =>
@@ -118,6 +131,19 @@ export const ChatProvider = ({ children }) => {
       const popUpMessage = `New message from ${currentUser.username}!`;
       setMessages((prevMessages) => [...prevMessages, newMessage]);
 
+      setChats((prevChats) => {
+        return prevChats.map((chat) =>
+          chat._id === chatId
+            ? {
+                ...chat,
+                lastMessage: newMessage.content,
+                lastMessageAt: newMessage.createdAt,
+                lastMessageRead: true,
+              }
+            : chat
+        );
+      });
+
       if (socket && activeChat) {
         socket.emit("send_message", {
           receiverId,
@@ -137,11 +163,20 @@ export const ChatProvider = ({ children }) => {
         receiverId,
         senderId: currentUser._id,
       });
-      const chat = response.data;
+      const newChat = response.data;
 
-      setActiveChat(chat);
+      let chat = chats.find((chat) => chat._id === newChat._id);
 
-      navigate(`/chat/${chat._id}`);
+      if (!chat) {
+        await fetchChats(); // Ensure the chat list is updated
+        chat = chats.find((chat) => chat._id === newChat._id); // Try again after fetching
+      }
+
+      if (chat) {
+        setActiveChat(chat);
+      }
+
+      navigate(`/chat`);
     } catch (error) {
       console.error("Failed to get/create chat:", error);
     }
