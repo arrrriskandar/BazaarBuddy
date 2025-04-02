@@ -6,7 +6,9 @@ export const getUserChats = async (userId) => {
     "_id username photoUrl"
   );
 
-  const transformedChats = chats.map((chat) => {
+  const filteredChats = chats.filter((chat) => chat.messages.length > 0);
+
+  const transformedChats = filteredChats.map((chat) => {
     const otherParticipant = chat.participants.find(
       (participant) => participant._id.toString() !== userId
     );
@@ -14,6 +16,11 @@ export const getUserChats = async (userId) => {
     const lastMessage = chat.messages.length
       ? chat.messages[chat.messages.length - 1]
       : null;
+
+    // Count unread messages for each chat
+    const unreadMessagesCount = chat.messages.filter(
+      (message) => !message.isRead && message.sender.toString() !== userId
+    ).length;
 
     const { participants, ...rest } = chat.toObject();
     return {
@@ -23,11 +30,18 @@ export const getUserChats = async (userId) => {
       lastMessageAt: lastMessage ? lastMessage.createdAt : null,
       lastMessageRead: lastMessage
         ? lastMessage.sender.toString() === userId || lastMessage.isRead
-        : false,
+        : true,
+      unreadMessagesCount, // Add unread messages count for this chat
     };
   });
 
-  return transformedChats;
+  // Calculate total unread messages across all chats
+  const totalUnreadMessages = transformedChats.reduce(
+    (acc, chat) => acc + chat.unreadMessagesCount,
+    0
+  );
+
+  return { transformedChats, totalUnreadMessages };
 };
 
 export const getChatMessages = async (chatParams) => {

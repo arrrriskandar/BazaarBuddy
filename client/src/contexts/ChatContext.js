@@ -14,6 +14,7 @@ export const ChatProvider = ({ children }) => {
   const { socket } = useSocket();
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
+  const [totalUnreadMessages, setTotalUnreadMessages] = useState(0);
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +33,9 @@ export const ChatProvider = ({ children }) => {
         const response = await axios.get(
           `${apiEndpoint}/chat/${currentUser._id}`
         );
-        setChats(response.data);
+        const { transformedChats, totalUnreadMessages } = response.data;
+        setChats(transformedChats);
+        setTotalUnreadMessages(totalUnreadMessages);
       } catch (error) {
         console.error("Failed to fetch chats:", error);
       }
@@ -49,11 +52,12 @@ export const ChatProvider = ({ children }) => {
           `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`
         );
         setMessages(response.data);
+        setTotalUnreadMessages((prev) => prev - activeChat.unreadMessagesCount);
 
         setChats((prevChats) =>
           prevChats.map((chat) =>
             chat._id === activeChat._id
-              ? { ...chat, lastMessageRead: true } // Mark last message as read
+              ? { ...chat, lastMessageRead: true, unreadMessagesCount: 0 } // Mark last message as read
               : chat
           )
         );
@@ -76,6 +80,7 @@ export const ChatProvider = ({ children }) => {
         });
       } else {
         alert(popUpMessage);
+        setTotalUnreadMessages((prev) => prev + 1);
       }
       setChats((prevChats) => {
         return prevChats.map((chat) =>
@@ -128,16 +133,14 @@ export const ChatProvider = ({ children }) => {
 
   const getOrCreateChat = async (receiverId) => {
     try {
-      const response = await axios.post(`${apiEndpoint}/chat/message`, {
+      const response = await axios.post(`${apiEndpoint}/chat`, {
         receiverId,
         senderId: currentUser._id,
       });
       const chat = response.data;
 
-      // Set the active chat to the newly created or existing chat
       setActiveChat(chat);
 
-      // Navigate to the chat window
       navigate(`/chat/${chat._id}`);
     } catch (error) {
       console.error("Failed to get/create chat:", error);
@@ -153,6 +156,7 @@ export const ChatProvider = ({ children }) => {
         setActiveChat,
         sendMessage,
         getOrCreateChat,
+        totalUnreadMessages,
       }}
     >
       {children}

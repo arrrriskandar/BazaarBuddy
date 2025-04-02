@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { useCart } from "../../contexts/CartContext";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useChat } from "../../contexts/ChatContext";
 
 const { Header } = Layout;
 const { SubMenu } = Menu;
@@ -19,6 +20,7 @@ const TopNavigation = () => {
   const location = useLocation();
   const { carts } = useCart();
   const { unreadCount } = useNotifications();
+  const { totalUnreadMessages } = useChat();
 
   const totalQuantity = carts.reduce(
     (acc, cart) =>
@@ -115,7 +117,20 @@ const TopNavigation = () => {
           icon={<WechatOutlined style={{ fontSize: "24px" }} />}
           style={{ width: "120px" }} // Adjusted width
         >
-          <Link to="/chat">Chats</Link>
+          <Link to="/chat">
+            Chats
+            <Badge
+              count={totalUnreadMessages}
+              overflowCount={100}
+              style={{
+                backgroundColor: "#52c41a",
+                boxShadow: "none",
+                position: "absolute",
+                top: "-30px",
+                right: "-5px",
+              }}
+            ></Badge>
+          </Link>
         </Menu.Item>
       </Menu>
       <Menu

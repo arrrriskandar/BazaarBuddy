@@ -56,7 +56,13 @@ const ChatList = ({ chats, activeChat, setActiveChat }) => {
                     <Text type="secondary" style={{ fontSize: "12px" }}>
                       {formattedTime}
                     </Text>
-                    {!chat.lastMessageRead && <Badge color="blue" />}
+                    {!chat.lastMessageRead && (
+                      <Badge
+                        count={chat.unreadMessagesCount}
+                        overflowCount={100}
+                        color="blue"
+                      />
+                    )}
                   </div>
                 </div>
               }
