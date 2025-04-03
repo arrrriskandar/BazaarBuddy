@@ -31,7 +31,8 @@ function SellerProducts() {
         );
         setProducts(response.data);
       } catch (error) {
-        message.error("Failed to retrieve products");
+        message.error("Failed to retrieve products, Please try again.");
+        console.error("Failed to retrieve products", error);
       }
     };
 

@@ -21,7 +21,8 @@ function SellerProductDetails() {
         const response = await axios.get(`${apiEndpoint}/product/${productId}`);
         setProduct(response.data);
       } catch (error) {
-        message.error("Failed to retrieve product details: ", error.message);
+        message.error("Failed to retrieve product details. Please try again.");
+        console.error("Failed to retrieve product details", error);
       }
     };
     fetchProduct();

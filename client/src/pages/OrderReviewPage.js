@@ -20,7 +20,8 @@ function OrderReviewPage() {
         setReviews(response.data);
         setLoading(false);
       } catch (error) {
-        message.error("Failed to retrieve reviews"); // Error message should relate to reviews
+        message.error("Failed to retrieve reviews. Please try again."); // Error message should relate to reviews
+        console.error("Failed to retrieve reviews", error); // Error message should relate to reviews
         setLoading(false); // Stop loading if there's an error
       }
     };

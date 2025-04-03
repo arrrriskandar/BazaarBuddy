@@ -22,7 +22,8 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
         const path = `${activeChat._id}/${photouuid}`;
         photoUrl = await uploadFile(selectedFile, path);
       } catch (uploadError) {
-        message.error("Failed to upload image. Please try again.", uploadError);
+        message.error("Failed to upload image. Please try again.");
+        console.error("Image upload failed", uploadError);
         return;
       }
       sendMessage(

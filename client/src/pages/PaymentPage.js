@@ -63,7 +63,7 @@ const PaymentPage = () => {
     } catch (error) {
       // Handle the case if payment fails
       message.error("Payment failed. Please try again.");
-      console.log(error);
+      console.error("Payment failed", error);
 
       // Redirect to the previous page based on whether it was cart or product checkout
       if (cartCheckout) {

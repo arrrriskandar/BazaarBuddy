@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useChat } from "../../contexts/ChatContext";
 
 const ChatNowButton = ({ receiverId }) => {
@@ -9,6 +9,7 @@ const ChatNowButton = ({ receiverId }) => {
     try {
       await getOrCreateChat(receiverId);
     } catch (error) {
+      message.error("Error starting chat. Please try again.");
       console.error("Error starting chat:", error);
     }
   };

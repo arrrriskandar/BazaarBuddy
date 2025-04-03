@@ -50,7 +50,8 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
       message.success("Product details updated successfully");
       setOpenEditModal(false);
     } catch (error) {
-      message.error("Failed to update product details");
+      message.error("Failed to update product details. Please try again.");
+      console.error("Failed to update product details", error);
     }
   };
 

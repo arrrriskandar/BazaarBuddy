@@ -77,6 +77,7 @@ function ProductAddForm({ setOpenModal, setProducts }) {
       setOpenModal(false);
     } catch (error) {
       message.error("Failed to create product. Please try again.");
+      console.error("Failed to create product.", error);
     }
   };
 

@@ -27,7 +27,8 @@ function BrowseProductDetails() {
         setProduct(product);
         setProducts(products);
       } catch (error) {
-        message.error("Failed to retrieve product details: ", error.message);
+        message.error("Failed to retrieve product details. Please try again.");
+        console.error("Failed to retrieve product details", error);
       }
     };
     fetchProduct();
@@ -36,9 +37,10 @@ function BrowseProductDetails() {
   const handleAddToCart = async () => {
     try {
       await addToCart(product, quantity);
-      message.success("Product added to cart!");
+      message.success(`${product.name} added to cart!`);
     } catch (error) {
-      message.error("Failed to add to cart. Please try again", error.message);
+      message.error("Failed to add to cart. Please try again.");
+      message.error("Failed to add to cart.", error);
     }
   };
 

@@ -38,7 +38,8 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
       message.success("Profile updated successfully");
       setOpenModal(false);
     } catch (error) {
-      message.error("Failed to update profile");
+      message.error("Failed to update profile. Please try again.");
+      console.error("Failed to update profile", error);
     }
   };
 

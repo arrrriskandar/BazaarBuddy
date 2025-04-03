@@ -26,7 +26,8 @@ function BuyerOrdersPage() {
       setOrders(response.data);
       filterOrders(response.data, activeTab); // Filter based on default tab
     } catch (error) {
-      message.error("Failed to retrieve orders");
+      message.error("Failed to retrieve orders. Please try again.");
+      console.error("Failed to retrieve orders.", error);
     }
   }, [currentUser, activeTab]);
 
@@ -63,7 +64,7 @@ function BuyerOrdersPage() {
         orderId,
         buyer: currentUser.username,
       });
-      // Make a PUT request to update the order status to "To Ship"
+      // Make a PUT request to update the order status to "To Rate"
       const response = await axios.put(`${apiEndpoint}/order/${orderId}`, {
         status: "To Rate", // Update status
         notificationMessage,
@@ -72,10 +73,11 @@ function BuyerOrdersPage() {
       const { order, notification } = response.data;
       const receiverId = order.seller;
       sendNotification(receiverId, notification);
-      message.success("Order received!");
+      message.success(`${orderId} received!`);
       fetchOrders();
     } catch (error) {
-      message.error("Failed to update order status: " + error.message);
+      message.error("Failed to update order status. Please try again.");
+      console.error("Failed to update order status", error);
     }
   };
 

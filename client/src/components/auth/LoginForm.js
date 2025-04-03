@@ -31,7 +31,8 @@ const LoginForm = ({ toggleRegister }) => {
       await login(email, password);
       message.success("Login successful!");
     } catch (error) {
-      message.error("Login failed");
+      message.error("Login failed. Please try again.");
+      console.error("Login failed", error);
     }
   };
 

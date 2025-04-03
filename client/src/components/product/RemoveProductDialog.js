@@ -15,11 +15,12 @@ function RemoveProductDialog({ setOpenRemoveModal, setProduct, product }) {
         { stock: "Discontinued" }
       );
       setProduct(response.data);
-      message.success("Product discontinued");
+      message.success(`${product.name} discontinued`);
       setOpenRemoveModal(false);
       navigate("/sell/product");
     } catch (error) {
-      message.error("Failed to discontinue product");
+      message.error("Failed to discontinue product. Please try again.");
+      console.error("Failed to discontinue product", error);
     }
   };
 

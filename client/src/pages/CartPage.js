@@ -16,10 +16,8 @@ const Cart = () => {
       await removeFromCart(id, product);
       message.success("Product removed from cart!");
     } catch (error) {
-      message.error(
-        "Failed to remove item from cart. Please try again",
-        error.message
-      );
+      message.error("Failed to remove item from cart. Please try again");
+      console.log("Failed to remove item from cart", error);
     }
   };
 
@@ -28,7 +26,8 @@ const Cart = () => {
       await deleteCart(id);
       message.success("Cart deleted!");
     } catch (error) {
-      message.error("Failed to delete cart. Please try again", error.message);
+      message.error("Failed to delete cart. Please try again");
+      message.error("Failed to delete cart", error);
     }
   };
 
@@ -42,12 +41,9 @@ const Cart = () => {
         }
         return newCheckedItems;
       });
-      message.success("Product quantity changed!");
     } catch (error) {
-      message.error(
-        "Failed to update quantity. Please try again",
-        error.message
-      );
+      message.error("Failed to update quantity. Please try again");
+      console.error("Failed to update quantity.", error.message);
     }
   };
 

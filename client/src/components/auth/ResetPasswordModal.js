@@ -9,14 +9,9 @@ const ResetPasswordModal = ({ visible, onClose }) => {
       message.success("Password reset email sent. Please check your inbox.");
       onClose();
     } catch (error) {
-      message.error(
-        "Failed to send password reset email. Please check your email address."
-      );
+      message.error("Failed to send password reset email. Please try again.");
+      console.error("Reset password failed.", error);
     }
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    message.error("Failed:", errorInfo);
   };
 
   return (
@@ -26,11 +21,7 @@ const ResetPasswordModal = ({ visible, onClose }) => {
       onCancel={onClose}
       footer={null}
     >
-      <Form
-        name="resetPasswordForm"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
+      <Form name="resetPasswordForm" onFinish={onFinish}>
         <Form.Item
           name="email"
           rules={[

@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Pagination, Select, Rate, Card, Progress, Typography } from "antd";
+import {
+  Pagination,
+  Select,
+  Rate,
+  Card,
+  Progress,
+  Typography,
+  message,
+} from "antd";
 import ReviewCard from "./ReviewCard"; // Assuming you have a ReviewCard component
 import { apiEndpoint } from "../../constants/constants";
 
@@ -31,6 +39,7 @@ function ReviewList({ product }) {
         setTotalReviews(response.data.totalReviews);
         setRatingBreakdown(response.data.ratingBreakdown); // Set the breakdown of reviews
       } catch (error) {
+        message.error("Failed to fetch reviews. Please try again.");
         console.error("Failed to fetch reviews:", error);
       }
     };

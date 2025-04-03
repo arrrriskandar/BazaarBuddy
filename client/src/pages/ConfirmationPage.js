@@ -22,7 +22,8 @@ function ConfirmationPage() {
         setOrder(response.data);
         setLoading(false);
       } catch (error) {
-        message.error("Failed to retrieve orders");
+        message.error("Failed to retrieve order. Please try again.");
+        console.error("Failed to retrieve order", error);
         setLoading(false); // Stop loading if there's an error
       }
     };

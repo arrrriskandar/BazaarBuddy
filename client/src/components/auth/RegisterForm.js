@@ -44,6 +44,7 @@ const RegisterForm = ({ toggleRegister }) => {
       message.success("Registration successful!");
     } catch (error) {
       message.error("Registration failed");
+      console.error("Registration failed", error);
     } finally {
       setRegistering(false);
     }

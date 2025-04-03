@@ -83,10 +83,11 @@ const SellerOrdersPage = () => {
       const { notification, order } = response.data;
       const receiverId = order.user;
       sendNotification(receiverId, notification);
-      message.success("Order shipped!");
+      message.success(`${orderId} shipped!`);
       fetchOrders();
     } catch (error) {
-      message.error("Failed to update order status: " + error.message);
+      message.error("Failed to update order status. Please try again.");
+      console.error("Failed to update order status", error);
     }
   };
 
