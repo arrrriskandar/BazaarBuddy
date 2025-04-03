@@ -9,6 +9,7 @@ import axios from "axios";
 import { apiEndpoint } from "../constants/constants";
 import { useUser } from "./UserContext";
 import { useSocket } from "./SocketContext";
+import { message } from "antd";
 
 const NotificationContext = createContext();
 
@@ -43,7 +44,7 @@ export const NotificationProvider = ({ children }) => {
     if (!socket) return;
 
     const handleNewNotification = ({ notification }) => {
-      alert(notification.message);
+      message.info(notification.message);
       setNotifications((prev) => [notification, ...prev]);
       setUnreadCount((prev) => prev + 1);
     };

@@ -10,6 +10,7 @@ import { useUser } from "./UserContext";
 import { useSocket } from "./SocketContext";
 import { apiEndpoint } from "../constants/constants";
 import { useLocation, useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const ChatContext = createContext();
 
@@ -92,7 +93,7 @@ export const ChatProvider = ({ children }) => {
           return [...prevMessages, { ...newMessage, isRead: true }];
         });
       } else {
-        alert(popUpMessage);
+        message.info(popUpMessage);
         setTotalUnreadMessages((prev) => prev + 1);
       }
       setChats((prevChats) => {
