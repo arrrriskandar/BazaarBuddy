@@ -42,7 +42,10 @@ function ProductAddForm({ setOpenModal, setProducts }) {
           const path = `${currentUser._id}/products/${photouuid}`; // Define storage path
           photoUrl = await uploadFile(selectedFile, path); // Wait for upload
         } catch (uploadError) {
-          message.error("Failed to upload image. Please try again.");
+          message.error(
+            "Failed to upload image. Please try again.",
+            uploadError
+          );
           return; // Stop execution if image upload fails
         }
       }

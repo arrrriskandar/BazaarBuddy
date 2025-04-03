@@ -25,7 +25,11 @@ export const getUserChats = async (userId) => {
     return {
       ...rest,
       otherParticipant,
-      lastMessage: lastMessage ? lastMessage.content : null,
+      lastMessage: lastMessage
+        ? lastMessage.isImage
+          ? "📷 Image"
+          : lastMessage.content
+        : null,
       lastMessageAt: lastMessage ? lastMessage.createdAt : null,
       lastMessageRead: lastMessage
         ? lastMessage.sender.toString() === userId || lastMessage.isRead
@@ -88,9 +92,6 @@ export const sendMessage = async (messageData) => {
 
   const message = { sender: senderId, receiver: receiverId, content, isImage };
   chat.messages.push(message);
-
-  chat.lastMessage = isImage ? "📷 Image" : content;
-  chat.lastMessageAt = new Date();
 
   await chat.save();
   return chat.messages[chat.messages.length - 1].toObject();

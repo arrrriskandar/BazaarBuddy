@@ -136,7 +136,7 @@ export const ChatProvider = ({ children }) => {
           chat._id === chatId
             ? {
                 ...chat,
-                lastMessage: newMessage.content,
+                lastMessage: isImage ? "📷 Image" : newMessage.content,
                 lastMessageAt: newMessage.createdAt,
                 lastMessageRead: true,
               }

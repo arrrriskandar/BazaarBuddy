@@ -1,35 +1,67 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Input, Button, List, Typography, Avatar } from "antd";
+import { Input, Button, List, Typography, Avatar, Image } from "antd";
+import { CameraFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
+import FilePicker from "../common/FilePicker";
+import { v4 as uuidv4 } from "uuid";
+import { uploadFile } from "../../firebase/storage";
 
 const { Text } = Typography;
 
 const ChatWindow = ({ activeChat, messages, sendMessage }) => {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [image, setImage] = useState(null);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
-    sendMessage(
-      activeChat._id,
-      message,
-      activeChat.otherParticipant._id,
-      false
-    );
-    setMessage("");
+  const handleSend = async () => {
+    if (selectedFile) {
+      let photoUrl = null;
+      let photouuid = uuidv4();
+      try {
+        const path = `${activeChat._id}/${photouuid}`;
+        photoUrl = await uploadFile(selectedFile, path);
+      } catch (uploadError) {
+        message.error("Failed to upload image. Please try again.", uploadError);
+        return;
+      }
+      sendMessage(
+        activeChat._id,
+        photoUrl,
+        activeChat.otherParticipant._id,
+        true
+      );
+    } else {
+      sendMessage(
+        activeChat._id,
+        message,
+        activeChat.otherParticipant._id,
+        false
+      );
+      setMessage("");
+    }
   };
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  // Function to check if a new date separator is needed
   const shouldShowDate = (prevMsg, currMsg) => {
-    if (!prevMsg) return true; // Show date for the first message
+    if (!prevMsg) return true;
     return !dayjs(prevMsg.createdAt).isSame(currMsg.createdAt, "day");
+  };
+
+  const onFileSelect = (file) => {
+    setSelectedFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setImage(previewUrl);
+  };
+
+  const handleRemovePicture = () => {
+    setSelectedFile(null);
+    setImage(null);
   };
 
   return (
@@ -51,15 +83,13 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
           {activeChat.otherParticipant.username}
         </Text>
       </div>
+
       <div style={{ flex: 1, overflowY: "auto", padding: "10px" }}>
         <List
           dataSource={messages}
           renderItem={(msg, index) => {
             const prevMsg = messages[index - 1];
             const isOtherUser = msg.sender === activeChat.otherParticipant._id;
-            const backgroundColor = isOtherUser ? "#ffffff" : "#1890ff";
-            const textColor = isOtherUser ? "black" : "white";
-
             return (
               <>
                 {shouldShowDate(prevMsg, msg) && (
@@ -77,7 +107,6 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
                 <List.Item
                   style={{
                     border: "none",
-                    boxShadow: "none",
                     display: "flex",
                     justifyContent: isOtherUser ? "flex-start" : "flex-end",
                   }}
@@ -86,19 +115,28 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "6px", // Space between message and timestamp
-                      background: backgroundColor,
-                      color: textColor,
+                      gap: "6px",
+                      backgroundColor: isOtherUser ? "#ffffff" : "#1890ff",
+                      color: isOtherUser ? "black" : "white",
                       padding: "8px 12px",
                       borderRadius: "10px",
                       maxWidth: "70%",
                     }}
                   >
-                    <Text>{msg.content}</Text>
+                    {msg.isImage ? (
+                      <Image
+                        src={msg.content}
+                        width={100}
+                        height={100}
+                        style={{ borderRadius: "5px" }}
+                      />
+                    ) : (
+                      <Text>{msg.content}</Text>
+                    )}
                     <Text
                       style={{
                         fontSize: "10px",
-                        color: textColor === "white" ? "#d1e7ff" : "#888",
+                        color: isOtherUser ? "#888" : "#d1e7ff",
                       }}
                     >
                       {dayjs(msg.createdAt).format("HH:mm")}
@@ -117,21 +155,77 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
           padding: "10px",
           borderTop: "1px solid #ddd",
           display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "relative",
+          minHeight: "60px",
         }}
       >
-        <Input
-          placeholder="Type a message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onPressEnter={handleSend}
-        />
-        <Button
-          type="primary"
-          onClick={handleSend}
-          style={{ marginLeft: "10px" }}
-        >
-          Send
-        </Button>
+        {!selectedFile ? (
+          <Input
+            placeholder="Type a message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onPressEnter={handleSend}
+            style={{ flex: 1, marginRight: "10px", height: "40px" }}
+          />
+        ) : (
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60px",
+            }}
+          >
+            <div style={{ position: "relative" }}>
+              <Image
+                src={image}
+                width={50}
+                height={50}
+                style={{ borderRadius: "5px" }}
+              />
+              <Button
+                size="small"
+                type="text"
+                danger
+                onClick={handleRemovePicture}
+                style={{
+                  position: "absolute",
+                  top: "-5px",
+                  right: "-15px",
+                  fontSize: "12px",
+                  background: "white",
+                  borderRadius: "50%",
+                  width: "16px",
+                  height: "16px",
+                  lineHeight: "16px",
+                  textAlign: "center",
+                  boxShadow: "0 0 3px rgba(0,0,0,0.2)",
+                }}
+              >
+                ✖
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {!message.trim() && !selectedFile && (
+          <FilePicker onFileSelect={onFileSelect}>
+            <Button icon={<CameraFilled />} />
+          </FilePicker>
+        )}
+
+        {(message.trim() || selectedFile) && (
+          <Button
+            type="primary"
+            onClick={handleSend}
+            style={{ height: "40px" }}
+          >
+            Send
+          </Button>
+        )}
       </div>
     </div>
   );
