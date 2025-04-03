@@ -32,6 +32,7 @@ export const ChatProvider = ({ children }) => {
     return () => {
       if (prevPath.startsWith("/chat") && location.pathname !== "/chat") {
         setActiveChat(null);
+        setMessages([]);
       }
       prevPath = location.pathname; // Update previous path
     };
@@ -58,6 +59,11 @@ export const ChatProvider = ({ children }) => {
   // Fetch messages for active chat
   useEffect(() => {
     const fetchMessages = async () => {
+      if (!currentUser) {
+        setMessages([]);
+        setActiveChat(null);
+        return;
+      }
       if (!activeChat?._id) return;
       try {
         const response = await axios.get(
@@ -85,29 +91,43 @@ export const ChatProvider = ({ children }) => {
   // Listen for incoming messages via WebSocket
   useEffect(() => {
     if (!socket) return;
-
     const handleNewMessage = (data) => {
       const { chatId, newMessage, popUpMessage } = data;
       if (chatId === activeChat?._id) {
         setMessages((prevMessages) => {
           return [...prevMessages, { ...newMessage, isRead: true }];
         });
-      } else {
-        message.info(popUpMessage);
-        setTotalUnreadMessages((prev) => prev + 1);
-      }
-      setChats((prevChats) => {
-        return prevChats.map((chat) =>
-          chat._id === chatId
-            ? {
-                ...chat,
-                lastMessage: newMessage.content,
-                lastMessageAt: newMessage.createdAt,
-                lastMessageRead: chatId === activeChat?._id,
-              }
-            : chat
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat._id === chatId
+              ? {
+                  ...chat,
+                  lastMessage: newMessage.content,
+                  lastMessageAt: newMessage.createdAt,
+                  lastMessageRead: true,
+                  unreadMessagesCount: 0, // Mark as read in active chat
+                }
+              : chat
+          )
         );
-      });
+      } else {
+        // Update unread messages count for other chats
+        setTotalUnreadMessages((prev) => prev + 1); // Increment the global unread count
+        message.info(popUpMessage);
+
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat._id === chatId
+              ? {
+                  ...chat,
+                  lastMessage: newMessage.content,
+                  lastMessageAt: newMessage.createdAt,
+                  unreadMessagesCount: chat.unreadMessagesCount + 1, // Increment unread count
+                }
+              : chat
+          )
+        );
+      }
     };
 
     socket.on("receive_message", handleNewMessage);
