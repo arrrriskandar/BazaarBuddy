@@ -32,6 +32,7 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
         activeChat.otherParticipant._id,
         true
       );
+      setSelectedFile(null);
     } else {
       sendMessage(
         activeChat._id,

@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import axios from "axios";
 import { useUser } from "./UserContext";
@@ -25,16 +26,18 @@ export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
 
   useEffect(() => {
-    let prevPath = location.pathname; // Store previous path
-
     return () => {
-      if (prevPath.startsWith("/chat") && location.pathname !== "/chat") {
+      if (
+        prevPathRef.current.startsWith("/chat") &&
+        location.pathname !== "/chat"
+      ) {
         setActiveChat(null);
         setMessages([]);
       }
-      prevPath = location.pathname; // Update previous path
+      prevPathRef.current = location.pathname; // Update previous path
     };
   }, [location.pathname]);
 
