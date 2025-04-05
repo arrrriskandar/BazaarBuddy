@@ -73,9 +73,6 @@ export const ChatProvider = ({ children }) => {
           `${apiEndpoint}/chat/${activeChat._id}/${currentUser._id}`
         );
         setMessages(response.data);
-        setTotalUnreadMessages(
-          (prev) => prev - (activeChat?.unreadMessagesCount || 0)
-        );
 
         setChats((prevChats) =>
           prevChats.map((chat) =>
@@ -83,6 +80,10 @@ export const ChatProvider = ({ children }) => {
               ? { ...chat, lastMessageRead: true, unreadMessagesCount: 0 } // Mark last message as read
               : chat
           )
+        );
+
+        setTotalUnreadMessages(
+          (prev) => prev - (activeChat?.unreadMessagesCount || 0)
         );
       } catch (error) {
         console.error("Failed to fetch messages:", error);
@@ -125,6 +126,7 @@ export const ChatProvider = ({ children }) => {
                   ...chat,
                   lastMessage: newMessage.content,
                   lastMessageAt: newMessage.createdAt,
+                  lastMessageRead: false,
                   unreadMessagesCount: chat.unreadMessagesCount + 1, // Increment unread count
                 }
               : chat
