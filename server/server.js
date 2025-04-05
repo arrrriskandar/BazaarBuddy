@@ -8,6 +8,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
@@ -36,6 +37,7 @@ app.use("/api/order", orderRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 const onlineUsers = new Map();
 

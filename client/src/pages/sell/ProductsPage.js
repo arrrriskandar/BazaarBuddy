@@ -43,6 +43,34 @@ function SellerProducts() {
     setOpenModal(true);
   };
 
+  const redirectToStripeOnboarding = async () => {
+    try {
+      const response = await axios.post(
+        apiEndpoint + `/stripe/create-account-link`,
+        { userId: currentUser._id, email: currentUser.email }
+      );
+      window.location.href = response.data.url;
+    } catch (error) {
+      message.error("Failed to initiate Stripe onboarding. Please try again.");
+      console.error("Stripe onboarding error", error);
+    }
+  };
+
+  if (!currentUser.stripeId) {
+    return (
+      <div style={{ textAlign: "center", margin: "20px" }}>
+        <h2>Complete Your Stripe Onboarding</h2>
+        <p>
+          You must create a Stripe account before you can list products for
+          sale.
+        </p>
+        <Button type="primary" onClick={redirectToStripeOnboarding}>
+          Create Stripe Account
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <>
       <Row style={{ justifyContent: "end" }}>

@@ -35,6 +35,9 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    stripeId: {
+      type: String,
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: false },
