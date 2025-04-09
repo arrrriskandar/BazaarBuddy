@@ -39,7 +39,7 @@ const TopNavigation = () => {
     if (location.pathname.startsWith("/cart")) return ["4"];
     if (location.pathname.startsWith("/notification")) return ["5"];
     if (location.pathname.startsWith("/profile")) return ["6"];
-    return ["1"];
+    return [];
   };
 
   const selectedKeys = getSelectedKey();

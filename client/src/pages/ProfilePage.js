@@ -67,7 +67,8 @@ const Profile = () => {
           <Descriptions.Item label="Rating">
             {profile.ratingCount > 0 ? (
               <>
-                {averageRating} ⭐ <span> ({profile.ratingCount} reviews)</span>
+                {averageRating.toFixed(1)} ⭐{" "}
+                <span> ({profile.ratingCount} reviews)</span>
               </>
             ) : (
               <span>No reviews</span>

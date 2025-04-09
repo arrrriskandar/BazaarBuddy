@@ -15,7 +15,7 @@ function ProductInfo({ product }) {
       <h2>
         {product.ratingCount > 0 ? (
           <>
-            {averageProductRating} ⭐ ({product.ratingCount} reviews)
+            {averageProductRating.toFixed(1)} ⭐ ({product.ratingCount} reviews)
           </>
         ) : (
           "No reviews"

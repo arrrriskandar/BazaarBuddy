@@ -135,8 +135,8 @@ function BrowseProductDetails() {
             More from {product.seller.username}{" "}
             {product.seller.ratingCount > 0 ? (
               <span>
-                | {averageSellerRating} ⭐ ({product.seller.ratingCount}{" "}
-                reviews)
+                | {averageSellerRating.toFixed(1)} ⭐ (
+                {product.seller.ratingCount} reviews)
               </span>
             ) : (
               <span> | No reviews</span>

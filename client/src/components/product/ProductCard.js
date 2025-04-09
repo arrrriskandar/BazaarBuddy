@@ -1,6 +1,7 @@
-import { Card, Rate } from "antd";
+import { Card } from "antd";
 import React from "react";
 import { getAverageRating } from "../../utils/ratingUtils";
+import StarRatings from "react-star-ratings";
 
 const { Meta } = Card;
 
@@ -36,9 +37,15 @@ function ProductCard({ product }) {
       <div style={{ marginTop: "10px", textAlign: "center" }}>
         {product.ratingCount > 0 ? (
           <>
-            <Rate disabled value={parseFloat(averageRating)} />
+            <StarRatings
+              rating={averageRating}
+              starRatedColor="gold"
+              numberOfStars={5}
+              starDimension="20px"
+              starSpacing="2px"
+            />
             <div>
-              {averageRating} ⭐ ({product.ratingCount} reviews)
+              {averageRating.toFixed(1)} ⭐ ({product.ratingCount} reviews)
             </div>
             <div></div>
           </>
