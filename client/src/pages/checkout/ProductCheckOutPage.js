@@ -24,20 +24,22 @@ const ProductCheckout = () => {
   const [visible, setVisible] = useState(false);
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
-  const navigate = useNavigate();
 
   const totalPrice = item.quantity * item.product.price;
 
-  const onFinish = () => {
-    navigate("/payment", {
-      state: {
+  const onFinish = async () => {
+    const seller = item.product.seller._id;
+    localStorage.setItem(
+      "checkOutData",
+      JSON.stringify({
         item,
-        address,
+        shippingAddress: address,
         unitNumber,
         totalPrice,
         cartCheckout: false, // Indicate this is for a single product
-      },
-    });
+        seller,
+      })
+    );
   };
 
   const columns = [

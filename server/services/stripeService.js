@@ -1,6 +1,7 @@
 import "dotenv/config";
 import Stripe from "stripe";
 import { updateUser } from "./userService.js";
+import { getOrderReleaseFund } from "./orderService.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -70,3 +71,34 @@ export const createStripeCheckoutSession = async (checkOutData) => {
 
   return session;
 };
+
+export const getChargeId = async (sessionId) => {
+  const { payment_intent } = await stripe.checkout.sessions.retrieve(sessionId);
+  const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent);
+  const chargeId = paymentIntent.latest_charge;
+  return chargeId;
+};
+
+export const releaseFunds = async (orderId) => {
+  const order = await getOrderReleaseFund(orderId);
+  const chargeId = await getChargeId(order.stripeSessionId);
+
+  try {
+    const transfer = await stripe.transfers.create({
+      amount: (order.totalPrice - Math.floor(order.totalPrice * 0.1)) * 100,
+      currency: "sgd",
+      destination: order.seller.stripeId,
+      source_transaction: chargeId,
+      metadata: {
+        orderId: order._id.toString(),
+      },
+    });
+    console.log("Transfer successful:", transfer);
+  } catch (error) {
+    console.error("Error releasing funds:", error);
+  }
+};
+
+export async function deleteAccount(accountId) {
+  await stripe.accounts.del(accountId);
+}

@@ -1,5 +1,6 @@
 import OrderModel from "../models/orderModel.js";
 import { createNotification } from "./notificationService.js";
+import { releaseFunds } from "./stripeService.js";
 
 export const createOrder = async (orderData) => {
   const { notificationMessage, seller } = orderData;
@@ -22,13 +23,11 @@ export const createOrder = async (orderData) => {
 export const getOrder = async (orderParams) => {
   const { orderId, userId } = orderParams;
 
-  // Fetch order details without populating seller and user
   const order = await OrderModel.findById(orderId).populate({
     path: "items.product",
     model: "ProductModel",
   });
 
-  // Determine which participant to populate
   const otherParticipantPath =
     order.seller.toString() !== userId ? "seller" : "user";
 
@@ -36,6 +35,16 @@ export const getOrder = async (orderParams) => {
   await order.populate({
     path: otherParticipantPath,
     model: "UserModel",
+  });
+
+  return order;
+};
+
+export const getOrderReleaseFund = async (orderId) => {
+  const order = await OrderModel.findById(orderId).populate({
+    path: "seller",
+    model: "UserModel",
+    select: "stripeId",
   });
 
   return order;
@@ -84,6 +93,7 @@ export const updateOrder = async (orderId, orderData) => {
     notificationMessage,
     notifyBuyer,
     orderCompleted = false,
+    releasePayment = false,
   } = orderData;
   try {
     const order = await OrderModel.findByIdAndUpdate(orderId, orderData, {
@@ -98,6 +108,10 @@ export const updateOrder = async (orderId, orderData) => {
       order: orderId,
       orderCompleted,
     });
+
+    if (releasePayment) {
+      await releaseFunds(orderId);
+    }
 
     return { order, notification };
   } catch (error) {

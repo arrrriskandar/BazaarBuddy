@@ -24,7 +24,6 @@ const CartCheckout = () => {
   const [visible, setVisible] = useState(false);
   const [address, setAddress] = useState(currentUser.address);
   const [unitNumber, setUnitNumber] = useState(currentUser.unitNumber);
-  const navigate = useNavigate();
 
   const totalPrice = selectedItems?.items?.reduce(
     (sum, item) => sum + item.quantity * item.product.price,
@@ -41,16 +40,19 @@ const CartCheckout = () => {
     total: item.quantity * item.product.price,
   }));
 
-  const onFinish = () => {
-    navigate("/payment", {
-      state: {
+  const onFinish = async () => {
+    const seller = selectedItems.items[0].product.seller;
+    localStorage.setItem(
+      "checkOutData",
+      JSON.stringify({
         selectedItems,
-        address,
+        shippingAddress: address,
         unitNumber,
         totalPrice,
-        cartCheckout: true, // Indicate this is from the cart
-      },
-    });
+        cartCheckout: true,
+        seller,
+      })
+    );
   };
 
   return (
