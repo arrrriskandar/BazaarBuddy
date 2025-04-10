@@ -34,6 +34,7 @@ const OrderSchema = new Schema({
   shippingAddress: { type: String, required: true },
   unitNumber: { type: String, required: true },
   status: { type: String, default: "To Ship" },
+  stripeSessionId: { type: String, required: true },
 });
 
 export default mongoose.model("OrderModel", OrderSchema);
