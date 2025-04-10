@@ -70,8 +70,8 @@ function BuyerOrdersPage() {
         notificationMessage,
         notifyBuyer: false,
       });
-      const { order, notification } = response.data;
-      const receiverId = order.seller;
+      const { notification } = response.data;
+      const receiverId = notification.userId;
       sendNotification(receiverId, notification);
       message.success(`${orderId} received!`);
       fetchOrders();

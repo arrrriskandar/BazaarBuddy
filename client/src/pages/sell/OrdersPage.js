@@ -80,8 +80,8 @@ const SellerOrdersPage = () => {
         notificationMessage,
         notifyBuyer: true,
       });
-      const { notification, order } = response.data;
-      const receiverId = order.user;
+      const { notification } = response.data;
+      const receiverId = notification.userId;
       sendNotification(receiverId, notification);
       message.success(`${orderId} shipped!`);
       fetchOrders();

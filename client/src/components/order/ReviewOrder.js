@@ -90,8 +90,8 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
         notifyBuyer: false,
         orderCompleted: true,
       });
-      const { order, notification } = response.data;
-      const receiverId = order.seller;
+      const { notification } = response.data;
+      const receiverId = notification.userId;
       sendNotification(receiverId, notification);
     } catch (error) {
       message.error("Failed to update order status: " + error.message);
