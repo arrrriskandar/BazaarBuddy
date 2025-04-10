@@ -22,8 +22,9 @@ import CartCheckout from "./pages/checkout/CartCheckOutPage";
 import SellerOrdersPage from "./pages/sell/OrdersPage";
 import BuyerOrdersPage from "./pages/buy/OrdersPage";
 import ProductCheckout from "./pages/checkout/ProductCheckOutPage";
-import PaymentPage from "./pages/PaymentPage";
-import ConfirmationPage from "./pages/ConfirmationPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import PaymentFailure from "./pages/payment/PaymentFailure";
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import { SocketProvider } from "./contexts/SocketContext";
 import Notification from "./pages/NotificationPage";
 import OrderReviewPage from "./pages/OrderReviewPage";
@@ -55,8 +56,15 @@ const AuthenticatedApp = () => {
           <Route path="/buy/checkout" element={<ProductCheckout />} />
           <Route path="/sell/order" element={<SellerOrdersPage />} />
           <Route path="/buy/order" element={<BuyerOrdersPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/confirmation/:orderId" element={<ConfirmationPage />} />
+          <Route
+            path="/payment/success/:stripeSessionId"
+            element={<PaymentSuccess />}
+          />
+          <Route
+            path="/order/confirmation/:orderId"
+            element={<OrderConfirmationPage />}
+          />
+          <Route path="/payment/fail" element={<PaymentFailure />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/chat/:chatId" element={<ChatPage />} />
           <Route path="*" element={<Navigate to="/buy/product" replace />} />

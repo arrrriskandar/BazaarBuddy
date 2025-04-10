@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Divider,
   Form,
@@ -14,6 +14,8 @@ import { useUser } from "../../contexts/UserContext";
 import { EditOutlined } from "@ant-design/icons";
 import getColumns from "../../components/checkout/Columns";
 import EditDeliveryAddressForm from "../../components/checkout/EditDeliveryAddressForm";
+import axios from "axios";
+import { apiEndpoint } from "../../constants/constants";
 
 const { Text } = Typography;
 
@@ -53,6 +55,17 @@ const CartCheckout = () => {
         seller,
       })
     );
+
+    const response = await axios.post(
+      `${apiEndpoint}/stripe/checkout-session`,
+      {
+        buyer: currentUser,
+        seller,
+        items: selectedItems.items,
+      }
+    );
+
+    window.location.href = response.data.url;
   };
 
   return (
