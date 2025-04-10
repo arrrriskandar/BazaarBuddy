@@ -5,8 +5,7 @@ import {
 
 export async function createAccountLinkController(req, res) {
   try {
-    const { userId, email } = req.body;
-    const account = await createExpressAccount(email, userId);
+    const account = await createExpressAccount(req.body);
     const accountLinkUrl = await generateAccountLink(account.id);
     res.json({ url: accountLinkUrl });
   } catch (error) {
