@@ -38,3 +38,35 @@ export async function generateAccountLink(accountId) {
   });
   return accountLink.url;
 }
+
+export const createStripeCheckoutSession = async (checkOutData) => {
+  const { buyer, seller, items } = checkOutData;
+  const lineItems = items.map((item) => ({
+    price_data: {
+      currency: "sgd",
+      product_data: {
+        name: item.product.name,
+        description: item.product.description,
+        images: [item.product.images], // Ensure you have the image URL
+      },
+      unit_amount: item.product.price * 100, // Convert price to cents
+    },
+    quantity: item.quantity,
+  }));
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: lineItems,
+    customer_email: buyer.email,
+    mode: "payment",
+    payment_intent_data: {
+      metadata: {
+        buyer: buyer._id,
+        seller,
+      },
+    },
+    success_url: `http://localhost:3000/payment/success/{CHECKOUT_SESSION_ID}`,
+    cancel_url: "http://localhost:3000/payment/fail",
+  });
+
+  return session;
+};
