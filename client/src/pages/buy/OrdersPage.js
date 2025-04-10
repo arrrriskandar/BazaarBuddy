@@ -69,6 +69,7 @@ function BuyerOrdersPage() {
         status: "To Rate", // Update status
         notificationMessage,
         notifyBuyer: false,
+        releasePayment: true,
       });
       const { notification } = response.data;
       const receiverId = notification.userId;
