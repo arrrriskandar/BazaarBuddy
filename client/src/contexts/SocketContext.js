@@ -16,6 +16,7 @@ export const SocketProvider = ({ children }) => {
   const { currentAuthUser } = useAuth();
   const socketRef = useRef(null);
   const [socket, setSocket] = useState(null);
+  const [socketReady, setSocketReady] = useState(false); // Track socket readiness
 
   useEffect(() => {
     if (!currentAuthUser) {
@@ -23,6 +24,7 @@ export const SocketProvider = ({ children }) => {
         socketRef.current.disconnect();
         socketRef.current = null;
         setSocket(null);
+        setSocketReady(false);
       }
       return;
     }
@@ -44,6 +46,10 @@ export const SocketProvider = ({ children }) => {
       console.error("Socket connection error:", err);
     });
 
+    newSocket.on("connect", () => {
+      setSocketReady(true); // Set socket as ready once connected
+    });
+
     socketRef.current = newSocket;
     setSocket(newSocket);
 
@@ -52,12 +58,13 @@ export const SocketProvider = ({ children }) => {
         socketRef.current.disconnect();
         socketRef.current = null;
         setSocket(null);
+        setSocketReady(false);
       }
     };
   }, [currentAuthUser]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, socketReady }}>
       {children}
     </SocketContext.Provider>
   );
