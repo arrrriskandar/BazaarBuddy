@@ -1,7 +1,10 @@
 import UserModel from "../models/userModel.js";
+import { createStripeCustomer } from "./stripeService.js";
 
 export const createUser = async (userData) => {
-  const user = new UserModel(userData);
+  const { username, email } = userData;
+  const customer = await createStripeCustomer(username, email);
+  const user = new UserModel({ ...userData, stripeCustomerId: customer.id });
   return await user.save();
 };
 

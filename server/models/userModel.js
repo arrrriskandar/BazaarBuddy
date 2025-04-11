@@ -35,8 +35,12 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    stripeId: {
+    stripeSellerId: {
       type: String,
+    },
+    stripeCustomerId: {
+      type: String,
+      required: true,
     },
   },
   {

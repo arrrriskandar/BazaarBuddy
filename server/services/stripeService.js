@@ -26,8 +26,15 @@ export async function createExpressAccount(accountData) {
     },
   });
 
-  await updateUser(userId, { stripeId: account.id });
+  await updateUser(userId, { stripeSellerId: account.id });
   return account;
+}
+
+export async function createStripeCustomer(name, email) {
+  return await stripe.customers.create({
+    name,
+    email,
+  });
 }
 
 export async function generateAccountLink(accountId) {
@@ -57,7 +64,7 @@ export const createStripeCheckoutSession = async (checkOutData) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: lineItems,
-    customer_email: buyer.email,
+    customer: buyer.stripeCustomerId,
     mode: "payment",
     payment_intent_data: {
       metadata: {
@@ -87,7 +94,7 @@ export const releaseFunds = async (orderId) => {
     const transfer = await stripe.transfers.create({
       amount: (order.totalPrice - Math.floor(order.totalPrice * 0.1)) * 100,
       currency: "sgd",
-      destination: order.seller.stripeId,
+      destination: order.seller.stripeSellerId,
       source_transaction: chargeId,
       metadata: {
         orderId: order._id.toString(),
