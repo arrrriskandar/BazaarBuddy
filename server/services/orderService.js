@@ -44,7 +44,7 @@ export const getOrderReleaseFund = async (orderId) => {
   const order = await OrderModel.findById(orderId).populate({
     path: "seller",
     model: "UserModel",
-    select: "stripeId",
+    select: "stripeSellerId",
   });
 
   return order;

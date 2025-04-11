@@ -56,7 +56,7 @@ function SellerProducts() {
     }
   };
 
-  if (!currentUser.stripeId) {
+  if (!currentUser.stripeSellerId) {
     return (
       <div style={{ textAlign: "center", margin: "20px" }}>
         <h2>Complete Your Stripe Onboarding</h2>
