@@ -50,6 +50,7 @@ export const ChatProvider = ({ children }) => {
       const { transformedChats, totalUnreadMessages } = response.data;
       setChats(transformedChats);
       setTotalUnreadMessages(totalUnreadMessages);
+      return transformedChats;
     } catch (error) {
       console.error("Failed to fetch chats:", error);
     }
@@ -194,8 +195,8 @@ export const ChatProvider = ({ children }) => {
       let chat = chats.find((chat) => chat._id === newChat._id);
 
       if (!chat) {
-        await fetchChats(); // Ensure the chat list is updated
-        chat = chats.find((chat) => chat._id === newChat._id); // Try again after fetching
+        const updatedChats = await fetchChats();
+        chat = updatedChats.find((chat) => chat._id === newChat._id);
       }
 
       if (chat) {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, message } from "antd";
 import { useChat } from "../../contexts/ChatContext";
 
