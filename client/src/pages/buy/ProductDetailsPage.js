@@ -63,6 +63,7 @@ function BrowseProductDetails() {
       ...prevProducts.filter((p) => p._id !== clickedProduct._id),
       product,
     ]);
+    setQuantity(1);
     setProduct(clickedProduct);
     window.scrollTo(0, 0);
   };
