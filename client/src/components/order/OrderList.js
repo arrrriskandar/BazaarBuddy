@@ -14,6 +14,7 @@ const OrderList = ({
     <List
       grid={{ gutter: 16, column: 1 }}
       dataSource={orders}
+      locale={{ emptyText: "No orders" }}
       renderItem={(order) => (
         <OrderCard
           key={order._id}
