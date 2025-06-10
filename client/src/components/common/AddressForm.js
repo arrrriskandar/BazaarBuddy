@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, AutoComplete, Input, message } from "antd";
 import { getSingaporeAddress } from "../../oneMap/addressLookup";
 
 const AddressForm = ({ form }) => {
   const [addressOptions, setAddressOptions] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+
+  useEffect(() => {
+    const currentAddress = form.getFieldValue("address");
+    if (currentAddress) {
+      setSelectedAddress(currentAddress);
+    }
+  }, [form]);
 
   const validateAddress = (_, value) => {
     if (!selectedAddress) {
