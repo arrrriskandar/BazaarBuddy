@@ -1,4 +1,5 @@
-export const apiEndpoint = "http://localhost:5001/api";
+export const BE_URL = process.env.REACT_APP_BE_URL;
+export const apiEndpoint = `${BE_URL}/api`;
 
 export const categories = [
   {

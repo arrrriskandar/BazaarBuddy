@@ -16,9 +16,11 @@ import http from "http";
 const app = express();
 const server = http.createServer(app);
 
+const FE_URL = process.env.FE_URL;
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: FE_URL,
     methods: ["GET", "POST"],
   },
 });

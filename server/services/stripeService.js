@@ -4,6 +4,7 @@ import { updateUser } from "./userService.js";
 import { getOrderReleaseFund } from "./orderService.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const FE_URL = process.env.FE_URL;
 
 export async function createExpressAccount(accountData) {
   const { userId, email } = accountData;
@@ -40,8 +41,8 @@ export async function createStripeCustomer(name, email) {
 export async function generateAccountLink(accountId) {
   const accountLink = await stripe.accountLinks.create({
     account: accountId,
-    refresh_url: "http://localhost:3000/sell/product",
-    return_url: "http://localhost:3000/sell/product",
+    refresh_url: `${FE_URL}/sell/product`,
+    return_url: `${FE_URL}/sell/product`,
     type: "account_onboarding",
   });
   return accountLink.url;
@@ -72,8 +73,8 @@ export const createStripeCheckoutSession = async (checkOutData) => {
         seller,
       },
     },
-    success_url: `http://localhost:3000/payment/success/{CHECKOUT_SESSION_ID}`,
-    cancel_url: "http://localhost:3000/payment/fail",
+    success_url: `${FE_URL}/payment/success/{CHECKOUT_SESSION_ID}`,
+    cancel_url: `${FE_URL}/payment/fail`,
   });
 
   return session;

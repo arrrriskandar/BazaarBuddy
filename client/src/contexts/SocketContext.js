@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "./AuthContext";
+import { BE_URL } from "../constants/constants";
 
 const SocketContext = createContext();
 
@@ -34,7 +35,7 @@ export const SocketProvider = ({ children }) => {
       socketRef.current.disconnect();
     }
 
-    const newSocket = io("http://localhost:5001", {
+    const newSocket = io(BE_URL, {
       query: { userId: currentAuthUser.uid },
       transports: ["websocket"],
       reconnection: true,
