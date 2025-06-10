@@ -33,7 +33,7 @@ function OrderCard({
         <Descriptions title={`Order ID: ${order._id}`} bordered column={2}>
           <Descriptions.Item label="Buyer">{user.username}</Descriptions.Item>
           <Descriptions.Item label="Total Price">
-            ${order.totalPrice}
+            {`$${Number(order.totalPrice).toFixed(2)}`}
           </Descriptions.Item>
           <Descriptions.Item label="Status">{order.status}</Descriptions.Item>
           <Descriptions.Item label="Order Date">
@@ -59,7 +59,9 @@ function OrderCard({
                     />
                   }
                   title={item.product.name}
-                  description={`Quantity: ${item.quantity} | Price: ${item.product.price}`}
+                  description={`Quantity: ${item.quantity} | Price: $${Number(
+                    item.product.price
+                  ).toFixed(2)}`}
                 />
               </Card>
             </List.Item>

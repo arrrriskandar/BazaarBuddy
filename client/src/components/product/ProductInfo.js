@@ -23,7 +23,9 @@ function ProductInfo({ product }) {
       </h2>
       <Paragraph>{product.description}</Paragraph>
       <Descriptions bordered column={1}>
-        <Descriptions.Item label="Price">$ {product.price}</Descriptions.Item>
+        <Descriptions.Item label="Price">
+          {`$${Number(product.price).toFixed(2)}`}
+        </Descriptions.Item>
         <Descriptions.Item label="Category">
           {product.category}
         </Descriptions.Item>

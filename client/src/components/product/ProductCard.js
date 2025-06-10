@@ -33,7 +33,11 @@ function ProductCard({ product }) {
         </div>
       }
     >
-      <Meta title={product.name} description={`$${product.price}`} />
+      <Meta
+        title={product.name}
+        description={`$${Number(product.price).toFixed(2)}`}
+      />
+
       <div style={{ marginTop: "10px", textAlign: "center" }}>
         {product.ratingCount > 0 ? (
           <>

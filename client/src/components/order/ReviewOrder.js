@@ -128,7 +128,9 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
                     />
                   }
                   title={<b>{item.product.name}</b>}
-                  description={`Quantity: ${item.quantity} | Price: $${item.product.price}`}
+                  description={`Quantity: ${item.quantity} | Price: $${Number(
+                    item.product.price
+                  ).toFixed(2)}`}
                 />
               </Card>
 

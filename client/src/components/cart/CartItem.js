@@ -43,7 +43,7 @@ const CartItem = ({
         >
           <h2 style={{ margin: 0 }}>{item.product.name}</h2>
           <Space direction="vertical" style={{ marginTop: "10px" }}>
-            <div>Price: ${item.product.price}</div>
+            <div>Price: {`$${Number(item.product.price).toFixed(2)}`}</div>
             <Row align="middle">
               <Col>
                 <span>Quantity: </span>
