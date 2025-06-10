@@ -57,7 +57,7 @@ export const createStripeCheckoutSession = async (checkOutData) => {
         description: item.product.description,
         images: [item.product.images], // Ensure you have the image URL
       },
-      unit_amount: item.product.price * 100, // Convert price to cents
+      unit_amount: Math.round(item.product.price * 100), // Convert price to cents
     },
     quantity: item.quantity,
   }));
@@ -100,7 +100,6 @@ export const releaseFunds = async (orderId) => {
         orderId: order._id.toString(),
       },
     });
-    console.log("Transfer successful:", transfer);
   } catch (error) {
     console.error("Error releasing funds:", error);
   }
