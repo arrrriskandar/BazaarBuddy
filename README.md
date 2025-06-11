@@ -1,100 +1,66 @@
 # BazaarBuddy
 
-## Description
+**BazaarBuddy** is a full-stack online marketplace platform where users can buy and sell products, communicate via real-time chat, receive real-time notifications, and make secure payments — all in one place.
 
-BazaarBuddy is an upcoming online marketplace application designed to connect buyers and sellers in a convenient and secure platform. With BazaarBuddy, users can browse a wide range of products, communicate with sellers, make purchases, and manage their orders, all in one place.
+## Live Demo
 
-## Key Features
+[Visit BazaarBuddy](https://bazaar-buddy.vercel.app)
 
-- **Browse and Buy**: Explore a diverse selection of products from various sellers.
-- **Sell with Ease**: Create listings for your products and reach potential buyers effortlessly.
-- **Chat with Sellers**: Communicate directly with sellers to get more information about products.
-- **Secure Transactions**: Enjoy peace of mind with our secure payment processing system.
-- **User-Friendly Interface**: Navigate the app with ease and make transactions smoothly.
+This demo is fully functional and runs on Stripe's test mode. You can simulate a purchase using Stripe's test card: `4242 4242 4242 4242` (Any future date, any CVC).
 
-## Contributors
+## Screenshots
 
-- Kerin Wong ([@kerinwlt](https://github.com/kerinwlt))
-- Muhamad Ar Iskandar ([@arrrrriskandar](https://github.com/arrrriskandar))
-- Hubert Ang ([@hubertang](https://github.com/hubertang))
+### Login Page
 
-## Set Up Instructions
+<img src="./assets/screenshot-login.png" alt="Login Page" width="600"/>
 
-### Prerequisites
+### Browse Products
 
-1. **Node.js and npm**: Make sure you have Node.js and npm installed on your machine. You can download them from [here](https://nodejs.org/).
-2. **Git**: Ensure you have Git installed for cloning the repository. You can download it from [here](https://git-scm.com/).
-3. **.env Files**: Ensure you have the necessary `.env` files provided, which contain configuration settings for the application.
+<img src="./assets/screenshot-buy.png" alt="Buy Page" width="600"/>
 
-### Step-by-Step Setup
+### Manage Listings
 
-1. **Clone the Repository**
+<img src="./assets/screenshot-sell.png" alt="Sell Page" width="600"/>
 
-   - Open your terminal or command prompt.
-   - Navigate to the directory where you want to clone the project.
-   - Run the following command to clone the BazaarBuddy repository:
-     ```sh
-     git clone https://github.com/yourusername/bazaarbuddy.git
-     ```
-   - Replace `yourusername` with the actual GitHub username if necessary.
+## Features at a Glance
 
-2. **Navigate to the Project Directory**
+- Browse, search, and filter product listings
+- List items for sale with images
+- Real-time chat between users (e.g., inquiries or order discussions)
+- Instant in-app notifications (e.g., order placed, shipped, reviewed)
+- Secure Stripe payments and seller payouts
+- User authentication
+- Responsive and modern UI with Ant Design
 
-   - Change into the project's root directory:
-     ```sh
-     cd bazaarbuddy
-     ```
+## Tech Stack
 
-3. **Import .env Files**
+**Frontend**
 
-   - Copy the provided `.env` files into the respective directories:
-     - `client/.env`: This file should go into the `client` directory.
-     - `server/.env`: This file should go into the `server` directory.
-   - Ensure that these files are correctly placed in the root of their respective directories.
+- React
+- Ant Design (UI component library)
+- Firebase Authentication
+- Firebase Storage (Image uploads)
+- Axios
+- Socket.IO Client
 
-4. **Install Dependencies for the Frontend**
+**Backend**
 
-   - Navigate to the `client` directory:
-     ```sh
-     cd client
-     ```
-   - Install the required dependencies using npm:
-     ```sh
-     npm install
-     ```
+- Node.js + Express
+- MongoDB + Mongoose
+- Stripe (Payments)
+- Socket.IO (Real-time chat & notifications)
 
-5. **Run the Frontend**
+**Deployment**
 
-   - Start the React Native (or React) development server:
-     ```sh
-     npm start
-     ```
+- Vercel (Frontend)
+- Render (Backend)
+- MongoDB Atlas (Database)
 
-6. **Install Dependencies for the Backend**
+---
 
-   - Open a new terminal window or tab.
-   - Navigate to the `server` directory:
-     ```sh
-     cd server
-     ```
-   - Install the required dependencies using npm:
-     ```sh
-     npm install
-     ```
+## Local Setup
 
-7. **Run the Backend**
-   - Start the backend server:
-     ```sh
-     npm start
-     ```
+If you'd like to run the app locally (e.g., for development or testing), follow the guide here:  
+📄 [SETUP.md](./SETUP.md)
 
-### Additional Notes
-
-- **Frontend**: The frontend application should now be running and accessible via Expo (if using Expo for React Native) or in your web browser (if using a web-based React setup).
-- **Backend**: The backend server should now be running and typically accessible via `http://localhost:PORT`, where `PORT` is specified in your `.env` file (default is often `3000`).
-- **Environment Variables**: Ensure that all required environment variables are correctly set in the `.env` files. This typically includes API keys, database URIs, and other configuration settings.
-- **Common Issues**:
-  - If you encounter issues with missing modules or packages, try running `npm install` again in both the `client` and `server` directories.
-  - Ensure that the versions of Node.js and npm are compatible with the project requirements specified in the `package.json` files.
-
-By following these detailed instructions, you should be able to set up and run the BazaarBuddy application successfully. If you encounter any issues or need further assistance, please refer to the project's documentation or reach out to the contributors.
+---
