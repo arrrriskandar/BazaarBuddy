@@ -25,6 +25,11 @@ const io = new Server(server, {
   },
 });
 
+const url = `https://bazaarbuddy-ev54.onrender.com`;
+setInterval(() => {
+  fetch(url).then(() => console.log("Self-ping successful"));
+}, 600000); // 600,000ms = 10 minutes
+
 // Connect Database
 connectDB();
 
@@ -78,7 +83,7 @@ io.on("connection", (socket) => {
   // Handle disconnect
   socket.on("disconnect", () => {
     const userIdToRemove = [...onlineUsers.entries()].find(
-      ([, socketId]) => socketId === socket.id
+      ([, socketId]) => socketId === socket.id,
     )?.[0];
 
     if (userIdToRemove) {
