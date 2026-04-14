@@ -31,7 +31,7 @@ function BrowseProducts() {
               page: currentPage,
               limit: pageSize,
             },
-          }
+          },
         );
         setProducts(response.data.products);
         setTotalItems(response.data.total);
@@ -46,6 +46,10 @@ function BrowseProducts() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Use "auto" for an instant jump
+    });
   };
 
   return (
