@@ -1,4 +1,4 @@
-export const BE_URL = process.env.REACT_APP_BE_URL;
+export const BE_URL = process.env.REACT_APP_BE_URL || "http://localhost:5001";
 export const apiEndpoint = `${BE_URL}/api`;
 
 export const categories = [

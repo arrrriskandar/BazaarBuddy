@@ -24,15 +24,15 @@ const Profile = () => {
   const handleEdit = () => {
     setOpenModal(true);
     form.setFieldsValue({
-      username: profile.username,
-      address: profile.address,
-      unitNumber: profile.unitNumber,
+      username: profile?.username,
+      address: profile?.address,
+      unitNumber: profile?.unitNumber,
     });
   };
 
   const averageRating = getAverageRating(
-    profile.ratingCount,
-    profile.ratingTotal
+    profile?.ratingCount,
+    profile?.ratingTotal,
   );
 
   return (
@@ -41,7 +41,7 @@ const Profile = () => {
         style={{ width: 400, boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
         cover={
           <Avatar
-            src={profile.photoUrl || "/default-avatar.png"}
+            src={profile?.photoUrl || "/default-avatar.png"}
             size={200}
             style={{
               margin: "20px auto",
@@ -52,30 +52,30 @@ const Profile = () => {
         }
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <Title level={3}>{profile.username}</Title>
+          <Title level={3}>{profile?.username}</Title>
           <Title level={3} style={{ color: "#888" }}>
-            {profile.email}
+            {profile?.email}
           </Title>
         </div>
         <Divider />
         <Descriptions layout="vertical" bordered column={1}>
           <Descriptions.Item label="Address">
-            {profile.unitNumber
-              ? `${profile.address} ${profile.unitNumber}`
-              : profile.address}
+            {profile?.unitNumber
+              ? `${profile?.address} ${profile?.unitNumber}`
+              : profile?.address}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
-            {profile.ratingCount > 0 ? (
+            {profile?.ratingCount > 0 ? (
               <>
                 {averageRating.toFixed(1)} ⭐{" "}
-                <span> ({profile.ratingCount} reviews)</span>
+                <span> ({profile?.ratingCount} reviews)</span>
               </>
             ) : (
               <span>No reviews</span>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Member Since">
-            {new Date(profile.createdAt).toLocaleDateString()}
+            {new Date(profile?.createdAt).toLocaleDateString()}
           </Descriptions.Item>
         </Descriptions>
         <div

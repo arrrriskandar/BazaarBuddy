@@ -16,7 +16,7 @@ import http from "http";
 const app = express();
 const server = http.createServer(app);
 
-const FE_URL = process.env.FE_URL;
+const FE_URL = process.env.FE_URL || "http://localhost:3000";
 
 const io = new Server(server, {
   cors: {
