@@ -56,6 +56,7 @@ export const getBrowseProducts = async (userId, queryParams) => {
   if (sortBy) {
     sortOptions[sortBy] = sortOrder;
   }
+  sortOptions["_id"] = 1;
 
   const totalProducts = await ProductModel.countDocuments(query);
   const totalPages = Math.ceil(totalProducts / pageSize);
@@ -89,13 +90,11 @@ export const getMyProducts = async (userId, queryParams) => {
   const oOSQuery = { ...query, stock: "Out of Stock" };
   const discontinuedQuery = { ...query, stock: "Discontinued" };
 
-  const availableProducts = await ProductModel.find(availabilityQuery).sort(
-    sortOptions
-  );
+  const availableProducts =
+    await ProductModel.find(availabilityQuery).sort(sortOptions);
   const oOSProducts = await ProductModel.find(oOSQuery).sort(sortOptions);
-  const discontinuedProducts = await ProductModel.find(discontinuedQuery).sort(
-    sortOptions
-  );
+  const discontinuedProducts =
+    await ProductModel.find(discontinuedQuery).sort(sortOptions);
 
   return {
     available: availableProducts,
