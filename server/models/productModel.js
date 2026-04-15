@@ -38,6 +38,12 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
     photouuid: {
       type: String,
       required: true,
@@ -45,7 +51,7 @@ const ProductSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model("ProductModel", ProductSchema);

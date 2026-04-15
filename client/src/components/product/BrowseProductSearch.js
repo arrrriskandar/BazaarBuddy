@@ -48,8 +48,8 @@ const BrowseProductSearch = ({
             onChange={(value) => handleSelectChange(value, "sortCriteria")}
             style={{ width: "100%" }}
           >
-            <Option value="ratingAveragedesc">Rating (High-Low)</Option>
-            <Option value="ratingAverageasc">Rating (Low-High)</Option>
+            <Option value="averageRatingdesc">Rating (High-Low)</Option>
+            <Option value="averageRatingasc">Rating (Low-High)</Option>
             <Option value="priceasc">Price (Low-High)</Option>
             <Option value="pricedesc">Price (High-Low)</Option>
           </Select>

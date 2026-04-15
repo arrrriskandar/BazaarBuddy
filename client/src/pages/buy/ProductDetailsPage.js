@@ -6,7 +6,6 @@ import { message, Button, Row, Col, Divider } from "antd";
 import ProductInfo from "../../components/product/ProductInfo";
 import { useCart } from "../../contexts/CartContext";
 import ProductCard from "../../components/product/ProductCard";
-import { getAverageRating } from "../../utils/ratingUtils";
 import ReviewList from "../../components/review/ReviewList";
 import ChatNowButton from "../../components/common/ChatNowButton";
 
@@ -21,7 +20,7 @@ function BrowseProductDetails() {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `${apiEndpoint}/product/sellerproducts/${productId}`
+          `${apiEndpoint}/product/sellerproducts/${productId}`,
         );
         const { product, products } = response.data;
         setProduct(product);
@@ -67,10 +66,6 @@ function BrowseProductDetails() {
     setProduct(clickedProduct);
     window.scrollTo(0, 0);
   };
-
-  const averageSellerRating = product
-    ? getAverageRating(product.seller.ratingCount, product.seller.ratingTotal)
-    : 0;
 
   return (
     <div>
@@ -134,9 +129,9 @@ function BrowseProductDetails() {
           <Divider />
           <h2>
             More from {product.seller.username}{" "}
-            {product.seller.ratingCount > 0 ? (
+            {product.seller.averageRating > 0 ? (
               <span>
-                | {averageSellerRating.toFixed(1)} ⭐ (
+                | {product.seller.averageRating.toFixed(1)} ⭐ (
                 {product.seller.ratingCount} reviews)
               </span>
             ) : (

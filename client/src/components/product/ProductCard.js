@@ -1,16 +1,10 @@
 import { Card } from "antd";
 import React from "react";
-import { getAverageRating } from "../../utils/ratingUtils";
 import StarRatings from "react-star-ratings";
 
 const { Meta } = Card;
 
 function ProductCard({ product }) {
-  const averageRating = getAverageRating(
-    product.ratingCount,
-    product.ratingTotal
-  );
-
   return (
     <Card
       hoverable
@@ -39,17 +33,18 @@ function ProductCard({ product }) {
       />
 
       <div style={{ marginTop: "10px", textAlign: "center" }}>
-        {product.ratingCount > 0 ? (
+        {product.averageRating > 0 ? (
           <>
             <StarRatings
-              rating={averageRating}
+              rating={product.averageRating}
               starRatedColor="gold"
               numberOfStars={5}
               starDimension="20px"
               starSpacing="2px"
             />
             <div>
-              {averageRating.toFixed(1)} ⭐ ({product.ratingCount} reviews)
+              {product.averageRating.toFixed(1)} ⭐ ({product.ratingCount}{" "}
+              reviews)
             </div>
             <div></div>
           </>

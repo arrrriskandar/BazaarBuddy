@@ -13,7 +13,7 @@ function BrowseProducts() {
   const [searchParams, setSearchParams] = useState({
     name: "",
     category: "",
-    sortCriteria: "ratingAveragedesc",
+    sortCriteria: "averageRatingdesc",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);

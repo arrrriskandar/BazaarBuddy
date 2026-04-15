@@ -12,7 +12,6 @@ import {
 import { useUser } from "../contexts/UserContext";
 import LogoutButton from "../components/auth/LogoutButton";
 import ProfileEditForm from "../components/profile/ProfileEditForm";
-import { getAverageRating } from "../utils/ratingUtils";
 
 const { Title } = Typography;
 const Profile = () => {
@@ -29,11 +28,6 @@ const Profile = () => {
       unitNumber: profile?.unitNumber,
     });
   };
-
-  const averageRating = getAverageRating(
-    profile?.ratingCount,
-    profile?.ratingTotal,
-  );
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "50px" }}>
@@ -65,9 +59,9 @@ const Profile = () => {
               : profile?.address}
           </Descriptions.Item>
           <Descriptions.Item label="Rating">
-            {profile?.ratingCount > 0 ? (
+            {profile?.averageRating > 0 ? (
               <>
-                {averageRating.toFixed(1)} ⭐{" "}
+                {profile.averageRating.toFixed(1)} ⭐{" "}
                 <span> ({profile?.ratingCount} reviews)</span>
               </>
             ) : (

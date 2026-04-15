@@ -35,6 +35,12 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
     stripeSellerId: {
       type: String,
     },
@@ -45,7 +51,7 @@ const UserSchema = new mongoose.Schema(
   },
   {
     timestamps: { createdAt: true, updatedAt: false },
-  }
+  },
 );
 
 export default mongoose.model("UserModel", UserSchema);
