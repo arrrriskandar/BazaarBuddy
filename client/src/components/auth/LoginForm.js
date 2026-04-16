@@ -10,7 +10,7 @@ import {
   Col,
   Avatar,
 } from "antd";
-import { login } from "../../firebase/auth";
+import { login } from "../../supabase/auth";
 import ResetPasswordModal from "./ResetPasswordModal";
 
 const LoginForm = ({ toggleRegister }) => {

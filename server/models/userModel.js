@@ -6,6 +6,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    supabaseId: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -39,7 +43,7 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: 0,
-      max: 5,
+      max: 0,
     },
     stripeSellerId: {
       type: String,

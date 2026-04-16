@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
       if (currentAuthUser) {
         try {
           const response = await axios.get(
-            apiEndpoint + `/user/${currentAuthUser.uid}`
+            apiEndpoint + `/user/supabase/${currentAuthUser.id}`,
           );
           setCurrentUser(response.data);
         } catch (error) {
@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
     fetchUserDetails();
   }, [currentAuthUser]);
 
-  const value = { currentUser, setRegistering, loading };
+  const value = { currentUser, loading, setRegistering };
   return (
     <UserContext.Provider value={value}>
       {!loading && children}

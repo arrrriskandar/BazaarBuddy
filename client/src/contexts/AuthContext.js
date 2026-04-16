@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { supabase } from "../supabase/config";
 
 const AuthContext = createContext();
 
@@ -14,21 +13,36 @@ export const AuthProvider = ({ children }) => {
   const [registering, setRegistering] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    // 1. Get initial session (important for refresh)
+    const getSession = async () => {
+      const { data } = await supabase.auth.getUser();
       if (!registering) {
-        setCurrentAuthUser(user);
+        setCurrentAuthUser(data?.user ?? null);
         setLoading(false);
       }
-    });
-    return () => unsubscribe();
+    };
+
+    getSession();
+
+    // 2. Listen for auth changes
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setCurrentAuthUser(session?.user ?? null);
+      },
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, [registering]);
 
   const value = {
     currentAuthUser,
-    setCurrentAuthUser,
     loading,
+    setCurrentAuthUser,
     setRegistering,
   };
+
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

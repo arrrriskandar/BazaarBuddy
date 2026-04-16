@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, message } from "antd";
-import { logout } from "../../firebase/auth";
+import { logout } from "../../supabase/auth";
 import { useAuth } from "../../contexts/AuthContext";
 
 const LogoutButton = () => {

@@ -4,6 +4,7 @@ import {
   deleteUserController,
   getUserController,
   updateUserController,
+  getUserBySupabaseIdController,
 } from "../controllers/userController.js";
 import {
   createUserValidationRules,
@@ -19,16 +20,17 @@ router
     createUserValidationRules(),
     restrictedFieldsValidationRules(),
     validate,
-    createUserController
+    createUserController,
   );
 router.route("/:id").get(getUserController);
+router.route("/supabase/:id").get(getUserBySupabaseIdController);
 router
   .route("/:id")
   .put(
     updateUserValidationRules(),
     restrictedFieldsValidationRules(),
     validate,
-    updateUserController
+    updateUserController,
   );
 router.route("/:id").delete(deleteUserController);
 

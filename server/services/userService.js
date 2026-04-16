@@ -12,6 +12,10 @@ export const getUser = async (userId) => {
   return await UserModel.findById(userId);
 };
 
+export const getUserBySupabaseId = async (supabaseId) => {
+  return await UserModel.findOne({ supabaseId });
+};
+
 export const updateUser = async (userId, userData) => {
   return await UserModel.findByIdAndUpdate(userId, userData, { new: true });
 };

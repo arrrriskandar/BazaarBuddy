@@ -10,17 +10,16 @@ import {
   Col,
   Avatar,
 } from "antd";
-import { register } from "../../firebase/auth";
+import { register } from "../../supabase/auth";
 import axios from "axios";
-import { useUser } from "../../contexts/UserContext";
 import { apiEndpoint } from "../../constants/constants";
 import AddressForm from "../common/AddressForm";
+import { useUser } from "../../contexts/UserContext";
 
 const RegisterForm = ({ toggleRegister }) => {
   const [form] = Form.useForm();
   const { Text } = Typography;
   const { setRegistering } = useUser();
-
   const onFinish = async ({
     email,
     password,
@@ -30,11 +29,11 @@ const RegisterForm = ({ toggleRegister }) => {
   }) => {
     try {
       setRegistering(true);
-      const userCredentials = await register(email, password);
-      const uid = userCredentials.uid;
+      const uid = await register(email, password);
 
       await axios.post(apiEndpoint + "/user", {
         _id: uid,
+        supabaseId: uid,
         username,
         email,
         address,
@@ -57,7 +56,7 @@ const RegisterForm = ({ toggleRegister }) => {
       return Promise.resolve();
     }
     return Promise.reject(
-      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
     );
   };
 
