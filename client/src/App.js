@@ -31,6 +31,7 @@ import OrderReviewPage from "./pages/OrderReviewPage";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import ChatPage from "./pages/ChatPage";
+import UpdatePasswordPage from "./pages/UpdatePasswordPage";
 
 const AuthenticatedApp = () => {
   return (
@@ -99,7 +100,16 @@ const Root = () => (
           <SocketProvider>
             <ChatProvider>
               <NotificationProvider>
-                <App />
+                <Routes>
+                  {/* public route */}
+                  <Route
+                    path="/reset-password"
+                    element={<UpdatePasswordPage />}
+                  />
+
+                  {/* app */}
+                  <Route path="/*" element={<App />} />
+                </Routes>
               </NotificationProvider>
             </ChatProvider>
           </SocketProvider>

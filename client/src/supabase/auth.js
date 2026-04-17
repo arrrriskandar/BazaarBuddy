@@ -25,10 +25,24 @@ export const logout = async () => {
   }
 };
 
-// export const resetPassword = async (email) => {
-//   try {
-//     await sendPasswordResetEmail(auth, email);
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const resetPassword = async (email) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "http://localhost:3000/reset-password",
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const handleUpdatePassword = async (newPassword) => {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  } else {
+    await supabase.auth.signOut();
+  }
+};

@@ -12,15 +12,18 @@ import {
 } from "antd";
 import { validatePassword } from "../utils/validatePassword";
 import { handleUpdatePassword } from "../supabase/auth";
+import { useNavigate } from "react-router-dom";
 
-const UpdatePassword = () => {
+const UpdatePasswordPage = () => {
+  const navigate = useNavigate();
   const onFinish = async (values) => {
     try {
       await handleUpdatePassword(values.password);
-      message.success("Registration successful!");
+      message.success("Password updated!");
+      navigate("/");
     } catch (error) {
-      message.error("Registration failed");
-      console.error("Registration failed", error);
+      message.error("Password update failed. Please try again.");
+      console.error("Password update failed", error);
     }
   };
 
@@ -61,4 +64,4 @@ const UpdatePassword = () => {
   );
 };
 
-export default UpdatePassword;
+export default UpdatePasswordPage;

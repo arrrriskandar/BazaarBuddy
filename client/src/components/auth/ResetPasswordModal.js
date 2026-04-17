@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Modal, message } from "antd";
-import { resetPassword } from "../../firebase/auth";
+import { resetPassword } from "../../supabase/auth";
 
 const ResetPasswordModal = ({ visible, onClose }) => {
   const onFinish = async (values) => {
