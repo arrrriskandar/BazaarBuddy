@@ -53,7 +53,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
     return Object.entries(values)
       .map(([productId, reviewData]) => {
         const product = order.items.find(
-          (item) => item.product._id === productId
+          (item) => item.product._id === productId,
         );
 
         if (!product) {
@@ -73,7 +73,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
 
   const submitReviews = async (reviews) => {
     const reviewPromises = reviews.map((review) =>
-      axios.post(`${apiEndpoint}/review`, review)
+      axios.post(`${apiEndpoint}/review`, review),
     );
 
     await Promise.all(reviewPromises);
@@ -117,7 +117,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
                 <Card.Meta
                   avatar={
                     <img
-                      src={item.product.images}
+                      src={`${item.product.images}?v=${item.product.imageVersion}`}
                       alt={item.product.name}
                       style={{
                         width: "60px",
@@ -129,7 +129,7 @@ function ReviewOrder({ setOpenModal, order, fetchOrders }) {
                   }
                   title={<b>{item.product.name}</b>}
                   description={`Quantity: ${item.quantity} | Price: $${Number(
-                    item.product.price
+                    item.product.price,
                   ).toFixed(2)}`}
                 />
               </Card>

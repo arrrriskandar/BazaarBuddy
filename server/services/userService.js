@@ -17,7 +17,19 @@ export const getUserBySupabaseId = async (supabaseId) => {
 };
 
 export const updateUser = async (userId, userData) => {
-  return await UserModel.findByIdAndUpdate(userId, userData, { new: true });
+  const user = await getUser(userId);
+
+  if (!user) throw new Error("User not found");
+
+  const update = { ...userData };
+
+  if (update.photoUrl !== undefined) {
+    update.photoVersion = (user.photoVersion || 0) + 1;
+  }
+
+  return await UserModel.findByIdAndUpdate(userId, update, {
+    new: true,
+  });
 };
 
 export const deleteUser = async (userId) => {

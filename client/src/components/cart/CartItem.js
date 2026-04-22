@@ -30,7 +30,11 @@ const CartItem = ({
         />
       </Col>
       <Col>
-        <Avatar shape="square" src={item.product.images} size={200} />
+        <Avatar
+          shape="square"
+          src={`${item.product.images}?v=${item.product.imageVersion}`}
+          size={200}
+        />
       </Col>
       <Col flex="auto">
         <div

@@ -50,7 +50,7 @@ function SellerProductDetails() {
           <Row gutter={16} style={{ marginTop: "20px" }}>
             <Col span={12}>
               <img
-                src={product.images}
+                src={`${product.images}?v=${product.imageVersion}`}
                 alt={product.name}
                 style={{ width: "100%" }}
               />

@@ -21,6 +21,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    imageVersion: {
+      type: Number,
+      default: 0,
+    },
     seller: {
       type: String,
       ref: "UserModel",

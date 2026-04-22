@@ -3,18 +3,31 @@ import axios from "axios";
 import React, { useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
 import FilePicker from "../common/FilePicker";
-import { uploadFile } from "../../firebase/storage";
+import { uploadFile } from "../../supabase/storage";
 import { useUser } from "../../contexts/UserContext";
 import AddressForm from "../common/AddressForm";
 
 function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
-  const [profilePicture, setProfilePicture] = useState(profile.photoUrl);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [removedImage, setRemovedImage] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const { currentUser } = useUser();
 
+  const getImageSrc = () => {
+    if (removedImage) return null;
+    if (selectedFile) return previewUrl;
+    if (profile.photoUrl) {
+      return `${profile.photoUrl}?v=${profile.photoVersion}`;
+    }
+
+    return null;
+  };
+
   const handleCancelClick = () => {
-    setProfilePicture(profile.photoUrl);
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setRemovedImage(false);
     setOpenModal(false);
     form.setFieldsValue({
       username: profile.username,
@@ -25,10 +38,13 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
 
   const handleFormSubmit = async (values) => {
     try {
-      const path = `${currentUser._id}/profilePicture/`;
-      let photoUrl = profilePicture;
+      const path = `${currentUser.supabaseId}/profilePicture.jpg`;
+      let photoUrl;
       if (selectedFile) {
         photoUrl = await uploadFile(selectedFile, path);
+      }
+      if (removedImage) {
+        photoUrl = null;
       }
       const response = await axios.put(`${apiEndpoint}/user/${profile._id}`, {
         ...values,
@@ -36,6 +52,9 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
       });
       setProfile(response.data);
       message.success("Profile updated successfully");
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setRemovedImage(false);
       setOpenModal(false);
     } catch (error) {
       message.error("Failed to update profile. Please try again.");
@@ -45,13 +64,15 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
 
   const onFileSelect = (file) => {
     setSelectedFile(file);
-    const previewUrl = URL.createObjectURL(file);
-    setProfilePicture(previewUrl);
+    setRemovedImage(false);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
   };
 
   const handleRemovePicture = () => {
     setSelectedFile(null);
-    setProfilePicture("");
+    setPreviewUrl(null);
+    setRemovedImage(true);
   };
 
   return (
@@ -66,17 +87,13 @@ function ProfileEditForm({ setOpenModal, form, setProfile, profile }) {
       >
         <FilePicker onFileSelect={onFileSelect}>
           <Avatar
-            src={profilePicture || "/default-avatar.png"}
+            src={getImageSrc() || "/default-avatar.png"}
             size={200}
             style={{ margin: "20px auto", cursor: "pointer" }}
           />
         </FilePicker>
-        {profilePicture && (
-          <Button
-            danger
-            onClick={handleRemovePicture}
-            style={{ display: "block", margin: "10px auto" }}
-          >
+        {getImageSrc() && (
+          <Button danger onClick={handleRemovePicture}>
             Remove
           </Button>
         )}

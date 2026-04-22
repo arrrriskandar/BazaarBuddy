@@ -14,19 +14,32 @@ import { apiEndpoint } from "../../constants/constants";
 import { categories, stockOptions } from "../../constants/constants";
 import FilePicker from "../common/FilePicker";
 import { useUser } from "../../contexts/UserContext";
-import { uploadFile } from "../../firebase/storage";
+import { uploadFile } from "../../supabase/storage";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
-  const [productPhoto, setProductPhoto] = useState(product.images);
   const { currentUser } = useUser();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [removedImage, setRemovedImage] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  const getImageSrc = () => {
+    if (removedImage) return null;
+    if (selectedFile) return previewUrl;
+    if (product.images) {
+      return `${product.images}?v=${product.imageVersion}`;
+    }
+
+    return null;
+  };
 
   const handleCancelClick = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setRemovedImage(false);
     setOpenEditModal(false);
-    setProductPhoto(product.images);
     form.setFieldsValue({
       name: product.name,
       description: product.description,
@@ -37,17 +50,23 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
   };
   const handleFormSubmit = async (values) => {
     try {
-      const path = `${currentUser._id}/products/${product.photouuid}/`;
-      let photoUrl = productPhoto;
+      const path = `${currentUser.supabaseId}/products/${product.photouuid}.jpg`;
+      let photoUrl;
       if (selectedFile) {
         photoUrl = await uploadFile(selectedFile, path);
       }
+      if (removedImage) {
+        photoUrl = null;
+      }
       const response = await axios.put(
         `${apiEndpoint}/product/${product._id}`,
-        { ...values, images: photoUrl }
+        { ...values, images: photoUrl },
       );
       setProduct(response.data);
       message.success("Product details updated successfully");
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setRemovedImage(false);
       setOpenEditModal(false);
     } catch (error) {
       message.error("Failed to update product details. Please try again.");
@@ -57,13 +76,15 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
 
   const onFileSelect = (file) => {
     setSelectedFile(file);
-    const previewUrl = URL.createObjectURL(file);
-    setProductPhoto(previewUrl);
+    setRemovedImage(false);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
   };
 
   const handleRemovePicture = () => {
     setSelectedFile(null);
-    setProductPhoto("");
+    setPreviewUrl(null);
+    setRemovedImage(true);
   };
   return (
     <>
@@ -76,14 +97,14 @@ function ProductEditForm({ setOpenEditModal, product, setProduct, form }) {
         }}
       >
         <FilePicker onFileSelect={onFileSelect}>
-          {productPhoto ? (
-            <Image src={productPhoto} preview={false} />
+          {getImageSrc() ? (
+            <Image src={getImageSrc()} preview={false} />
           ) : (
             <Button>Upload photo</Button>
           )}
         </FilePicker>
 
-        {productPhoto && (
+        {getImageSrc() && (
           <Button
             danger
             onClick={handleRemovePicture}

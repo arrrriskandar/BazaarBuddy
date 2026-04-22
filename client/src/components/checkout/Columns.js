@@ -13,7 +13,10 @@ const getColumns = () => [
     render: (product) => (
       <Row align="middle">
         <Col>
-          <Avatar src={product.images} size={64} />
+          <Avatar
+            src={`${product.images}?v=${product.imageVersion}`}
+            size={64}
+          />
         </Col>
         <Col style={{ paddingLeft: "10px" }}>
           <Title level={5} style={{ margin: 0 }}>

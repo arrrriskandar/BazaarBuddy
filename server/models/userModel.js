@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    photoVersion: {
+      type: Number,
+      default: 0,
+    },
     address: {
       type: String,
       required: true,

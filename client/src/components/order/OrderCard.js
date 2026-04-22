@@ -53,14 +53,14 @@ function OrderCard({
                 <Card.Meta
                   avatar={
                     <img
-                      src={item.product.images}
+                      src={`${item.product.images}?v=${item.product.imageVersion}`}
                       alt={item.product.name}
                       style={{ width: "50px" }}
                     />
                   }
                   title={item.product.name}
                   description={`Quantity: ${item.quantity} | Price: $${Number(
-                    item.product.price
+                    item.product.price,
                   ).toFixed(2)}`}
                 />
               </Card>

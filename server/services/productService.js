@@ -104,8 +104,17 @@ export const getMyProducts = async (userId, queryParams) => {
 };
 
 export const updateProduct = async (productId, productData) => {
-  productData.updatedAt = Date.now();
-  return await ProductModel.findByIdAndUpdate(productId, productData, {
+  const product = await getProduct(productId);
+
+  if (!product) throw new Error("Product not found");
+
+  const update = { ...productData };
+  update.updatedAt = Date.now();
+
+  if (update.images !== undefined) {
+    update.imageVersion = (product.imageVersion || 0) + 1;
+  }
+  return await ProductModel.findByIdAndUpdate(productId, update, {
     new: true,
   });
 };

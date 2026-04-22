@@ -14,7 +14,7 @@ import { apiEndpoint } from "../../constants/constants";
 import { categories, stockOptions } from "../../constants/constants";
 import { useUser } from "../../contexts/UserContext";
 import FilePicker from "../common/FilePicker";
-import { uploadFile } from "../../firebase/storage";
+import { uploadFile } from "../../supabase/storage";
 import { v4 as uuidv4 } from "uuid";
 
 const { TextArea } = Input;
@@ -39,12 +39,12 @@ function ProductAddForm({ setOpenModal, setProducts }) {
       // If a file is selected, upload it first
       if (selectedFile) {
         try {
-          const path = `${currentUser._id}/products/${photouuid}`; // Define storage path
+          const path = `${currentUser.supabaseId}/products/${photouuid}.jpg`; // Define storage path
           photoUrl = await uploadFile(selectedFile, path); // Wait for upload
         } catch (uploadError) {
           message.error(
             "Failed to upload image. Please try again.",
-            uploadError
+            uploadError,
           );
           return; // Stop execution if image upload fails
         }

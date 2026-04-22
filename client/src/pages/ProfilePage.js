@@ -35,7 +35,11 @@ const Profile = () => {
         style={{ width: 400, boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
         cover={
           <Avatar
-            src={profile?.photoUrl || "/default-avatar.png"}
+            src={
+              profile.photoUrl
+                ? `${profile.photoUrl}?v=${profile.photoVersion}`
+                : "/default-avatar.png"
+            }
             size={200}
             style={{
               margin: "20px auto",

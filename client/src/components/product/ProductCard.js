@@ -21,7 +21,7 @@ function ProductCard({ product }) {
         >
           <img
             alt={product.name}
-            src={product.images}
+            src={`${product.images}?v=${product.imageVersion}`}
             style={{ maxWidth: "100%", maxHeight: "100%" }}
           />
         </div>

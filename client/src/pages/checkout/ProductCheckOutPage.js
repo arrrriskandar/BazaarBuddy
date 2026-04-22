@@ -40,7 +40,7 @@ const ProductCheckout = () => {
         totalPrice,
         cartCheckout: false, // Indicate this is for a single product
         seller,
-      })
+      }),
     );
 
     const response = await axios.post(
@@ -49,7 +49,7 @@ const ProductCheckout = () => {
         buyer: currentUser,
         seller,
         items: [item],
-      }
+      },
     );
 
     window.location.href = response.data.url;
@@ -62,7 +62,10 @@ const ProductCheckout = () => {
       render: () => (
         <Row align="middle">
           <Col>
-            <Avatar src={item.product.images} size={64} />
+            <Avatar
+              src={`${item.product.images}?v=${item.product.imageVersion}`}
+              size={64}
+            />
           </Col>
           <Col style={{ paddingLeft: "10px" }}>
             <Title level={5} style={{ margin: 0 }}>

@@ -4,7 +4,7 @@ import { CameraFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
 import FilePicker from "../common/FilePicker";
 import { v4 as uuidv4 } from "uuid";
-import { uploadFile } from "../../firebase/storage";
+import { uploadFile } from "../../supabase/storage";
 
 const { Text } = Typography;
 
@@ -19,7 +19,7 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
       let photoUrl = null;
       let photouuid = uuidv4();
       try {
-        const path = `${activeChat._id}/${photouuid}`;
+        const path = `${activeChat._id}/${photouuid}.jpg`;
         photoUrl = await uploadFile(selectedFile, path);
       } catch (uploadError) {
         message.error("Failed to upload image. Please try again.");
@@ -30,7 +30,7 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
         activeChat._id,
         photoUrl,
         activeChat.otherParticipant._id,
-        true
+        true,
       );
       setSelectedFile(null);
     } else {
@@ -38,7 +38,7 @@ const ChatWindow = ({ activeChat, messages, sendMessage }) => {
         activeChat._id,
         message,
         activeChat.otherParticipant._id,
-        false
+        false,
       );
       setMessage("");
     }

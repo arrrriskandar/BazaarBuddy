@@ -15,7 +15,7 @@ function OrderReviewPage() {
     const fetchReviewsByOrder = async () => {
       try {
         const response = await axios.get(
-          `${apiEndpoint}/review/order/${orderId}`
+          `${apiEndpoint}/review/order/${orderId}`,
         );
         setReviews(response.data);
         setLoading(false);
@@ -48,7 +48,7 @@ function OrderReviewPage() {
               {review.product.images && (
                 <Image
                   width={200}
-                  src={review.product.images}
+                  src={`${review.product.images}?v=${review.product.imageVersion}`}
                   alt={review.product.name}
                   style={{ marginBottom: "8px" }}
                 />
