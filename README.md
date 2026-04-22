@@ -38,8 +38,8 @@ This demo is fully functional and runs on Stripe's test mode. You can simulate a
 
 - React
 - Ant Design (UI component library)
-- Firebase Authentication
-- Firebase Storage (Image uploads)
+- Supabase Authentication
+- Supabase Storage (Image uploads)
 - Axios
 - Socket.IO Client
 

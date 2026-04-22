@@ -16,12 +16,17 @@ Before setting up the project, ensure the following tools and services are avail
 
 ### Services Required
 
-3. **Firebase Project**  
-   Create a Firebase project via the [Firebase Console](https://console.firebase.google.com/).  
-   Enable:
+3. **Supabase Setup**  
+   Please refer to the official Supabase documentation for setup instructions:
+   - Authentication: https://supabase.com/docs/guides/auth
+   - Storage: https://supabase.com/docs/guides/storage
+   - Row Level Security (RLS): https://supabase.com/docs/guides/database/postgres/row-level-security
 
-   - **Authentication** (e.g., Email/Password)
-   - **Firebase Storage**
+   ### Required configuration:
+   - Create a Supabase project
+   - Enable Authentication (Email/Password)
+   - Create a Storage bucket for uploads
+   - Configure appropriate Storage policies (RLS)
 
 4. **MongoDB Database**  
    Use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) or run a local MongoDB instance.
@@ -32,7 +37,6 @@ Before setting up the project, ensure the following tools and services are avail
 ## Step-by-Step Setup
 
 1. **Clone the Repository**
-
    - Open your terminal or command prompt.
    - Navigate to the directory where you want to clone the project.
    - Run the following command to clone the BazaarBuddy repository:
@@ -41,14 +45,12 @@ Before setting up the project, ensure the following tools and services are avail
      ```
 
 2. **Navigate to the Project Directory**
-
    - Change into the project's root directory:
      ```sh
      cd bazaarbuddy
      ```
 
 3. **Prepare and Import .env Files**
-
    - Inside both `client` and `server` directories, rename the example environment files from `.env.example` to `.env`.
    - Edit these `.env` files to add your own configuration values (Firebase API keys, MongoDB URI, etc.).
    - Ensure the `.env` files are located in the root of their respective directories:
@@ -56,7 +58,6 @@ Before setting up the project, ensure the following tools and services are avail
      - `server/.env`
 
 4. **Install Dependencies for the Frontend**
-
    - Navigate to the `client` directory:
      ```sh
      cd client
@@ -67,14 +68,12 @@ Before setting up the project, ensure the following tools and services are avail
      ```
 
 5. **Run the Frontend**
-
-   - Start the React Native (or React) development server:
+   - Start the React development server:
      ```sh
      npm start
      ```
 
 6. **Install Dependencies for the Backend**
-
    - Open a new terminal window or tab.
    - Navigate to the `server` directory:
      ```sh
