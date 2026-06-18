@@ -1,3 +1,4 @@
+import productQueue from "../queues/productQueue.js";
 import {
   createProduct,
   deleteProduct,
@@ -11,6 +12,7 @@ import {
 export const createProductController = async (req, res) => {
   try {
     const product = await createProduct(req.body);
+    await productQueue.add("classify-product", { productId: product._id });
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json({ message: err.message });

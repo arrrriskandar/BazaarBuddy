@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import React, { useState } from "react";
 import { apiEndpoint } from "../../constants/constants";
-import { categories, stockOptions } from "../../constants/constants";
+import { stockOptions } from "../../constants/constants";
 import { useUser } from "../../contexts/UserContext";
 import FilePicker from "../common/FilePicker";
 import { uploadFile } from "../../supabase/storage";
@@ -147,22 +147,6 @@ function ProductAddForm({ setOpenModal, setProducts }) {
           ]}
         >
           <InputNumber style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          name="category"
-          label="Category:"
-          rules={[
-            {
-              required: true,
-              message: "Please select a category!",
-            },
-          ]}
-        >
-          <Select>
-            {categories.map((category) => (
-              <Option value={category.value}>{category.label}</Option>
-            ))}
-          </Select>
         </Form.Item>
         <Form.Item
           name="stock"

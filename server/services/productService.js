@@ -1,6 +1,7 @@
 import ProductModel from "../models/productModel.js";
 
 export const createProduct = async (productData) => {
+  productData.category = "";
   const product = new ProductModel(productData);
   return await product.save();
 };
@@ -36,6 +37,7 @@ export const getBrowseProducts = async (userId, queryParams) => {
 
   query.stock = "Available";
   query.seller = { $ne: userId };
+  query.isCategorized = true;
 
   if (category) {
     query.category = category;

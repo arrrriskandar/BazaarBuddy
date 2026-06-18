@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express from "express";
 import connectDB from "./config/db.js";
-import "dotenv/config";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
@@ -12,6 +12,7 @@ import stripeRoutes from "./routes/stripeRoutes.js";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
+import initProductWorker from "./queues/productWorker.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +33,8 @@ setInterval(() => {
 
 // Connect Database
 connectDB();
+
+initProductWorker();
 
 app.use(express.json());
 app.use(cors());

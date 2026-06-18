@@ -15,7 +15,11 @@ const ProductSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: true,
+      default: "",
+    },
+    isCategorized: {
+      type: Boolean,
+      default: false,
     },
     images: {
       type: String,

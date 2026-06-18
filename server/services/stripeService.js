@@ -1,4 +1,3 @@
-import "dotenv/config";
 import Stripe from "stripe";
 import { updateUser } from "./userService.js";
 import { getOrderReleaseFund } from "./orderService.js";

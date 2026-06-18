@@ -7,16 +7,21 @@ export const createProductValidationRules = () => {
   return [
     body("name").notEmpty().withMessage("Name is required"),
     body("price").isNumeric().withMessage("Price must be a number"),
-    body("category")
-      .notEmpty()
-      .withMessage("Category is required")
-      .isIn(categoryValues)
-      .withMessage("Invalid category"),
     body("stock")
       .notEmpty()
       .withMessage("Stock is required")
       .isIn(stockValues)
       .withMessage("Invalid stock value"),
+    body("isCategorized")
+      .not()
+      .exists()
+      .withMessage("Restricted request: isCategorized cannot be set by client"),
+    body("category")
+      .not()
+      .exists()
+      .withMessage(
+        "Restricted request: Category selection is handled automatically by AI",
+      ),
   ];
 };
 

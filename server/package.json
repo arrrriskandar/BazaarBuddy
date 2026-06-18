@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^2.8.0",
+    "bullmq": "^5.78.1",
     "config": "^3.3.11",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
