@@ -30,6 +30,7 @@ const initProductWorker = () => {
         max: 10,
         duration: 60000,
       },
+      drainDelay: 30,
     },
   );
 };
