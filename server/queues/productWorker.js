@@ -4,6 +4,8 @@ import { getProduct, updateProduct } from "../services/productService.js";
 import { classifyItemCategory } from "../services/geminiService.js";
 
 const initProductWorker = () => {
+  console.log("Initializing standard production BullMQ Worker...");
+
   return new Worker(
     "tagging-queue",
     async (job) => {
@@ -24,15 +26,12 @@ const initProductWorker = () => {
       });
     },
     {
-      connection: redisClient, // Uses shared socket connection
+      connection: redisClient,
       limiter: {
         max: 10,
         duration: 60000,
       },
-      drainDelay: 60,
-      disableEvents: true, // Stops workers from emitting global event ticks
-
-      stalledInterval: 300000,
+      drainDelay: 5,
     },
   );
 };

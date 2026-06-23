@@ -14,7 +14,7 @@ import { Server } from "socket.io";
 import http from "http";
 import initProductWorker from "./queues/productWorker.js";
 import productQueue from "./queues/productQueue.js";
-import redisClient from "./config/redis.js"; // Import the client instance to disconnect it explicitly
+import redisClient from "./config/redis.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -36,6 +36,7 @@ setInterval(() => {
 // Connect Database
 connectDB();
 
+// Initialize worker cleanly at boot time
 const workerInstance = initProductWorker();
 
 app.use(express.json());
@@ -88,25 +89,21 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-// Optimized structural tearing system for Render Zero-Downtime lifecycle
+// Graceful shutdown handling for zero-downtime container swaps
 const gracefulShutdown = async (signal) => {
-  console.log(
-    `Received ${signal}. Shutting down BullMQ connections gracefully...`,
-  );
+  console.log(`Received ${signal}. Shutting down application cleanly...`);
 
   try {
-    // 1. Close structural wrappers
     await productQueue.close();
     if (workerInstance) {
       await workerInstance.close();
     }
-    // 2. Terminate the raw background client socket pool
     await redisClient.quit();
 
-    console.log("Redis connections closed cleanly.");
+    console.log("All background Redis connections closed cleanly.");
     process.exit(0);
   } catch (error) {
-    console.error("Error during Redis graceful shutdown:", error);
+    console.error("Error during graceful shutdown execution:", error);
     process.exit(1);
   }
 };
