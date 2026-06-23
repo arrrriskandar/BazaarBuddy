@@ -4,7 +4,7 @@ import { getProduct, updateProduct } from "../services/productService.js";
 import { classifyItemCategory } from "../services/geminiService.js";
 
 const initProductWorker = () => {
-  new Worker(
+  return new Worker(
     "tagging-queue",
     async (job) => {
       if (job.name !== "classify-product") return;
@@ -30,7 +30,7 @@ const initProductWorker = () => {
         max: 10,
         duration: 60000,
       },
-      drainDelay: 30,
+      drainDelay: 60,
     },
   );
 };
