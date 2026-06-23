@@ -1,7 +1,9 @@
 import { Queue } from "bullmq";
-import redisConfig from "../config/redis.js";
+import redisClient from "../config/redis.js";
 
-// Registers 'tagging-queue' directly within the Redis memory layout
-const productQueue = new Queue("tagging-queue", redisConfig);
+// Uses the centralized single socket descriptor layout
+const productQueue = new Queue("tagging-queue", {
+  connection: redisClient,
+});
 
 export default productQueue;

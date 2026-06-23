@@ -1,10 +1,13 @@
-const redisURL = process.env.REDIS_URL;
+import "dotenv/config";
 
-const redisConfig = {
-  connection: {
-    url: redisURL || "redis://127.0.0.1:6379",
-    // Required to bypass handshake errors on secure managed clouds like Render Key Value
-    tls: process.env.REDIS_URL?.startsWith("rediss://") ? {} : undefined,
-  },
-};
-export default redisConfig;
+const redisURL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+
+// Instantiate a single structural client instance
+const redisClient = new Redis(redisURL, {
+  maxRetriesPerRequest: null, // Mandatory option required by BullMQ
+  tls: redisURL.startsWith("rediss://")
+    ? { rejectUnauthorized: false }
+    : undefined,
+});
+
+export default redisClient;

@@ -14,6 +14,7 @@ import { Server } from "socket.io";
 import http from "http";
 import initProductWorker from "./queues/productWorker.js";
 import productQueue from "./queues/productQueue.js";
+import redisClient from "./config/redis.js"; // Import the client instance to disconnect it explicitly
 
 const app = express();
 const server = http.createServer(app);
@@ -30,7 +31,7 @@ const io = new Server(server, {
 const url = `https://bazaarbuddy-ev54.onrender.com`;
 setInterval(() => {
   fetch(url).then(() => console.log("Self-ping successful"));
-}, 600000); // 600,000ms = 10 minutes
+}, 600000); // 10 minutes
 
 // Connect Database
 connectDB();
@@ -54,24 +55,16 @@ const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
+  if (userId) onlineUsers.set(userId, socket.id);
 
-  if (userId) {
-    onlineUsers.set(userId, socket.id);
-  }
-
-  // Handle sending notifications
   socket.on("send_notification", (data) => {
     const { receiverId, notification } = data;
     const recipientSocketId = onlineUsers.get(receiverId);
-
     if (recipientSocketId) {
-      io.to(recipientSocketId).emit("receive_notification", {
-        notification,
-      });
+      io.to(recipientSocketId).emit("receive_notification", { notification });
     }
   });
 
-  // Handle sending notifications
   socket.on("send_message", (data) => {
     const { receiverId, popUpMessage, newMessage, chatId } = data;
     const recipientSocketId = onlineUsers.get(receiverId);
@@ -84,36 +77,33 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle disconnect
   socket.on("disconnect", () => {
     const userIdToRemove = [...onlineUsers.entries()].find(
-      ([, socketId]) => socketId === socket.id,
+      ([_, socketId]) => socketId === socket.id,
     )?.[0];
-
-    if (userIdToRemove) {
-      onlineUsers.delete(userIdToRemove);
-    }
+    if (userIdToRemove) onlineUsers.delete(userIdToRemove);
   });
 });
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+// Optimized structural tearing system for Render Zero-Downtime lifecycle
 const gracefulShutdown = async (signal) => {
   console.log(
     `Received ${signal}. Shutting down BullMQ connections gracefully...`,
   );
 
   try {
-    // Dynamically close the worker connection if it's open
-    // BullMQ workers register themselves internally; closing the queue connection helps clear the pool
+    // 1. Close structural wrappers
     await productQueue.close();
-
     if (workerInstance) {
       await workerInstance.close();
     }
+    // 2. Terminate the raw background client socket pool
+    await redisClient.quit();
 
-    console.log("Redis connections closed successfully.");
+    console.log("Redis connections closed cleanly.");
     process.exit(0);
   } catch (error) {
     console.error("Error during Redis graceful shutdown:", error);

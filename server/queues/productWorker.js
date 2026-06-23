@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import redisConfig from "../config/redis.js";
+import redisClient from "../config/redis.js";
 import { getProduct, updateProduct } from "../services/productService.js";
 import { classifyItemCategory } from "../services/geminiService.js";
 
@@ -18,19 +18,19 @@ const initProductWorker = () => {
         product.description || "",
       );
 
-      // Mutate the database. This acts as the final source of truth.
       await updateProduct(productId, {
         category: optimalCategory,
         isCategorized: true,
       });
     },
     {
-      ...redisConfig,
+      connection: redisClient, // Uses shared socket connection
       limiter: {
         max: 10,
         duration: 60000,
       },
       drainDelay: 60,
+      disableEvents: true, // Stops workers from emitting global event ticks
     },
   );
 };
