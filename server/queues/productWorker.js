@@ -31,6 +31,8 @@ const initProductWorker = () => {
       },
       drainDelay: 60,
       disableEvents: true, // Stops workers from emitting global event ticks
+
+      stalledInterval: 300000,
     },
   );
 };
