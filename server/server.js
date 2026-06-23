@@ -13,6 +13,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";
 import initProductWorker from "./queues/productWorker.js";
+import productQueue from "./queues/productQueue.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -34,7 +35,7 @@ setInterval(() => {
 // Connect Database
 connectDB();
 
-initProductWorker();
+const workerInstance = initProductWorker();
 
 app.use(express.json());
 app.use(cors());
@@ -97,3 +98,28 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const gracefulShutdown = async (signal) => {
+  console.log(
+    `Received ${signal}. Shutting down BullMQ connections gracefully...`,
+  );
+
+  try {
+    // Dynamically close the worker connection if it's open
+    // BullMQ workers register themselves internally; closing the queue connection helps clear the pool
+    await productQueue.close();
+
+    if (workerInstance) {
+      await workerInstance.close();
+    }
+
+    console.log("Redis connections closed successfully.");
+    process.exit(0);
+  } catch (error) {
+    console.error("Error during Redis graceful shutdown:", error);
+    process.exit(1);
+  }
+};
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
