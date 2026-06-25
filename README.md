@@ -38,8 +38,8 @@ This demo is fully functional and runs on Stripe's test mode. You can simulate a
 To prevent slow LLM API response times from blocking the core server thread, BazaarBuddy utilizes an event-driven background processing architecture:
 
 1. **Submission**: When a seller lists an item, it is immediately saved to MongoDB with an `isCategorized: false` state.
-2. **Queueing**: The Express controller pushes a background job containing the listing metadata onto a **BullMQ** queue managed by a high-performance **Redis** instance.
-3. **Execution**: An isolated worker process picks up the task, queries **Gemini 2.5 Flash** using a strict JSON structural schema constraint, updates the product category, and toggles `isCategorized: true`.
+2. **Queueing**: The Express controller pushes a background job containing the listing metadata onto a **BullMQ** queue managed by a high-performance **Render Key Value (Redis)** instance.
+3. **Execution**: An isolated worker process picks up the task via a low-latency internal network connection, queries **Gemini 2.5 Flash** using a strict JSON structural schema constraint, updates the product category, and toggles `isCategorized: true`.
 4. **UI Presentation**: The frontend checks this state to display elegant, non-blocking loading skeletons, preventing user disruption while processing occurs seamlessly behind the scenes.
 
 ## Tech Stack
@@ -66,7 +66,7 @@ To prevent slow LLM API response times from blocking the core server thread, Baz
 
 - Vercel (Frontend)
 - Render (Backend Web Service)
-- **Upstash** (Serverless cloud Redis cluster for background tasks)
+- **Render Key Value** (Managed Redis instance linked via internal private network)
 - MongoDB Atlas (Cloud Database)
 
 ---
